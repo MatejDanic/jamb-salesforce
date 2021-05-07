@@ -1,0 +1,12 @@
+<template>
+    <div class="column">
+        <button class="button button-form image-container"
+            style="background-image: url(../static/images/column/DOWNWARDS.png);">{type}</button>
+        <div class="sum-up">1</div>
+        <div class="sum-mid">2</div>
+        <div class="sum-down">3</div>
+        <template for:each={boxes} for:item="box">
+            <c-box key={box.type} get-box={box} get-column-type={type}></c-box>
+        </template>
+    </div>
+</template>

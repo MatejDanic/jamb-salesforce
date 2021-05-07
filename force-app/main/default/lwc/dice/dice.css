@@ -1,0 +1,11 @@
+.dice {
+    cursor: pointer;
+    border-radius: 16px;
+    height: 64px;
+    width: 64px;
+    background-size: 160% 80%;
+    background-position: 50%;
+    background-repeat: no-repeat;
+    background-color: #fff;
+    margin: 5px;
+}

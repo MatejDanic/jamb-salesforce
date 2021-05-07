@@ -1,0 +1,35 @@
+.form-container {
+    height: 100%;
+    display: block;
+}
+
+.form {
+    display: inline-grid;
+    grid-template-columns: repeat(6,64px);
+    grid-template-rows: repeat(18,32px);
+    background-color: white;
+    border: 1px solid rgb(221, 219, 218);
+    border-radius: 0.25rem;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.10);
+}
+
+.label-column {
+    grid-row-start: 1;
+    grid-row-end: 18;
+    grid-template-rows: repeat(17,32px);
+    grid-template-columns: 64px;
+    display: inline-grid;
+}
+
+.label-column-end {
+    grid-column-start: 6;
+}
+
+.bottom-row {
+    display: inline-grid;
+    grid-row-start: 18;
+    grid-column-start: 1;
+    grid-column-end: 7;
+    grid-template-columns: repeat(3,128px);
+    grid-template-rows: 32px;
+}

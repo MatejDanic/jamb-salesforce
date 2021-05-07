@@ -1,0 +1,19 @@
+.column {
+    grid-row-start: 1;
+    grid-row-end: 18;
+    grid-template-rows: repeat(17,32px);
+    grid-template-columns: 64px;
+    display: inline-grid;
+}
+
+.sum-up {
+    grid-row-start: 8;
+}
+
+
+.sum-mid {
+    grid-row-start: 11;
+}
+.sum-down {
+    grid-row-start: 17;
+}

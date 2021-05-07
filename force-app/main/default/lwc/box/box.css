@@ -1,0 +1,15 @@
+.box {
+    border-radius: 5px;
+    border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 100%;
+}
+
+.full {
+    height: 100%;
+    width: 100%;
+    border: 1px solid red;
+}

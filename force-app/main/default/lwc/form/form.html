@@ -1,0 +1,56 @@
+<template>
+    <div class="form-container">
+        <div class="form">
+            <div class="label-column">
+                <button class="button button-form button-info image-container bg-lightpink"
+                    style="background-image: url(../static/images/misc/info.png);"></button>
+                <button class="button button-form image-container bg-skyblue"
+                    style="background-image: url(../static/images/dice/{{1}}.png);"></button>
+                <button class="button button-form image-container bg-skyblue"
+                    style="background-image: url(../static/images/dice/{{2}}.png);"></button>
+                <button class="button button-form image-container bg-skyblue"
+                    style="background-image: url(../static/images/dice/{{3}}.png);"></button>
+                <button class="button button-form image-container bg-skyblue"
+                    style="background-image: url(../static/images/dice/{{4}}.png);"></button>
+                <button class="button button-form image-container bg-skyblue"
+                    style="background-image: url(../static/images/dice/{{5}}.png);"></button>
+                <button class="button button-form image-container bg-skyblue"
+                    style="background-image: url(../static/images/dice/{{6}}.png);"></button>
+                <button class="button button-form bg-skyblue">(1-6)</button>
+                <button class="button button-form bg-skyblue">MAX</button>
+                <button class="button button-form bg-skyblue">MIN</button>
+                <button class="button button-form bg-skyblue">∆ x 1's</button>
+                <button class="button button-form bg-skyblue">Trips</button>
+                <button class="button button-form bg-skyblue">Straight</button>
+                <button class="button button-form bg-skyblue">Full</button>
+                <button class="button button-form bg-skyblue">Poker</button>
+                <button class="button button-form bg-skyblue">Yahtzee</button>
+                <button class="button button-form bg-skyblue">Σ</button>
+            </div>
+
+            <template for:each={columns} for:item="column">
+                <c-column key={column.type} get-column={column}></c-column>
+            </template>
+
+            <div class="label-column label-column-end">
+                <button class="button button-form button-roll-dice image-container bg-lightpink"
+                    id="ROLL-DICE-BUTTON"
+                    style="background-image: url(../static/images/misc/roll_{{game.roll_count}}.png);"></button>
+                <button class="button button-form bg-skyblue"></button>
+                <button class="button button-form button-restart image-container bg-lightpink" id="RESTART-BUTTON"
+                    style="background-image: url(../static/images/misc/restart.png);"></button>
+                <button class="button button-form bg-skyblue"></button>
+                <button class="button button-form button-scoreboard bg-lightpink"></button>
+                <div class="button button-form bg-skyblue"></div>
+            </div>
+                
+            <div class="bottom-row">
+                <button class="button button-form image-container bg-lightpink"
+                    style="background-image: url(../static/images/misc/cog.png);"></button></button>
+                <button class="button button-form">Total:</button>
+                <div class="button button-form bg-skyblue"></div>
+            </div>
+            
+        </div>
+    </div>
+</template>
