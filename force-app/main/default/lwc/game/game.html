@@ -1,7 +1,7 @@
 <template>
     <div class="game">
         <template if:true={game}>
-            <c-dice-rack></c-dice-rack>
+            <c-dice-rack get-dice-list={game.dice}></c-dice-rack>
             <c-form get-form={game.form}></c-form>
         </template>
     </div>

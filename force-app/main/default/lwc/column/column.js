@@ -5,11 +5,19 @@ export default class Column extends LightningElement {
 
     @track type;
     @track boxes;
+    @track isDown;
+    @track isUp;
+    @track isAny;
+    @track isAnn;
 
     connectedCallback() {
         // console.log(JSON.parse(JSON.stringify(this.getColumn)));
         this.type = this.getColumn.type;
         this.boxes = this.getColumn.boxes;
-        console.log(JSON.parse(JSON.stringify(this.boxes)));
+        this.isDown = this.type == "Downwards";
+        this.isUp = this.type == "Upwards";
+        this.isAny = this.type == "AnyDirection";
+        this.isAnn = this.type == "Announcement";
+        // console.log(JSON.parse(JSON.stringify(this.boxes)));
     }
 }

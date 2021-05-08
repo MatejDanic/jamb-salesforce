@@ -1,3 +1,5 @@
 <template>
-    <div class="box">{type}</div>
+    <div class="box">
+        <template if:true={filled}>{value}</template>
+    </div>
 </template>

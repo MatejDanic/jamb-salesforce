@@ -15,12 +15,12 @@ export default class Game extends LightningElement {
     }
 
     callGetGameById(gameId) {
-        console.log("Game ID:", gameId);
+        // console.log("Game ID:", gameId);
         getGameById({
             gameId: gameId
         }).then(game => {
             this.game = JSON.parse(game);
-            console.log(JSON.parse(JSON.stringify(this.game)));
+            console.log("Game:", JSON.parse(JSON.stringify(this.game)));
         }).catch(error => {
             console.log("Error (getGameById):", error);
         });

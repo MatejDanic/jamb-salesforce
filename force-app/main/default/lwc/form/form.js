@@ -7,6 +7,6 @@ export default class Form extends LightningElement {
 
     connectedCallback() {
         this.columns = this.getForm.columns;
-        console.log(JSON.parse(JSON.stringify(this.getForm)));
+        // console.log(JSON.parse(JSON.stringify(this.getForm)));
     }
 }

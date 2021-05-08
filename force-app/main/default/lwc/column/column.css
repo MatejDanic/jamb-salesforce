@@ -6,14 +6,29 @@
     display: inline-grid;
 }
 
-.sum-up {
+.icon {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: rgb(250, 250, 249);
+    border-radius: 0px;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.10);
+}
+
+.sum-1 {
     grid-row-start: 8;
 }
 
-
-.sum-mid {
+.sum-2 {
     grid-row-start: 11;
 }
-.sum-down {
+
+.sum-3 {
     grid-row-start: 17;
 }
