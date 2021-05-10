@@ -2,7 +2,7 @@
     <div class="dice-rack-container">
         <div class="dice-rack">
             <template for:each={diceList} for:item="dice">
-                <c-dice key={dice.order} get-dice={dice}></c-dice>
+                <c-dice key={dice.order} get-dice={dice} get-roll-count={rollCount}></c-dice>
             </template>
         </div>
     </div>

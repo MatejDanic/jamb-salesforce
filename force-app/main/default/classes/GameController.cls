@@ -17,7 +17,7 @@ public with sharing class GameController {
         Map<String, Object> gameMap = new Map<String, Object>();
         System.Debug('Game:');
         gameMap.put('announcement', game.Announcement__c);
-        gameMap.put('roll_count', game.Roll_Count__c);
+        gameMap.put('rollCount', game.Roll_Count__c);
         System.Debug(gameMap);
         List<Map<String, Object>> diceList = new List<Map<String, Object>>();
         

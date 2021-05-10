@@ -1,23 +1,28 @@
 import { LightningElement, api, track } from 'lwc';
-import Dice_1 from '@salesforce/resourceUrl/Dice_1';
-import Dice_2 from '@salesforce/resourceUrl/Dice_2';
-import Dice_3 from '@salesforce/resourceUrl/Dice_3';
-import Dice_4 from '@salesforce/resourceUrl/Dice_4';
-import Dice_5 from '@salesforce/resourceUrl/Dice_5';
-import Dice_6 from '@salesforce/resourceUrl/Dice_6';
+import ImageResource from '@salesforce/resourceUrl/ImageResource';
 
 export default class Dice extends LightningElement {
     @api getDice;
+    @api getRollCount;
 
     @track value;
     @track isHeld;
+    @track diceImage;
+    @track borderClass;
+    @track isDisabled;
+    @track rollCount;
 
     connectedCallback() {
         this.isHeld = false;
         this.value = this.getDice.value;
+        this.diceImage = ImageResource + "/dice/" + this.value + ".png";
+        this.rollCount = this.getRollCount;
+        this.isDisabled = this.rollCount == 0 || this.rollCount == 3;
+        this.borderClass = "dice dice-border-" + (this.isDisabled ? "gray" : "black");
     }
 
     handleClick() {
         this.isHeld = !this.isHeld;
+        this.borderClass = "dice dice-border-" + (this.isHeld ? "red" : "gray");
     }
 }

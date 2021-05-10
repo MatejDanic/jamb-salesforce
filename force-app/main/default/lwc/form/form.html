@@ -26,8 +26,9 @@
             </template>
 
             <div class="label-column label-column-end">
-                <c-label class="button-role-dice" id="ROLL-DICE-BUTTON"
-                    style="background-image: url(../static/images/misc/roll_{{game.roll_count}}.png);"></c-label>
+                <button class="button-role-dice" id="ROLL-DICE-BUTTON">
+                    <img src={rollDiceButtonImage}>
+                </button>
                 <c-label></c-label>
                 <c-label class="button-restart" id="RESTART-BUTTON" style="background-image: url(../static/images/misc/restart.png);">
                 </c-label>

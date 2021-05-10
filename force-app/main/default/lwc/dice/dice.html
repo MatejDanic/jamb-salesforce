@@ -1,8 +1,5 @@
 <template>
-    <template if:true={isHeld}>
-        <div class="dice dice-border-red" onclick={handleClick}></div>
-    </template>
-    <template if:false={isHeld}>
-        <div class="dice dice-border-gray" onclick={handleClick}></div>
-    </template>
+    <button class={borderClass} onclick={handleClick} disabled={isDisabled}>
+        <img src={diceImage}>
+    </button>
 </template>

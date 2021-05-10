@@ -1,5 +1,4 @@
 .dice {
-    cursor: pointer;
     border-radius: 16px;
     height: 64px;
     width: 64px;
@@ -11,10 +10,20 @@
     margin: 5px;
 }
 
+.dice:hover:enabled {
+    cursor: pointer;
+    background-color: lightgray;
+    border: 4px solid lightcoral;
+}
+
+.dice-border-black {
+    border: 4px solid black;
+}
+
 .dice-border-gray {
     border: 4px solid rgb(155, 152, 150);
 }
 
 .dice-border-red {
-    border: 3px solid indianred;
+    border: 4px solid indianred;
 }

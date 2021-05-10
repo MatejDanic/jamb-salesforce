@@ -51,6 +51,7 @@
 .button-role-dice {
     grid-row-start: 1;
     grid-row-end: 8;
+    border: 1px solid red;
 }
 
 .button-restart {
