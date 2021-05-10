@@ -5,14 +5,23 @@ export default class Form extends LightningElement {
     @api getForm;
     @api getRollCount;
 
+    @track form;
     @track columns;
     @track rollDiceButtonImage;
     @track rollCount;
+    @track diceImages;
+    @track numberSum;
+    @track diffSum;
+    @track labelSum;
 
     connectedCallback() {
-        this.columns = this.getForm.columns;
+        this.form = this.getForm;
+        this.columns = this.form.columns;
         this.rollCount = this.getRollCount;
         this.rollDiceButtonImage = ImageResource + "/misc/roll_" + this.rollCount + ".png";
-        // console.log(JSON.parse(JSON.stringify(this.getForm)));
+        this.diceImages = [];
+        for (let i=1; i<=6; i++) {
+            this.diceImages.push(ImageResource + "/dice/" + i + ".png");
+        }
     }
 }
