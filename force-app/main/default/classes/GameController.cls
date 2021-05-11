@@ -57,4 +57,42 @@ public with sharing class GameController {
 
         return JSON.serialize(gameMap);
     }
+
+    @auraEnabled
+    public static List<Dice__c> rollDice(String gameId, List<Integer> diceToRoll) {
+
+        List<Game__c> gameList = [SELECT Id, Announcement__c, Roll_Count__c, Number_of_Columns__c, Number_of_Dice__c,
+                                    (SELECT Id, Value__c, Order__c FROM Dice__r),
+                                    (SELECT Id, Filled_Boxes__c FROM Forms__r)
+                                FROM Game__c WHERE Id = :gameId LIMIT 1];
+                                
+        Game__c game = gameList[0];
+        Form__c form = game.Forms__r[0];
+        List<Dice__c> diceList = game.Dice__r;
+        
+		if (game.Roll_Count__c == 0) {
+            diceToRoll = new List<Integer>();
+            for (Integer i = 1; i <= Integer.valueOf(game.Number_of_Dice__c); i++) {
+                diceToRoll.add(i);
+            }
+        } else if (game.Roll_Count__c == 3) {
+            return null;
+        } else if (game.Roll_Count__c == 1 && game.Announcement__c == null && Integer.valueOf(game.Number_of_Columns__c) == 4 && Integer.valueOf(form.Filled_Boxes__c) < (Integer.valueOf(game.Number_of_Columns__c) * 13)) {
+            return null;
+        }
+
+		if (game.Roll_Count__c < 3) {
+			game.Roll_Count__c = game.Roll_Count__c + 1;
+		}
+
+		for (Dice__c dice : diceList) {
+            if (diceToRoll.contains(Integer.valueOf(dice.Order__c))) {
+                dice.Value__c = Math.floor(Math.random() * ((6-1)+1) + 1);
+            }
+		}
+        update game;
+        update diceList;
+
+		return diceList;
+    }
 }
