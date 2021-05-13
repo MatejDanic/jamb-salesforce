@@ -1,6 +1,6 @@
 <template>
     <div class="form-container">
-        <div class="form">
+        <div class="form" id="FORM">
             <div class="label-column">
                 <lightning-icon class="form-item" icon-name="utility:info" alternative-text="Info" title="Info"></lightning-icon>
                 <template for:each={diceImages} for:item="diceImage">
@@ -21,7 +21,7 @@
                 <lightning-icon class="form-item" icon-name="utility:advanced_function" alternative-text="Down" title="Down"></lightning-icon>
             </div>
 
-            <template for:each={columns} for:item="column">
+            <template for:each={form.columns} for:item="column">
                 <c-column key={column.type} get-column={column}></c-column>
             </template>
 

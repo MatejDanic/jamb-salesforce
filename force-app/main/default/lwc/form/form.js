@@ -8,7 +8,6 @@ export default class Form extends LightningElement {
     @api getRollCount;
 
     @track form;
-    @track columns;
     @track rollDiceButtonImage;
     @track rollCount;
     @track diceImages;
@@ -18,7 +17,6 @@ export default class Form extends LightningElement {
 
     connectedCallback() {
         this.form = this.getForm;
-        this.columns = this.form.columns;
         this.rollCount = this.getRollCount;
         this.rollDiceButtonImage = ImageResource + "/misc/roll_" + this.rollCount + ".png";
         this.diceImages = [];
