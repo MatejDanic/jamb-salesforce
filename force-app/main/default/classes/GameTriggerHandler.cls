@@ -1,6 +1,6 @@
 public with sharing class GameTriggerHandler {
 
-    public static void InitializeGame(List<Game__c> gameList) {
+    public static void initializeGame(List<Game__c> gameList) {
         if (gameList.size() != 1) return;
         List<Dice__c> diceList = new List<Dice__c>();
         List<Column__c> columnList = new List<Column__c>();
@@ -45,4 +45,16 @@ public with sharing class GameTriggerHandler {
         }
         insert boxList;
     }
+
+    public static void generateScore(List<Game__c> gameList) {
+        List<Score__c> scoreList = new List<Score__c>();
+        for (Game__c game : gameList) {
+            Score__c score = new Score__c();
+            score.Value__c = game.Final_Sum__c;
+            score.Date__c = Datetime.now();
+            scoreList.add(score);
+        }
+        insert scoreList;
+    }
+
 }

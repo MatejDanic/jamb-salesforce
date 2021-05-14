@@ -22,14 +22,14 @@
     background-color: white;
 }
 
-.sum-1 {
+.number-sum {
     grid-row-start: 8;
 }
 
-.sum-2 {
+.difference-sum {
     grid-row-start: 11;
 }
 
-.sum-3 {
+.label-sum {
     grid-row-start: 17;
 }

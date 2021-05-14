@@ -5,7 +5,6 @@ export default class Dice extends LightningElement {
     @api getDice;
     @api getRollCount;
 
-    @track value;
     @track isHeld;
     @track diceImage;
     @track borderClass;
@@ -13,9 +12,9 @@ export default class Dice extends LightningElement {
     @track rollCount;
 
     connectedCallback() {
+        this.dice = this.getDice;
         this.isHeld = false;
-        this.value = this.getDice.value;
-        this.diceImage = ImageResource + "/dice/" + this.value + ".png";
+        this.diceImage = ImageResource + "/dice/" + this.dice.value + ".png";
         this.rollCount = this.getRollCount;
         this.isDisabled = this.rollCount == 0 || this.rollCount == 3;
         this.borderClass = "dice dice-border-" + (this.isDisabled ? "gray" : "black");

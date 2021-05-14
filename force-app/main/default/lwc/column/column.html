@@ -1,26 +1,26 @@
 <template>
     <div class="column">
         <template if:true={isDown}>
-            <lightning-icon class="form-item" icon-name="utility:arrowdown" alternative-text="Down" title="Down">
+            <lightning-icon class="form-item" icon-name="utility:arrowdown" alternative-text="Downwards" title="Downwards">
             </lightning-icon>
         </template>
         <template if:true={isUp}>
-            <lightning-icon class="form-item" icon-name="utility:arrowup" alternative-text="Down" title="Down">
+            <lightning-icon class="form-item" icon-name="utility:arrowup" alternative-text="Upwards" title="Upwards">
             </lightning-icon>
         </template>
         <template if:true={isAny}>
-            <lightning-icon class="form-item" icon-name="utility:sort" alternative-text="Down" title="Down">
+            <lightning-icon class="form-item" icon-name="utility:sort" alternative-text="Any Direction" title="Any Direction">
             </lightning-icon>
         </template>
         <template if:true={isAnn}>
-            <lightning-icon class="form-item" icon-name="utility:announcement" alternative-text="Down" title="Down">
+            <lightning-icon class="form-item" icon-name="utility:announcement" alternative-text="Announcement" title="Announcement">
             </lightning-icon>
         </template>
-        <c-label class="sum-1" get-text="1"></c-label>
-        <c-label class="sum-2" get-text="2"></c-label>
-        <c-label class="sum-3" get-text="3"></c-label>
-        <template for:each={boxes} for:item="box">
-            <c-box key={box.type} get-box={box} get-column-type={type}></c-box>
+        <c-label class="number-sum" get-text={column.numberSum}></c-label>
+        <c-label class="difference-sum" get-text={column.differenceSum}></c-label>
+        <c-label class="label-sum" get-text={column.labelSum}></c-label>
+        <template for:each={column.boxes} for:item="box">
+            <c-box key={box.type} get-box={box} get-column-type={column.type}></c-box>
         </template>
     </div>
 </template>

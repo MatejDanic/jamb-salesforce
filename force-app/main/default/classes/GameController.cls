@@ -2,15 +2,16 @@ public with sharing class GameController {
 
     @auraEnabled
     public static String getGameById(String gameId) {
+        System.Debug(gameId);
         List<Game__c> gameQueryList = [SELECT Id, Announcement__c, Roll_Count__c,
                                     (SELECT Id, Value__c, Order__c FROM Dice__r),
-                                    (SELECT Id FROM Forms__r)
+                                    (SELECT Id, Number_Sum__c, Difference_Sum__c, Label_Sum__c, Final_Sum__c FROM Forms__r)
                                 FROM Game__c WHERE Id = :gameId LIMIT 1];
                                 
         Game__c game = gameQueryList[0];
         Form__c form = game.Forms__r[0];
-        List<Column__c> columnQueryList = [SELECT Id, Type__c,
-                                        (SELECT Id, Type__c, Value__c, Filled__c, Available__c FROM Boxes__r ORDER BY Type__c)
+        List<Column__c> columnQueryList = [SELECT Id, Type__c, Number_Sum__c, Difference_Sum__c, Label_Sum__c,
+                                        (SELECT Id, Value__c, Type__c, Filled__c, Available__c FROM Boxes__r ORDER BY Type__c)
                                     FROM Column__c WHERE Form__c = :form.Id ORDER BY Type__c LIMIT 4];
         
         
@@ -38,6 +39,9 @@ public with sharing class GameController {
         for (Column__c column : columnQueryList) {
             Map<String, Object> columnMap = new Map<String, Object>();
             columnMap.put('type', column.Type__c);
+            columnMap.put('numberSum', column.Number_Sum__c);
+            columnMap.put('differenceSum', column.Difference_Sum__c);
+            columnMap.put('labelSum', column.Label_Sum__c);
             System.Debug(columnMap);
             List<Map<String, Object>> boxList = new List<Map<String, Object>>();
             for (Box__c box : column.Boxes__r) {
@@ -52,6 +56,10 @@ public with sharing class GameController {
             columnMap.put('boxes', boxList);
             columnList.add(columnMap);
         }
+        formMap.put('numberSum', form.Number_Sum__c);
+        formMap.put('differenceSum', form.Difference_Sum__c);
+        formMap.put('labelSum', form.Label_Sum__c);
+        formMap.put('finalSum', form.Final_Sum__c);
         formMap.put('columns', columnList);
         gameMap.put('form', formMap);
 
@@ -60,7 +68,6 @@ public with sharing class GameController {
 
     @auraEnabled
     public static List<Dice__c> rollDice(String gameId, List<Integer> diceToRoll) {
-
         List<Game__c> gameList = [SELECT Id, Announcement__c, Roll_Count__c, Number_of_Columns__c, Number_of_Dice__c,
                                     (SELECT Id, Value__c, Order__c FROM Dice__r),
                                     (SELECT Id, Filled_Boxes__c FROM Forms__r)
@@ -90,6 +97,7 @@ public with sharing class GameController {
                 dice.Value__c = Math.floor(Math.random() * ((6-1)+1) + 1);
             }
 		}
+
         update game;
         update diceList;
 

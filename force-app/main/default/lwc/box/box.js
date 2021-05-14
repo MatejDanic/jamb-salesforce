@@ -4,19 +4,17 @@ export default class Box extends LightningElement {
     @api getBox;
     @api getColumnType;
 
+    @track box;
     @track value;
     @track available;
     @track filled;
-    @track type;
 
     @track isMax;
     @track isTrips;
 
     connectedCallback() {
-        // console.log(JSON.parse(JSON.stringify(this.getBox)));
-        // console.log(JSON.parse(JSON.stringify(this.getColumnType)));
-        this.type = this.getBox.type;
-        this.isMax = this.type == "Max";
-        this.isTrips = this.type == "Trips";
+        this.box = this.getBox;
+        this.isMax = this.box.type == "Max";
+        this.isTrips = this.box.type == "Trips";
     }
 }

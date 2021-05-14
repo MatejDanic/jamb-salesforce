@@ -20,7 +20,7 @@ export default class Form extends LightningElement {
         this.rollCount = this.getRollCount;
         this.rollDiceButtonImage = ImageResource + "/misc/roll_" + this.rollCount + ".png";
         this.diceImages = [];
-        for (let i=1; i<=6; i++) {
+        for (let i = 1; i <= 6; i++) {
             this.diceImages.push(ImageResource + "/dice/" + i + ".png");
         }
     }

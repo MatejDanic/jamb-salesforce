@@ -9,6 +9,7 @@ export default class Game extends LightningElement {
     @track gameId;
 
     connectedCallback() {
+        console.log("Initialization...")
         this.gameId = this.recordId;
         this.callGetGameById = this.callGetGameById.bind(this);
         this.callGetGameById(this.gameId);

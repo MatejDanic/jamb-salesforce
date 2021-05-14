@@ -1,6 +1,6 @@
 <template>
     <div class="form-container">
-        <div class="form" id="FORM">
+        <div class="form" data-id="FORM">
             <div class="label-column">
                 <lightning-icon class="form-item" icon-name="utility:info" alternative-text="Info" title="Info"></lightning-icon>
                 <template for:each={diceImages} for:item="diceImage">
@@ -42,7 +42,7 @@
             <div class="bottom-row">
                 <c-label style="background-image: url(../static/images/misc/cog.png);"></c-label>
                 <c-label get-text="Total:"></c-label>
-                <c-label></c-label>
+                <c-label get-text={form.finalSum}></c-label>
             </div>
 
         </div>
