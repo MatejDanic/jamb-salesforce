@@ -1,38 +1,47 @@
 import { LightningElement, api, track } from 'lwc';
 import ImageResource from '@salesforce/resourceUrl/ImageResource';
-import rollDice from '@salesforce/apex/GameController.rollDice';
-
 
 export default class Form extends LightningElement {
-    @api getForm;
-    @api getRollCount;
 
-    @track form;
+    @api form;
+    @api rollCount;
+    @api announcement;
+    @api rollDiceButtonDisabled;
+
     @track rollDiceButtonImage;
-    @track rollCount;
+    @track rollDiceButtonDisabled;
+    @track boxesDisabled;
+
     @track diceImages;
-    @track numberSum;
-    @track diffSum;
-    @track labelSum;
+    @track formClass;
+    @track lastColumnClass;
+    @track bottomRowClass;
+    @track multipleColumns;
 
     connectedCallback() {
-        this.form = this.getForm;
-        this.rollCount = this.getRollCount;
+        this.multipleColumns = this.form.columns.length > 1;
         this.rollDiceButtonImage = ImageResource + "/misc/roll_" + this.rollCount + ".png";
         this.diceImages = [];
         for (let i = 1; i <= 6; i++) {
             this.diceImages.push(ImageResource + "/dice/" + i + ".png");
         }
+        this.formClass = "form form-columns-" + this.form.columns.length;
+        this.lastColumnClass = "label-column last-column-" + this.form.columns.length;
+        this.bottomRowClass = "bottom-row bottom-row-end-" + this.form.columns.length;
+    }
+
+    renderedCallback() {
+        this.rollDiceButtonImage = ImageResource + "/misc/roll_" + this.rollCount + ".png";
+        this.rollDiceButtonDisabled = this.rollCount == 3 || this.rollDiceButtonDisabled;
     }
 
     handleRollDice() {
-        rollDice({
-            gameId: "a0009000008HOgLAAW",
-            diceList: [1, 2, 3, 4, 5]
-        }).then(diceList => {
-            console.log(diceList);
-        }).catch(error => {
-            console.log("Error (getGameById):", error);
-        });
+        this.dispatchEvent(new CustomEvent("rolldice"));
+    }
+
+    handleBoxClick(event) {
+        this.dispatchEvent(new CustomEvent("boxclick", {
+            detail: event.detail
+        }));
     }
 }

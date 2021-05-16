@@ -1,5 +1,6 @@
 <template>
-    <button class={borderClass} onclick={handleClick} disabled={isDisabled}>
+    <div style="display: none;">{dice}{diceDisabled}</div>
+    <button class={borderClass} onclick={handleHoldDice} disabled={diceDisabled}>
         <img src={diceImage}>
     </button>
 </template>

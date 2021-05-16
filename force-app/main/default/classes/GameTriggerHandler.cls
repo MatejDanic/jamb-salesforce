@@ -12,6 +12,7 @@ public with sharing class GameTriggerHandler {
             dice.Game__c = game.Id;
             dice.Value__c = 6;
             dice.Order__c = i;
+            dice.Held__c = false;
             diceList.add(dice);
         }
         Form__c form = new Form__c();
@@ -36,9 +37,10 @@ public with sharing class GameTriggerHandler {
                 box.Column__c = column.Id;
                 box.Type__c = boxType.name();
                 box.Filled__c = false;
-                box.Available__c = (column.Type__c == 'DOWNWARDS' && box.Type__c == 'ONES'
+                box.Available__c = column.Type__c == 'DOWNWARDS' && box.Type__c == 'ONES'
                 || column.Type__c == 'UPWARDS' && box.Type__c == 'YAHTZEE'
-                || column.Type__c == 'ANYDIRECTION' && column.Type__c == 'ANNOUNCEMENT');
+                || column.Type__c == 'ANYDIRECTION' 
+                || column.Type__c == 'ANNOUNCEMENT';
                 box.Value__c = 0;
                 boxList.add(box);
             }

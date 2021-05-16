@@ -1,8 +1,14 @@
 <template>
     <div class="game">
         <template if:true={game}>
-            <c-dice-rack get-dice-list={game.dice} get-roll-count={game.rollCount} get-announcement={game.announcement}></c-dice-rack>
-            <c-form get-form={game.form} get-roll-count={game.rollCount} get-announcement={game.announcement}></c-form>
+            <c-dice-rack onholddice={handleHoldDice} dice-list={game.dice} dice-disabled={diceDisabled}></c-dice-rack>
+            <c-form onrolldice={handleRollDice} onboxclick={handleBoxClick} form={game.form} roll-dice-button-disabled={rollDiceButtonDisabled} boxes-disabled={boxDisabled} roll-count={game.rollCount} announcement={game.announcement}></c-form>
         </template>
+        <!-- <template if:true={diceList}>
+            <c-dice-rack number={number} onholddice={handleHoldDice} dice-list={diceList} roll-count={rollCount} announcement={announcement}></c-dice-rack>
+        </template>
+        <template if:true={form}>
+            <c-form onrolldice={handleRollDice} form={form} roll-count={rollCount} announcement={announcement}></c-form>
+        </template> -->
     </div>
 </template>

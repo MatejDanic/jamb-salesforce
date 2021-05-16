@@ -1,14 +1,16 @@
 <template>
+    <div style="display: none;">{form}{rollCount}{announcement}{rollDiceButtonDisabled}</div>
     <div class="form-container">
-        <div class="form" data-id="FORM">
+        <div class={formClass}>
             <div class="label-column">
-                <lightning-icon class="form-item" icon-name="utility:info" alternative-text="Info" title="Info"></lightning-icon>
+                <lightning-icon class="form-item" icon-name="utility:info" alternative-text="Info" title="Info">
+                </lightning-icon>
                 <template for:each={diceImages} for:item="diceImage">
                     <div class="form-item" key={diceImage}>
                         <img src={diceImage} width="40%" height="40%">
                     </div>
                 </template>
-                
+
                 <c-label get-text="(1-6)"></c-label>
                 <c-label get-text="Max"></c-label>
                 <c-label get-text="Min"></c-label>
@@ -18,30 +20,47 @@
                 <c-label get-text="Full"></c-label>
                 <c-label get-text="Poker"></c-label>
                 <c-label get-text="Yahtzee"></c-label>
-                <lightning-icon class="form-item" icon-name="utility:advanced_function" alternative-text="Down" title="Down"></lightning-icon>
+                <c-label get-text="(Trips-Yahtzee)"></c-label>
             </div>
 
             <template for:each={form.columns} for:item="column">
-                <c-column key={column.type} get-column={column}></c-column>
+                <c-column key={column.type} column={column} boxes-disabled={boxesDisabled} onboxclick={handleBoxClick}></c-column>
             </template>
 
-            <div class="label-column label-column-end">
+            <div class={lastColumnClass}>
                 <c-label></c-label>
-                <button class="form-item button-roll-dice" id="ROLL-DICE-BUTTON" onclick={handleRollDice}>
+                <button class="form-item button-roll-dice" id="ROLL-DICE-BUTTON" onclick={handleRollDice} disabled={rollDiceButtonDisabled}>
                     <img src={rollDiceButtonImage}>
                 </button>
-                <c-label></c-label>
-                <lightning-icon class="form-item button-restart" icon-name="utility:refresh" alternative-text="Refresh" title="Refresh"></lightning-icon>
+                <template if:true={multipleColumns}>
+                    <c-label get-text={form.numberSum}></c-label>
+                </template>
+                <template if:false={multipleColumns}>
+                    <c-label></c-label>
+                </template>
+                <lightning-icon class="form-item button-restart" icon-name="utility:refresh" alternative-text="Refresh"
+                    title="Refresh"></lightning-icon>
                 <!-- <c-label class="button-restart" id="RESTART-BUTTON" style="background-image: url(../static/images/misc/restart.png);"> -->
                 <!-- </c-label> -->
-                <c-label></c-label>
+                <template if:true={multipleColumns}>
+                    <c-label get-text={form.differenceSum}></c-label>
+                </template>
+                <template if:false={multipleColumns}>
+                    <c-label></c-label>
+                </template>
                 <c-label class="button-scoreboard"></c-label>
-                <c-label></c-label>
+                <template if:true={multipleColumns}>
+                    <c-label get-text={form.labelSum}></c-label>
+                </template>
+                <template if:false={multipleColumns}>
+                    <c-label></c-label>
+                </template>
             </div>
 
-            <div class="bottom-row">
+            <div class={bottomRowClass}>
                 <c-label style="background-image: url(../static/images/misc/cog.png);"></c-label>
-                <c-label get-text="Total:"></c-label>
+                <lightning-icon class="form-item" icon-name="utility:advanced_function" alternative-text="Down"
+                    title="Down"></lightning-icon>
                 <c-label get-text={form.finalSum}></c-label>
             </div>
 

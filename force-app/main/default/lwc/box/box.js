@@ -1,20 +1,23 @@
 import { LightningElement, api, track } from 'lwc';
 
 export default class Box extends LightningElement {
-    @api getBox;
-    @api getColumnType;
 
-    @track box;
-    @track value;
-    @track available;
-    @track filled;
+    @api box;
+    @api columnType;
+    @api boxesDisabled;
+    @api announcement;
 
-    @track isMax;
-    @track isTrips;
+    @track disabled;
 
-    connectedCallback() {
-        this.box = this.getBox;
-        this.isMax = this.box.type == "Max";
-        this.isTrips = this.box.type == "Trips";
+    renderedCallback() {
+        this.disabled = this.boxesDisabled || this.box.filled || !this.box.available || this.announcement && this.announcement != this.box.type;
+    }
+
+    handleClick() {
+        if (this.columnType == "boxclick") {
+            this.dispatchEvent(new CustomEvent("announce", {
+                detail: this.box.type
+            }));   
+        }
     }
 }

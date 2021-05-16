@@ -1,4 +1,5 @@
 <template>
+    <div style="display: none;">{column}</div>
     <div class="column">
         <template if:true={isDown}>
             <lightning-icon class="form-item" icon-name="utility:arrowdown" alternative-text="Downwards" title="Downwards">
@@ -20,7 +21,7 @@
         <c-label class="difference-sum" get-text={column.differenceSum}></c-label>
         <c-label class="label-sum" get-text={column.labelSum}></c-label>
         <template for:each={column.boxes} for:item="box">
-            <c-box key={box.type} get-box={box} get-column-type={column.type}></c-box>
+            <c-box key={box.type} box={box} column-type={column.type} boxes-disabled={boxesDisabled} onboxclick={handleBoxClick}></c-box>
         </template>
     </div>
 </template>

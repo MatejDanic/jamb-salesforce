@@ -1,14 +1,14 @@
 import { LightningElement, api, track } from 'lwc';
 
 export default class DiceRack extends LightningElement {
-    @api getDiceList;
-    @api getRollCount;
 
-    @track diceList;
-    @track rollCount;
+    @api diceList;
+    @api diceDisabled;
 
-    connectedCallback() {
-        this.diceList = this.getDiceList;
-        this.rollCount = this.getRollCount;
+    handleHoldDice(event) {
+        this.dispatchEvent(new CustomEvent("holddice", {
+            detail: event.detail
+        }));
     }
+
 }
