@@ -85,9 +85,9 @@ export default class Game extends LightningElement {
         holdDice({
             gameId: this.gameId,
             order: event.detail
-        }).then(dice => {
-            dice = JSON.parse(dice);
-            this.game.dice[dice.order - 1] = dice;
+        }).then(diceList => {
+            diceList = JSON.parse(diceList);
+            this.game.dice = diceList;
         }).catch(error => {
             console.log("Error (holdDice):", error);
         });
