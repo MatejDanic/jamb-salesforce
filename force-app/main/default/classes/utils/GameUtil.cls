@@ -1,9 +1,23 @@
+/**
+ * ____________________________________________________________
+ * 
+ * ____________________________________________________________
+ * 
+ * @author Matej Đanić <matej.danic@triple-innovations.com>
+ * @version 0.1
+ * 
+ * @created 16.5.2021.
+ * @modified 17.5.2021.
+ * ____________________________________________________________
+ * 
+*/
+
 public with sharing class GameUtil {
-    public static boolean isAnnouncementRequired(List<Column__c> columnList) {
-        for (Column__c column : columnList) {
-            if (column.Type__c != 'Announcement') {
-                for (Box__c box : column.Boxes__r) {
-                    if (box.Available__c) {
+    public static boolean isAnnouncementRequired(Form form) {
+        for (Column column : form.getColumns()) {
+            if (column.getType() != ColumnType.ANNOUNCEMENT) {
+                for (Box box : column.getBoxes()) {
+                    if (box.isAvailable()) {
                         return false;
                     }
                 }
@@ -21,13 +35,17 @@ public with sharing class GameUtil {
             Integer onesValue, maxValue, minValue;
             Integer columnNumberSum = 0, columnDifferenceSum = 0, columnLabelSum = 0;
             for (Box box : column.getBoxes()) {
-                if (box.getType() == BoxType.ONES || box.getType() == BoxType.TWOS || box.getType() == BoxType.THREES || box.getType() == BoxType.FOURS || box.getType() == BoxType.FIVES || box.getType() == BoxType.SIXES) {
+                if (box.getType() == BoxType.ONES || box.getType() == BoxType.TWOS || 
+                    box.getType() == BoxType.THREES || box.getType() == BoxType.FOURS || 
+                    box.getType() == BoxType.FIVES || box.getType() == BoxType.SIXES) {
                     columnNumberSum += box.getValue();
                     if (box.getType() == BoxType.ONES) {
                         onesFilled = box.isFilled();
                         onesValue = box.getValue();
                     }
-                } else if (box.getType() == BoxType.TRIPS || box.getType() == BoxType.STRAIGHT || box.getType() == BoxType.FULL || box.getType() == BoxType.POKER || box.getType() == BoxType.YAHTZEE) {
+                } else if (box.getType() == BoxType.TRIPS || box.getType() == BoxType.STRAIGHT || 
+                            box.getType() == BoxType.FULL || box.getType() == BoxType.POKER || 
+                            box.getType() == BoxType.YAHTZEE) {
                     columnLabelSum += box.getValue();
                 } else if (box.getType() == BoxType.MAX) {
                     maxFilled = box.isFilled();

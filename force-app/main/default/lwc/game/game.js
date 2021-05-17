@@ -1,3 +1,17 @@
+/**
+ * ____________________________________________________________
+ * 
+ * ____________________________________________________________
+ * 
+ * @author Matej Đanić <matej.danic@triple-innovations.com>
+ * @version 0.1
+ * 
+ * @created 7.5.2021.
+ * @modified 17.5.2021.
+ * ____________________________________________________________
+ * 
+*/
+
 import { LightningElement, api, track } from 'lwc';
 import getGameById from '@salesforce/apex/GameController.getGameById';
 import rollDice from '@salesforce/apex/GameController.rollDice';
@@ -17,8 +31,6 @@ export default class Game extends LightningElement {
     @track diceDisabled;
     @track rollDiceButtonDisabled;
     @track boxesDisabled;
-
-
 
     connectedCallback() {
         this.gameId = this.recordId;
@@ -53,7 +65,7 @@ export default class Game extends LightningElement {
     isAnouncementRequired(form) {
         for (let column of form.columns) {
             console.log(JSON.parse(JSON.stringify(column)));
-            if (column.type != "Announcement") {
+            if (column.type != "ANNOUNCEMENT") {
                 for (let box of column.boxes) { 
                     console.log(JSON.parse(JSON.stringify(box)));
                     if (box.available) {
@@ -94,7 +106,7 @@ export default class Game extends LightningElement {
     }
 
     handleBoxClick(event) {
-        if (event.detail.column == "Announcement") {
+        if (event.detail.column == "ANNOUNCEMENT") {
 
         } else {
 
