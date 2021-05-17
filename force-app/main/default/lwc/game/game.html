@@ -2,7 +2,7 @@
     <div class="game">
         <template if:true={game}>
             <c-dice-rack onholddice={handleHoldDice} dice-list={game.dice} dice-disabled={diceDisabled}></c-dice-rack>
-            <c-form onrolldice={handleRollDice} onboxclick={handleBoxClick} form={game.form} roll-dice-button-disabled={rollDiceButtonDisabled} boxes-disabled={boxDisabled} roll-count={game.rollCount} announcement={game.announcement}></c-form>
+            <c-form onrolldice={handleRollDice} onboxclick={handleBoxClick} form={game.form} roll-dice-button-disabled={rollDiceButtonDisabled} boxes-disabled={boxesDisabled} roll-count={game.rollCount} announcement={game.announcement}></c-form>
         </template>
         <!-- <template if:true={diceList}>
             <c-dice-rack number={number} onholddice={handleHoldDice} dice-list={diceList} roll-count={rollCount} announcement={announcement}></c-dice-rack>

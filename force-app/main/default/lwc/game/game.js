@@ -2,8 +2,8 @@ import { LightningElement, api, track } from 'lwc';
 import getGameById from '@salesforce/apex/GameController.getGameById';
 import rollDice from '@salesforce/apex/GameController.rollDice';
 import holdDice from '@salesforce/apex/GameController.holdDice';
-import fillBox from '@salesforce/apex/GameController.fillBox';
-import announce from '@salesforce/apex/GameController.announce';
+// import fillBox from '@salesforce/apex/GameController.fillBox';
+// import announce from '@salesforce/apex/GameController.announce';
 
 
 
@@ -13,11 +13,12 @@ export default class Game extends LightningElement {
     @track gameId;
     @track gameLoaded;
 
-
     @track game;
     @track diceDisabled;
     @track rollDiceButtonDisabled;
     @track boxesDisabled;
+
+
 
     connectedCallback() {
         this.gameId = this.recordId;
@@ -46,6 +47,7 @@ export default class Game extends LightningElement {
         this.diceDisabled = game.rollCount == 0 || game.rollCount == 3 || this.rollDiceButtonDisabled;
         console.log("Dice Disabled", this.diceDisabled);
         this.boxesDisabled = game.rollCount == 0;
+        console.log("Boxes Disabled", this.boxesDisabled);
     }
 
     isAnouncementRequired(form) {

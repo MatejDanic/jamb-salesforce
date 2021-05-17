@@ -7,11 +7,9 @@ export default class Form extends LightningElement {
     @api rollCount;
     @api announcement;
     @api rollDiceButtonDisabled;
+    @api boxesDisabled;
 
     @track rollDiceButtonImage;
-    @track rollDiceButtonDisabled;
-    @track boxesDisabled;
-
     @track diceImages;
     @track formClass;
     @track lastColumnClass;
@@ -32,7 +30,6 @@ export default class Form extends LightningElement {
 
     renderedCallback() {
         this.rollDiceButtonImage = ImageResource + "/misc/roll_" + this.rollCount + ".png";
-        this.rollDiceButtonDisabled = this.rollCount == 3 || this.rollDiceButtonDisabled;
     }
 
     handleRollDice() {

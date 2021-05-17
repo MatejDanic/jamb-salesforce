@@ -11,10 +11,10 @@ export default class Column extends LightningElement {
     @track isAnn;
 
     connectedCallback() {
-        this.isDown = this.column.type == "Downwards";
-        this.isUp = this.column.type == "Upwards";
-        this.isAny = this.column.type == "AnyDirection";
-        this.isAnn = this.column.type == "Announcement";
+        this.isDown = this.column.type == "DOWNWARDS";
+        this.isUp = this.column.type == "UPWARDS";
+        this.isAny = this.column.type == "ANYDIRECTION";
+        this.isAnn = this.column.type == "ANNOUNCEMENT";
     }
 
     handleBoxClick(event) {
