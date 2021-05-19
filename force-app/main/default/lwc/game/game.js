@@ -107,7 +107,7 @@ export default class Game extends LightningElement {
 
     handleBoxClick(event) {
         if (event.detail.column == "ANNOUNCEMENT") {
-
+            
         } else {
 
         }

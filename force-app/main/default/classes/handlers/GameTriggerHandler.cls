@@ -7,7 +7,7 @@
  * @version 0.1
  * 
  * @created 7.5.2021.
- * @modified 17.5.2021.
+ * @modified 19.5.2021.
  * ____________________________________________________________
  * 
 */
@@ -42,22 +42,22 @@ public with sharing class GameTriggerHandler {
             Column column = new Column(cType, boxList);
             columnList.add(column);
         }
-
         Form form = new Form(columnList);
-
         game.Form__c =  JSON.serialize(form);
     }
 
-    public static void handleUpdate(Map<Id, Game__c> gameMapOld, Map<Id, Game__c> gameMapNew) {
-        for (Id gameId : gameMapOld.keySet()) {
-            if (gameMapOld.get(gameId).Form__c != gameMapNew.get(gameId).Form__c) {
-                Game__c game = gameMapNew.get(gameId);
-                game.Form__c = GameUtil.calculateSums(game.Form__c);
-                game.Final_Sum__c = ((Form) JSON.deserialize(game.Form__c, Form.class)).getFinalSum();
-                gameMapNew.put(gameId, game);
-            }
-        }
-    }
+    // public static void handleUpdate(Map<Id, Game__c> gameMapOld, Map<Id, Game__c> gameMapNew) {
+    //     for (Id gameId : gameMapOld.keySet()) {
+    //         if (gameMapOld.get(gameId).Form__c != gameMapNew.get(gameId).Form__c) {
+    //             Game__c game = gameMapNew.get(gameId);
+    //             Form form = (Form)JSON.deserialize(game.Form__c, Form.class);
+    //             form.updateSums();
+    //             game.Form__c = JSON.serialize(form);
+    //             game.Final_Sum__c = form.getFinalSum();
+    //             gameMapNew.put(gameId, game);
+    //         }
+    //     }
+    // }
 
     public static void generateScore(List<Game__c> gameList) {
         List<Score__c> scoreList = new List<Score__c>();

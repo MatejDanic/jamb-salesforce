@@ -7,6 +7,7 @@
  * @version 0.1
  * 
  * @created 17.5.2021
+ * @modified 17.5.2021
  * ____________________________________________________________
  * 
 */
@@ -67,4 +68,35 @@ public with sharing class Form {
     public void setFinalSum(Integer finalSum) {
         this.finalSum = finalSum;
     }
+
+    public boolean isAnnouncementRequired() {
+        for (Column column : this.columns) {
+            if (column.getType() != ColumnType.ANNOUNCEMENT && !column.isFinished()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void updateSums() {
+        this.numberSum = 0;
+        this.differenceSum = 0;
+        this.labelSum = 0;
+        for (Column column : this.columns) {
+            column.updateSums();
+            this.numberSum += column.getNumberSum();
+            this.differenceSum += column.getDifferenceSum();
+            this.labelSum += column.getLabelSum();
+        }
+        this.finalSum = this.numberSum + this.differenceSum + this.labelSum;
+    }
+
+    public Column getColumnByType(ColumnType columnType) {
+		for (Column column : this.columns) {
+			if (column.getType() == columnType) {
+				return column;
+			}
+		}
+		return null;
+	}
 }

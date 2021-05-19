@@ -7,6 +7,7 @@
  * @version 0.1
  * 
  * @created 17.5.2021
+ * @modified 19.5.2021
  * ____________________________________________________________
  * 
 */
@@ -55,6 +56,12 @@ public with sharing class Box {
 
     public void setAvailable(Boolean available) {
         this.available = available;
+    }
+
+    public void fill(Integer value) {
+        this.value = value;
+        this.filled = true;
+        this.available = false;
     }
 
 }

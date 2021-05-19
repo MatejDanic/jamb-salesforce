@@ -7,7 +7,7 @@
  * @version 0.1
  * 
  * @created 7.5.2021.
- * @modified 17.5.2021.
+ * @modified 19.5.2021.
  * ____________________________________________________________
  * 
 */
@@ -50,6 +50,16 @@ public with sharing class GameController {
         } catch (Exception e) {
             System.debug(e.getMessage());
             throw new AuraHandledException('Error in GameController method "announce": ' + e.getMessage());
+        }
+    }
+
+    @auraEnabled
+    public static String fill(String gameId, String columnType, String boxType) {
+        try {
+            return GameService.fill(gameId, columnType, boxType);
+        } catch (Exception e) {
+            System.debug(e.getMessage());
+            throw new AuraHandledException('Error in GameController method "fill": ' + e.getMessage());
         }
     }
 }

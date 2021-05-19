@@ -7,6 +7,7 @@
  * @version 0.1
  * 
  * @created 17.5.2021
+ * @modified 19.5.2021
  * ____________________________________________________________
  * 
 */
@@ -48,5 +49,7 @@ public with sharing class Dice {
         this.held = held;
     }
 
-
+    public void roll() {
+        this.value = Math.round(Math.random() * (6-1) + 1);
+    }
 }

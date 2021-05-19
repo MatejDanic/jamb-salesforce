@@ -7,6 +7,7 @@
  * @version 0.1
  * 
  * @created 17.5.2021
+ * @modified 19.5.2021
  * ____________________________________________________________
  * 
 */
@@ -68,4 +69,44 @@ public with sharing class Column {
         this.labelSum = labelSum;
     }
 
+    public Box getBoxByType(BoxType boxType) {
+		for (Box box : this.boxes) {
+			if (box.getType() == boxType) {
+				return box;
+			}
+		}
+		return null;
+	}
+
+    public boolean isFinished() {
+        for (Box box : this.boxes) {
+            if (!box.isFilled()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void updateSums() {
+        this.numberSum = 0;
+        this.differenceSum = 0;
+        this.labelSum = 0;
+        for (Box box : this.boxes) {
+            if (box.getType() == BoxType.ONES || box.getType() == BoxType.TWOS || 
+                box.getType() == BoxType.THREES || box.getType() == BoxType.FOURS || 
+                box.getType() == BoxType.FIVES || box.getType() == BoxType.SIXES) {
+                numberSum += box.getValue();
+            } else if (box.getType() == BoxType.TRIPS || box.getType() == BoxType.STRAIGHT || 
+                        box.getType() == BoxType.FULL || box.getType() == BoxType.POKER || 
+                        box.getType() == BoxType.YAHTZEE) {
+                labelSum += box.getValue();
+            }
+        }
+        Box ones = this.getBoxByType(BoxType.ONES);
+        Box max = this.getBoxByType(BoxType.MAX);
+        Box min = this.getBoxByType(BoxType.MIN);
+        if (ones.isFilled() && max.isFilled() && min.isFilled()) {
+            this.differenceSum = ones.getValue() * (max.getValue() - min.getValue());
+        }
+    }
 }
