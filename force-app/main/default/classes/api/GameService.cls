@@ -7,10 +7,10 @@
  * @version 0.1
  * 
  * @created 17.5.2021.
- * @modified 19.5.2021.
+ * @modified 21.5.2021.
  * ____________________________________________________________
  * 
-*/
+ */
 
 public with sharing class GameService {
 
@@ -76,7 +76,7 @@ public with sharing class GameService {
         return game.Dice__c;
     }
 
-    public static String announce(String gameId, String bType) {
+    public static String announce(String gameId, String boxTypeString) {
         List<Game__c> gameList = [SELECT Id, Announcement__c, Roll_Count__c
                                 FROM Game__c WHERE Id = :gameId];
         if (gameList.size() != 1) return null;
@@ -88,23 +88,22 @@ public with sharing class GameService {
             throw new IllegalMoveException('Announcement is available only after first roll!');
         }
 
-        game.Announcement__c = bType;
+        game.Announcement__c = boxTypeString;
         update game;
 
         return game.Announcement__c;
     }
 
-    public static String fill(String gameId, String cType, String bType) {
-        List<Game__c> gameList = [SELECT Id, Announcement__c, Roll_Count__c,
-                                    (SELECT Id FROM Forms__r)
-                                FROM Game__c WHERE Id = :gameId LIMIT 1];
+    public static String fill(String gameId, String columnTypeString, String boxTypeString) {
+        List<Game__c> gameList = [SELECT Id, Announcement__c, Roll_Count__c, Form__c, Dice__c
+                                FROM Game__c WHERE Id = :gameId];
         if (gameList.size() != 1) return null;
         Game__c game = gameList[0];
 
         Form form = (Form)JSON.deserialize(game.Form__c, Form.class);
         List<Dice> diceList = (List<Dice>)JSON.deserialize(game.Dice__c, List<Dice>.class);
-        
-        Box b = form.getColumnByType(ColumnType.valueOf(cType)).getBoxByType(BoxType.valueOf(bType));
+
+        Box b = form.getColumnByType(columnTypeString).getBoxByType(boxTypeString);
         
         if (b.isFilled()) {
 			throw new IllegalMoveException('Box is already filled!');
@@ -112,31 +111,42 @@ public with sharing class GameService {
             throw new IllegalMoveException('Box is not available!');
         } else if (game.Roll_Count__c == 0) {
             throw new IllegalMoveException('Cannot fill box without rolling dice first!');
-        } else if (game.Announcement__c != null && BoxType.valueOf(game.Announcement__c) != b.getType()) {
+        } else if (game.Announcement__c != null && game.Announcement__c != b.getType().name()) {
             throw new IllegalMoveException('Another box is announced');
         }
 
         for (Column column : form.getColumns()) {
-            if (column.getType() == ColumnType.valueOf(cType)) {
+            if (column.getType().name() == columnTypeString) {
                 for (Box box : column.getBoxes()) {
-                    if (box.getType() == BoxType.valueOf(bType)) {
+                    if (box.getType().name() == boxTypeString) {
                         box.fill(ScoreUtil.calculateScore(diceList, box.getType()));
                     } else if (column.getType() == ColumnType.DOWNWARDS && 
-                    BoxType.valueOf(bType) != BoxType.YAHTZEE && 
-                    BoxType.valueOf(bType).ordinal() + 1 == box.getType().ordinal()) {
+                    boxTypeString != String.valueOf(BoxType.YAHTZEE) && 
+                    ((BoxType)EnumUtil.parseEnum(boxTypeString, BoxType.class)).ordinal() + 1 == box.getType().ordinal()) {
                         box.setAvailable(true);
                     } else if (column.getType() == ColumnType.UPWARDS && 
-                    BoxType.valueOf(bType) != BoxType.ONES && 
-                    BoxType.valueOf(bType).ordinal() - 1 == box.getType().ordinal()) {
+                    boxTypeString != String.valueOf(BoxType.Ones) && 
+                    ((BoxType)EnumUtil.parseEnum(boxTypeString, BoxType.class)).ordinal() - 1 == box.getType().ordinal()) {
                         box.setAvailable(true);
                     }
                 }   
                 break;
             }
         }
-
+        form.updateSums();
+        
+        for (Dice dice : diceList) {
+            dice.setHeld(false);
+        }
+        game.Final_Sum__c = form.getFinalSum();
+        game.Dice__c = JSON.serialize(diceList);
         game.Form__c = JSON.serialize(form);
+        game.Roll_Count__c = 0;
+        game.Announcement__c = null;
+
+
         update game;
-        return game.Form__c;
+
+        return JSON.serialize(RecordUtil.recordToMap('GAME', game));
     }
 }

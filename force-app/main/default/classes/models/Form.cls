@@ -7,11 +7,10 @@
  * @version 0.1
  * 
  * @created 17.5.2021
- * @modified 17.5.2021
+ * @modified 21.5.2021
  * ____________________________________________________________
  * 
-*/
-
+ */
 
 public with sharing class Form {
 
@@ -91,9 +90,9 @@ public with sharing class Form {
         this.finalSum = this.numberSum + this.differenceSum + this.labelSum;
     }
 
-    public Column getColumnByType(ColumnType columnType) {
+    public Column getColumnByType(String columnTypeString) {
 		for (Column column : this.columns) {
-			if (column.getType() == columnType) {
+			if (column.getType().name() == columnTypeString) {
 				return column;
 			}
 		}

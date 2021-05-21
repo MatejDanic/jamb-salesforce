@@ -7,10 +7,11 @@
  * @version 0.1
  * 
  * @created 7.5.2021.
- * @modified 19.5.2021.
+ * @modified 21.5.2021.
  * ____________________________________________________________
  * 
-*/
+ */
+
 public with sharing class GameController {
 
     @auraEnabled
@@ -19,7 +20,7 @@ public with sharing class GameController {
             return GameService.getGameById(gameId);
         } catch (Exception e) {
             System.debug(e.getMessage());       
-            throw new AuraHandledException('Error in GameController method "getGameById": ' + e.getMessage());
+            throw new AuraHandledException('Error (GameController.getGameById): ' + e.getMessage());
         }
     }
 
@@ -29,7 +30,7 @@ public with sharing class GameController {
             return GameService.rollDice(gameId);
         } catch (Exception e) {
             System.debug(e.getMessage());
-            throw new AuraHandledException('Error in GameController method "rollDice": ' + e.getMessage());
+            throw new AuraHandledException('Error (GameController.rollDice): ' + e.getMessage());
         }
     }
 
@@ -39,7 +40,7 @@ public with sharing class GameController {
             return GameService.holdDice(gameId, order);
         } catch (Exception e) {
             System.debug(e.getMessage());
-            throw new AuraHandledException('Error in GameController method "holdDice": ' + e.getMessage());
+            throw new AuraHandledException('Error (GameController.holdDice): ' + e.getMessage());
         }
     }
 
@@ -49,17 +50,17 @@ public with sharing class GameController {
             return GameService.announce(gameId, boxType);
         } catch (Exception e) {
             System.debug(e.getMessage());
-            throw new AuraHandledException('Error in GameController method "announce": ' + e.getMessage());
+            throw new AuraHandledException('Error (GameController.announce): ' + e.getMessage());
         }
     }
 
     @auraEnabled
-    public static String fill(String gameId, String columnType, String boxType) {
+    public static String fill(String gameId, String columnTypeString, String boxTypeString) {
         try {
-            return GameService.fill(gameId, columnType, boxType);
+            return GameService.fill(gameId, columnTypeString, boxTypeString);
         } catch (Exception e) {
             System.debug(e.getMessage());
-            throw new AuraHandledException('Error in GameController method "fill": ' + e.getMessage());
+            throw new AuraHandledException('Error (GameController.fill): ' + e.getMessage());
         }
     }
 }

@@ -7,11 +7,10 @@
  * @version 0.1
  * 
  * @created 17.5.2021
- * @modified 19.5.2021
+ * @modified 21.5.2021
  * ____________________________________________________________
  * 
-*/
-
+ */
 
 public with sharing class Column {
     
@@ -69,9 +68,9 @@ public with sharing class Column {
         this.labelSum = labelSum;
     }
 
-    public Box getBoxByType(BoxType boxType) {
+    public Box getBoxByType(String boxTypeString) {
 		for (Box box : this.boxes) {
-			if (box.getType() == boxType) {
+			if (box.getType().name() == boxTypeString) {
 				return box;
 			}
 		}
@@ -102,9 +101,9 @@ public with sharing class Column {
                 labelSum += box.getValue();
             }
         }
-        Box ones = this.getBoxByType(BoxType.ONES);
-        Box max = this.getBoxByType(BoxType.MAX);
-        Box min = this.getBoxByType(BoxType.MIN);
+        Box ones = this.getBoxByType(String.valueOf(BoxType.ONES));
+        Box max = this.getBoxByType(String.valueOf(BoxType.MAX));
+        Box min = this.getBoxByType(String.valueOf(BoxType.MIN));
         if (ones.isFilled() && max.isFilled() && min.isFilled()) {
             this.differenceSum = ones.getValue() * (max.getValue() - min.getValue());
         }

@@ -7,10 +7,10 @@
  * @version 0.1
  * 
  * @created 7.5.2021.
- * @modified 17.5.2021.
+ * @modified 21.5.2021.
  * ____________________________________________________________
  * 
-*/
+ */
 
 import { LightningElement, api, track } from 'lwc';
 
@@ -28,10 +28,8 @@ export default class Box extends LightningElement {
     }
 
     handleClick() {
-        if (this.columnType == "boxclick") {
-            this.dispatchEvent(new CustomEvent("announce", {
-                detail: this.box.type
-            }));   
-        }
+        this.dispatchEvent(new CustomEvent("boxclick", {
+            detail: this.box.type
+        }));
     }
 }
