@@ -7,7 +7,7 @@
  * @version 0.1
  * 
  * @created 7.5.2021.
- * @modified 21.5.2021.
+ * @modified 24.5.2021.
  * ____________________________________________________________
  * 
  */
@@ -18,6 +18,7 @@ export default class Column extends LightningElement {
 
     @api column
     @api boxesDisabled;
+    @api rollCount;
 
     @track isDown;
     @track isUp;

@@ -7,7 +7,7 @@
  * @version 0.1
  * 
  * @created 7.5.2021.
- * @modified 21.5.2021.
+ * @modified 24.5.2021.
  * ____________________________________________________________
  * 
  */
@@ -20,11 +20,20 @@ export default class Box extends LightningElement {
     @api columnType;
     @api boxesDisabled;
     @api announcement;
+    @api rollCount;
 
     @track disabled;
+    
+    connectedCallback() {
+        this.disabled = this.boxesDisabled || this.box.filled || !this.box.available || 
+                        this.columnType == "ANNOUNCEMENT" && (this.announcement && this.announcement != this.box.type || !this.announcement && this.rollCount != 1) || 
+                        this.columnType != "ANNOUNCEMENT" && this.announcement;
+    }
 
     renderedCallback() {
-        this.disabled = this.boxesDisabled || this.box.filled || !this.box.available || this.announcement && this.announcement != this.box.type;
+        this.disabled = this.boxesDisabled || this.box.filled || !this.box.available || 
+                        this.columnType == "ANNOUNCEMENT" && (this.announcement && this.announcement != this.box.type || !this.announcement && this.rollCount != 1) || 
+                        this.columnType != "ANNOUNCEMENT" && this.announcement;
     }
 
     handleClick() {
