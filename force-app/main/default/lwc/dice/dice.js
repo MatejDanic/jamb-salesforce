@@ -7,7 +7,7 @@
  * @version 0.1
  * 
  * @created 7.5.2021.
- * @modified 17.5.2021.
+ * @modified 26.5.2021.
  * ____________________________________________________________
  * 
 */
@@ -21,11 +21,11 @@ export default class Dice extends LightningElement {
     @api diceDisabled;
 
     @track diceImage;
-    @track borderClass;
+    @track diceClass;
 
     renderedCallback() {
         this.diceImage = ImageResource + "/dice/" + this.dice.value + ".png";
-        this.borderClass = "dice dice-border-" + (this.diceDisabled ? "gray" : (this.dice.held ? "red" : "black"));
+        this.diceClass = "dice dice-border-" + (this.diceDisabled ? "gray" : (this.dice.held ? "red" : "black"));
     }
 
     handleHoldDice() {

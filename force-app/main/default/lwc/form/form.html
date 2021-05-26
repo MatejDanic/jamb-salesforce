@@ -24,7 +24,7 @@
             </div>
 
             <template for:each={form.columns} for:item="column">
-                <c-column key={column.type} column={column} boxes-disabled={boxesDisabled} onboxclick={handleBoxClick} roll-count={rollCount}></c-column>
+                <c-column key={column.type} column={column} boxes-disabled={boxesDisabled} onboxclick={handleBoxClick} roll-count={rollCount} announcement={announcement}></c-column>
             </template>
 
             <div class={lastColumnClass}>

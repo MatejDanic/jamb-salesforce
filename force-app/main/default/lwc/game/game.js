@@ -7,7 +7,7 @@
  * @version 0.1
  * 
  * @created 7.5.2021.
- * @modified 21.5.2021.
+ * @modified 26.5.2021.
  * ____________________________________________________________
  * 
  */
@@ -35,13 +35,13 @@ export default class Game extends LightningElement {
 
     connectedCallback() {
         this.gameId = this.recordId;
-        this.callGetGameById = this.callGetGameById.bind(this);
+        // this.getGame = this.getGame.bind(this);
         this.isAnouncementRequired = this.isAnouncementRequired.bind(this);
         this.setParameters = this.setParameters.bind(this);
-        this.callGetGameById(this.gameId);
+        this.getGame(this.gameId);
     }
 
-    callGetGameById(gameId) {
+    getGame(gameId) {
         getGameById({
             gameId: gameId
         }).then(game => {
@@ -65,10 +65,8 @@ export default class Game extends LightningElement {
 
     isAnouncementRequired(form) {
         for (let column of form.columns) {
-            console.log(JSON.parse(JSON.stringify(column)));
             if (column.type != "ANNOUNCEMENT") {
                 for (let box of column.boxes) { 
-                    console.log(JSON.parse(JSON.stringify(box)));
                     if (box.available) {
                         return false;
                     }
@@ -83,6 +81,7 @@ export default class Game extends LightningElement {
             gameId: this.gameId
         }).then(diceList => {
             diceList = JSON.parse(diceList);
+            console.log("Dice", diceList);
             if (this.game.rollCount < 3) {
                 this.game.rollCount = this.game.rollCount + 1;
             }
@@ -98,7 +97,8 @@ export default class Game extends LightningElement {
             gameId: this.gameId,
             order: event.detail
         }).then(diceList => {
-            diceList = JSON.parse(diceList);
+            diceList = JSON.parse(diceList);        
+            console.log("Dice", diceList);
             this.game.dice = diceList;
         }).catch(error => {
             console.log("Error (holdDice):", error);
@@ -111,7 +111,7 @@ export default class Game extends LightningElement {
                 gameId: this.gameId,
                 boxTypeString: event.detail.boxType
             }).then(announcement => {
-                console.log(announcement);
+                console.log("Announcement", announcement);
                 this.game.announcement = announcement;
                 this.setParameters(this.game);
             }).catch(error => {
@@ -131,4 +131,16 @@ export default class Game extends LightningElement {
             });
         }
     }
+
+    // handleRefresh() {
+    //     refresh({
+    //         gameId: this.gameId
+    //     }).then(game => {
+    //         console.log("Announcement", announcement);
+    //         this.game.announcement = announcement;
+    //         this.setParameters(this.game);
+    //     }).catch(error => {
+    //         console.log("Error (announce):", error);
+    //     });
+    // }
 }

@@ -21,7 +21,7 @@
         <c-label class="difference-sum" get-text={column.differenceSum}></c-label>
         <c-label class="label-sum" get-text={column.labelSum}></c-label>
         <template for:each={column.boxes} for:item="box">
-            <c-box key={box.type} box={box} column-type={column.type} boxes-disabled={boxesDisabled} onboxclick={handleBoxClick} roll-count={rollCount}></c-box>
+            <c-box key={box.type} box={box} column-type={column.type} boxes-disabled={boxesDisabled} onboxclick={handleBoxClick} roll-count={rollCount} announcement={announcement}></c-box>
         </template>
     </div>
 </template>

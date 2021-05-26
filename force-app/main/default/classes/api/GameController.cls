@@ -7,7 +7,7 @@
  * @version 0.1
  * 
  * @created 7.5.2021.
- * @modified 21.5.2021.
+ * @modified 26.5.2021.
  * ____________________________________________________________
  * 
  */
@@ -45,9 +45,9 @@ public with sharing class GameController {
     }
 
     @auraEnabled
-    public static String announce(String gameId, String boxType) {
+    public static String announce(String gameId, String boxTypeString) {
         try {
-            return GameService.announce(gameId, boxType);
+            return GameService.announce(gameId, boxTypeString);
         } catch (Exception e) {
             System.debug(e.getMessage());
             throw new AuraHandledException('Error (GameController.announce): ' + e.getMessage());
