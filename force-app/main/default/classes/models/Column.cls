@@ -7,7 +7,7 @@
  * @version 0.1
  * 
  * @created 17.5.2021
- * @modified 21.5.2021
+ * @modified 27.5.2021
  * ____________________________________________________________
  * 
  */
@@ -96,7 +96,7 @@ public with sharing class Column {
                 box.getType() == BoxType.FIVES || box.getType() == BoxType.SIXES) {
                 numberSum += box.getValue();
             } else if (box.getType() == BoxType.TRIPS || box.getType() == BoxType.STRAIGHT || 
-                        box.getType() == BoxType.FULL || box.getType() == BoxType.POKER || 
+                        box.getType() == BoxType.FULL || box.getType() == BoxType.QUADS || 
                         box.getType() == BoxType.YAHTZEE) {
                 labelSum += box.getValue();
             }

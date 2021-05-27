@@ -8,7 +8,7 @@
  * @version 0.1
  * 
  * @created 19.5.2021
- * @modified 21.5.2021
+ * @modified 27.5.2021
  * ____________________________________________________________
  * 
  */
@@ -43,11 +43,11 @@ public with sharing class ScoreUtil {
 			when FULL {
 				result = calculateFull(diceList, GameConstants.BONUS_FULL);
             }
-			when POKER {
-				result = calculateSumOfRepeatingValue(diceList, 4, GameConstants.BONUS_POKER);
+			when QUADS {
+				result = calculateSumOfRepeatingValue(diceList, 4, GameConstants.BONUS_QUADS);
             }
             when YAHTZEE {
-				result = calculateSumOfRepeatingValue(diceList, 5, GameConstants.BONUS_JAMB);
+				result = calculateSumOfRepeatingValue(diceList, 5, GameConstants.BONUS_YAHTZEE);
             }
 		}
 		return result;

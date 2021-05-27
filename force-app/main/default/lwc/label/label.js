@@ -7,19 +7,15 @@
  * @version 0.1
  * 
  * @created 7.5.2021.
- * @modified 17.5.2021.
+ * @modified 27.5.2021.
  * ____________________________________________________________
  * 
 */
 
-import { LightningElement, api, track } from 'lwc';
+import { LightningElement, api } from 'lwc';
 
 export default class Label extends LightningElement {
-    @api getText;
 
-    @track text;
+    @api text;
 
-    connectedCallback() {
-        this.text = this.getText;
-    }
 }

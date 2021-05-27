@@ -7,7 +7,7 @@
  * @version 0.1
  * 
  * @created 7.5.2021.
- * @modified 26.5.2021.
+ * @modified 27.5.2021.
  * ____________________________________________________________
  * 
  */
@@ -15,12 +15,22 @@
 public with sharing class GameController {
 
     @auraEnabled
-    public static String getGameById(String gameId) {
+    public static String getGame(String gameId) {
         try {
-            return GameService.getGameById(gameId);
+            return GameService.getGame(gameId);
         } catch (Exception e) {
             System.debug(e.getMessage());       
-            throw new AuraHandledException('Error (GameController.getGameById): ' + e.getMessage());
+            throw new AuraHandledException('Error (GameController.getGame): ' + e.getMessage());
+        }
+    }
+
+    @auraEnabled
+    public static String refreshGame(String gameId) {
+        try {
+            return GameService.refresh(gameId);
+        } catch (Exception e) {
+            System.debug(e.getMessage());
+            throw new AuraHandledException('Error (GameController.refreshGame): ' + e.getMessage());
         }
     }
 

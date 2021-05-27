@@ -11,44 +11,48 @@
                     </div>
                 </template>
 
-                <c-label get-text="(1-6)"></c-label>
-                <c-label get-text="Max"></c-label>
-                <c-label get-text="Min"></c-label>
-                <c-label get-text="∆ x 1's"></c-label>
-                <c-label get-text="Trips"></c-label>
-                <c-label get-text="Straight"></c-label>
-                <c-label get-text="Full"></c-label>
-                <c-label get-text="Poker"></c-label>
-                <c-label get-text="Yahtzee"></c-label>
-                <c-label get-text="(Trips-Yahtzee)"></c-label>
+                <c-label text="(1-6)"></c-label>
+                <c-label text="Max"></c-label>
+                <c-label text="Min"></c-label>
+                <c-label text="∆ x 1's"></c-label>
+                <c-label text="Trips"></c-label>
+                <c-label text="Straight"></c-label>
+                <c-label text="Full"></c-label>
+                <c-label text="Quads"></c-label>
+                <c-label text="Yahtzee"></c-label>
+                <c-label text="(Trips-Yahtzee)"></c-label>
             </div>
 
             <template for:each={form.columns} for:item="column">
-                <c-column key={column.type} column={column} boxes-disabled={boxesDisabled} onboxclick={handleBoxClick} roll-count={rollCount} announcement={announcement}></c-column>
+                <c-column key={column.type} column={column} boxes-disabled={boxesDisabled} onboxclick={handleBoxClick}
+                    roll-count={rollCount} announcement={announcement}></c-column>
             </template>
 
             <div class={lastColumnClass}>
                 <c-label></c-label>
-                <button class="form-item button-roll-dice" id="ROLL-DICE-BUTTON" onclick={handleRollDice} disabled={rollDiceButtonDisabled}>
+                <button class="form-item button-roll-dice" id="ROLL-DICE-BUTTON" onclick={handleRollDice}
+                    disabled={rollDiceButtonDisabled}>
                     <img src={rollDiceButtonImage}>
                 </button>
                 <template if:true={multipleColumns}>
-                    <c-label get-text={form.numberSum}></c-label>
+                    <c-label text={form.numberSum}></c-label>
                 </template>
                 <template if:false={multipleColumns}>
                     <c-label></c-label>
                 </template>
-                <lightning-icon class="form-item button-restart" icon-name="utility:refresh" alternative-text="Refresh"
-                    title="Refresh"></lightning-icon>
+                <button class="form-item button-restart" onclick={handleRefresh}>
+                    <lightning-icon class="" icon-name="utility:refresh" alternative-text="Refresh" title="Refresh">
+                    </lightning-icon>
+                </button>
                 <template if:true={multipleColumns}>
-                    <c-label get-text={form.differenceSum}></c-label>
+                    <c-label text={form.differenceSum}></c-label>
                 </template>
                 <template if:false={multipleColumns}>
                     <c-label></c-label>
                 </template>
                 <c-label class="button-scoreboard"></c-label>
                 <template if:true={multipleColumns}>
-                    <c-label get-text={form.labelSum}></c-label>
+                    <c-label text={form.labelSum}></c-label>
                 </template>
                 <template if:false={multipleColumns}>
                     <c-label></c-label>
@@ -59,7 +63,7 @@
                 <c-label style="background-image: url(../static/images/misc/cog.png);"></c-label>
                 <lightning-icon class="form-item" icon-name="utility:advanced_function" alternative-text="Down"
                     title="Down"></lightning-icon>
-                <c-label get-text={form.finalSum}></c-label>
+                <c-label class="label-final-sum" text={form.finalSum}></c-label>
             </div>
 
         </div>

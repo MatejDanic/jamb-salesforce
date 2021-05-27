@@ -7,19 +7,22 @@
  * @version 0.1
  * 
  * @created 7.5.2021.
- * @modified 26.5.2021.
+ * @modified 27.5.2021.
  * ____________________________________________________________
  * 
  */
 
 import { LightningElement, api, track } from 'lwc';
-import getGameById from '@salesforce/apex/GameController.getGameById';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import getGame from '@salesforce/apex/GameController.getGame';
+import refreshGame from '@salesforce/apex/GameController.refreshGame';
 import rollDice from '@salesforce/apex/GameController.rollDice';
 import holdDice from '@salesforce/apex/GameController.holdDice';
 import fill from '@salesforce/apex/GameController.fill';
 import announce from '@salesforce/apex/GameController.announce';
 
-
+const ERROR_TITLE = "Error";
+const ERROR_VARIANT = "Error";
 
 export default class Game extends LightningElement {
 
@@ -35,14 +38,11 @@ export default class Game extends LightningElement {
 
     connectedCallback() {
         this.gameId = this.recordId;
-        // this.getGame = this.getGame.bind(this);
-        this.isAnouncementRequired = this.isAnouncementRequired.bind(this);
-        this.setParameters = this.setParameters.bind(this);
-        this.getGame(this.gameId);
+        this.callGetGame(this.gameId);
     }
 
-    getGame(gameId) {
-        getGameById({
+    callGetGame(gameId) {
+        getGame({
             gameId: gameId
         }).then(game => {
             game = JSON.parse(game);
@@ -50,7 +50,29 @@ export default class Game extends LightningElement {
             this.game = game;
             this.setParameters(this.game);
         }).catch(error => {
-            console.log("Error (getGameById):", error);
+            this.dispatchEvent(new ShowToastEvent({
+                title: ERROR,
+                message: error,
+                variant: ERROR,
+            }));
+        });
+    }
+
+    handleRefresh() {
+        refreshGame({
+            gameId: this.gameId
+        }).then(game => {
+            game = JSON.parse(game);
+            console.log("Game:", JSON.parse(JSON.stringify(game)));
+            this.game = game;
+            this.setParameters(this.game);
+        }).catch(error => {
+            console.log(error);
+            this.dispatchEvent(new ShowToastEvent({
+                title: ERROR_TITLE,
+                message: error.body.message,
+                variant: ERROR_VARIANT,
+            }));
         });
     }
 
@@ -66,7 +88,7 @@ export default class Game extends LightningElement {
     isAnouncementRequired(form) {
         for (let column of form.columns) {
             if (column.type != "ANNOUNCEMENT") {
-                for (let box of column.boxes) { 
+                for (let box of column.boxes) {
                     if (box.available) {
                         return false;
                     }
@@ -88,7 +110,11 @@ export default class Game extends LightningElement {
             this.game.dice = diceList;
             this.setParameters(this.game);
         }).catch(error => {
-            console.log("Error (rollDice):", error);
+            this.dispatchEvent(new ShowToastEvent({
+                title: ERROR,
+                message: error,
+                variant: ERROR,
+            }));
         });
     }
 
@@ -97,11 +123,15 @@ export default class Game extends LightningElement {
             gameId: this.gameId,
             order: event.detail
         }).then(diceList => {
-            diceList = JSON.parse(diceList);        
+            diceList = JSON.parse(diceList);
             console.log("Dice", diceList);
             this.game.dice = diceList;
         }).catch(error => {
-            console.log("Error (holdDice):", error);
+            this.dispatchEvent(new ShowToastEvent({
+                title: ERROR,
+                message: error,
+                variant: ERROR,
+            }));
         });
     }
 
@@ -111,7 +141,6 @@ export default class Game extends LightningElement {
                 gameId: this.gameId,
                 boxTypeString: event.detail.boxType
             }).then(announcement => {
-                console.log("Announcement", announcement);
                 this.game.announcement = announcement;
                 this.setParameters(this.game);
             }).catch(error => {
@@ -127,20 +156,12 @@ export default class Game extends LightningElement {
                 this.game = game;
                 this.setParameters(this.game);
             }).catch(error => {
-                console.log("Error (fill):", error);
+                this.dispatchEvent(new ShowToastEvent({
+                    title: ERROR,
+                    message: error,
+                    variant: ERROR,
+                }));
             });
         }
     }
-
-    // handleRefresh() {
-    //     refresh({
-    //         gameId: this.gameId
-    //     }).then(game => {
-    //         console.log("Announcement", announcement);
-    //         this.game.announcement = announcement;
-    //         this.setParameters(this.game);
-    //     }).catch(error => {
-    //         console.log("Error (announce):", error);
-    //     });
-    // }
 }

@@ -7,21 +7,92 @@
  * @version 0.1
  * 
  * @created 17.5.2021.
- * @modified 21.5.2021.
+ * @modified 27.5.2021.
  * ____________________________________________________________
  * 
  */
 
 public with sharing class GameService {
 
-    public static String getGameById(String gameId) {
+    public static String getGame(String gameId) {
 
-        List<Game__c> gameList = [SELECT Id, Announcement__c, Roll_Count__c, Dice__c, Form__c
-                                FROM Game__c WHERE Id = :gameId];
-        if (gameList.size() != 1) return null;
-        Game__c game = gameList[0];
+        Game__c game = [SELECT 
+                            Id, 
+                            Announcement__c, 
+                            Roll_Count__c, 
+                            Dice__c, 
+                            Form__c
+                        FROM Game__c 
+                        WHERE Id = :gameId][0];
 
         return JSON.serialize(RecordUtil.recordToMap('GAME', game));
+    }
+
+    public static String refresh(String gameId) {
+
+        Game__c game = [SELECT 
+                            Id, 
+                            Announcement__c, 
+                            Roll_Count__c, 
+                            Dice__c, 
+                            Form__c, 
+                            Number_Of_Dice__c, 
+                            Number_of_Columns__c,
+                            Column_Types__c
+                        FROM Game__c 
+                        WHERE Id = :gameId][0];
+        
+        game = initializeGame(game);
+        update game;
+        
+        return JSON.serialize(RecordUtil.recordToMap('GAME', game));
+    }
+    
+    public static void initializeGames(List<Game__c> gameList) {
+        for (Game__c game : gameList) {
+            game = initializeGame(game);
+        }
+    }
+
+    public static Game__c initializeGame(Game__c game) {
+
+        List<Dice> diceList = new List<Dice>();
+        for (Integer i = 1; i <= Integer.valueOf(game.Number_of_Dice__c); i++) {
+            Dice dice = new Dice(i);
+            diceList.add(dice);
+        }
+        game.Dice__c = JSON.serialize(diceList);
+
+        List<Column> columnList = new List<Column>();
+        for (Integer i = 1; i <= Integer.valueOf(game.Number_of_Columns__c); i++) {
+            ColumnType cType = game.Column_Types__c == 'Classic' ? columnType.values()[i - 1] : ColumnType.ANYDIRECTION;
+            List<Box> boxList = new List<Box>();
+            for (BoxType bType : BoxType.values()) {
+                Boolean available = (cType == ColumnType.DOWNWARDS && bType == BoxType.ONES
+                || cType == ColumnType.UPWARDS && bType == BoxType.YAHTZEE
+                || cType == ColumnType.ANYDIRECTION
+                || cType == ColumnType.ANNOUNCEMENT);
+                Box box = new Box(bType, available);
+                boxList.add(box);
+            }
+            Column column = new Column(cType, boxList);
+            columnList.add(column);
+        }
+        Form form = new Form(columnList);
+        game.Form__c =  JSON.serialize(form);
+
+        return game;
+    }
+    
+    public static void generateScore(List<Game__c> gameList) {
+        List<Score__c> scoreList = new List<Score__c>();
+        for (Game__c game : gameList) {
+            if (game.Finished__c) {
+                Score__c score = new Score__c(Value__c = game.Final_Sum__c, Date__c = DateTime.now());
+                scoreList.add(new Score__c(Value__c = game.Final_Sum__c, Date__c = DateTime.now()));
+            }
+        }
+        insert scoreList;
     }
 
     public static String rollDice(String gameId) {

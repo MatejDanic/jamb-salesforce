@@ -7,17 +7,15 @@
  * @version 0.1
  * 
  * @created 7.5.2021.
- * @modified 19.5.2021.
+ * @modified 27.5.2021.
  * ____________________________________________________________
  * 
 */
 
 trigger GameTrigger on Game__c (before insert, before delete) {
     if (Trigger.isInsert) {
-        GameTriggerHandler.initializeGame(Trigger.new);
+        GameService.initializeGames(Trigger.new);
     } else if(Trigger.isDelete) {
-        GameTriggerHandler.generateScore(Trigger.old);
-    } /*else if(Trigger.isUpdate) {
-        GameTriggerHandler.handleUpdate(Trigger.oldMap, Trigger.newMap);
-    }*/
+        GameService.generateScore(Trigger.old);
+    }
 }

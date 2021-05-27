@@ -7,7 +7,7 @@
  * @version 0.1
  * 
  * @created 7.5.2021.
- * @modified 26.5.2021.
+ * @modified 27.5.2021.
  * ____________________________________________________________
  * 
  */
@@ -23,13 +23,7 @@ export default class Box extends LightningElement {
     @api rollCount;
 
     @track disabled;
-    
-    // connectedCallback() {
-    //     this.disabled = this.boxesDisabled || this.box.filled || !this.box.available || 
-    //                     this.columnType == "ANNOUNCEMENT" && (this.announcement && this.announcement != this.box.type || !this.announcement && this.rollCount != 1) || 
-    //                     this.columnType != "ANNOUNCEMENT" && this.announcement;
-    //     this.boxClass = "box box-" + ((this.columnType == "ANNOUNCEMENT" && this.announcement == this.box.type) ? "announcement" : "normal");
-    // }
+    @track boxClass;
 
     renderedCallback() {
         this.disabled = this.boxesDisabled || this.box.filled || !this.box.available || 

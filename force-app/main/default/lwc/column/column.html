@@ -17,9 +17,9 @@
             <lightning-icon class="form-item" icon-name="utility:announcement" alternative-text="Announcement" title="Announcement">
             </lightning-icon>
         </template>
-        <c-label class="number-sum" get-text={column.numberSum}></c-label>
-        <c-label class="difference-sum" get-text={column.differenceSum}></c-label>
-        <c-label class="label-sum" get-text={column.labelSum}></c-label>
+        <c-label class="number-sum" text={column.numberSum}></c-label>
+        <c-label class="difference-sum" text={column.differenceSum}></c-label>
+        <c-label class="label-sum" text={column.labelSum}></c-label>
         <template for:each={column.boxes} for:item="box">
             <c-box key={box.type} box={box} column-type={column.type} boxes-disabled={boxesDisabled} onboxclick={handleBoxClick} roll-count={rollCount} announcement={announcement}></c-box>
         </template>

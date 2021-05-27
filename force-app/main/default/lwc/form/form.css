@@ -95,6 +95,11 @@
     grid-row-end: 11;
 }
 
+.button-restart:hover:enabled {
+    cursor: pointer;
+    background-color: rgb(221, 219, 218);
+}
+
 .button-scoreboard {
     grid-row-start: 12;
     grid-row-end: 17;
@@ -111,4 +116,8 @@
     border-radius: 4px;
     color: rgb(8, 7, 7);
     background-color: white;
+}
+
+.label-final-sum {
+    font-size: x-large;
 }
