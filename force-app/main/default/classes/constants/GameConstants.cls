@@ -10,9 +10,12 @@
  * @modified 27.5.2021.
  * ____________________________________________________________
  * 
-*/
+ */
 
 public with sharing class GameConstants {
+
+	public static final Integer NUMBER_OF_ROLLS = 3;
+	public static final Integer NUMBER_OF_BOXES = 13;
 
 	public static final Integer BONUS_TRIPS = 10;
 	public static final Integer BONUS_STRAIGHT_SMALL = 35;

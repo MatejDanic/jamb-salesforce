@@ -7,7 +7,7 @@
  * @version 0.1
  * 
  * @created 17.5.2021
- * @modified 21.5.2021
+ * @modified 27.5.2021
  * ____________________________________________________________
  * 
  */
@@ -19,6 +19,7 @@ public with sharing class Form {
     private Integer differenceSum;
     private Integer labelSum;
     private Integer finalSum;
+    private Integer availableBoxes;
 
     public Form(List<Column> columns) {
         this.columns = columns;
@@ -26,6 +27,7 @@ public with sharing class Form {
         this.differenceSum = 0;
         this.labelSum = 0;
         this.finalSum = 0;
+        this.availableBoxes = this.columns.size() * GameConstants.NUMBER_OF_BOXES;
     }
 
     public List<Column> getColumns() {
@@ -68,6 +70,14 @@ public with sharing class Form {
         this.finalSum = finalSum;
     }
 
+    public Integer getAvailableBoxes() {
+        return this.availableBoxes;
+    }
+
+    public void setAvailableBoxes(Integer availableBoxes) {
+        this.availableBoxes = availableBoxes;
+    }
+
     public boolean isAnnouncementRequired() {
         for (Column column : this.columns) {
             if (column.getType() != ColumnType.ANNOUNCEMENT && !column.isFinished()) {
@@ -83,6 +93,20 @@ public with sharing class Form {
         this.labelSum = 0;
         for (Column column : this.columns) {
             column.updateSums();
+            this.numberSum += column.getNumberSum();
+            this.differenceSum += column.getDifferenceSum();
+            this.labelSum += column.getLabelSum();
+        }
+        this.finalSum = this.numberSum + this.differenceSum + this.labelSum;
+    }
+
+    public void UpdateSums(String columnTypeString) {
+        this.numberSum = 0;
+        this.differenceSum = 0;
+        this.labelSum = 0;
+        Column col = this.getColumnByType(columnTypeString);
+        col.updateSums();
+        for (Column column : this.columns) {
             this.numberSum += column.getNumberSum();
             this.differenceSum += column.getDifferenceSum();
             this.labelSum += column.getLabelSum();

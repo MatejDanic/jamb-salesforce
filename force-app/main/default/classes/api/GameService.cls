@@ -7,7 +7,7 @@
  * @version 0.1
  * 
  * @created 17.5.2021.
- * @modified 27.5.2021.
+ * @modified 31.5.2021.
  * ____________________________________________________________
  * 
  */
@@ -55,7 +55,6 @@ public with sharing class GameService {
     }
 
     public static Game__c initializeGame(Game__c game) {
-
         List<Dice> diceList = new List<Dice>();
         for (Integer i = 1; i <= Integer.valueOf(game.Number_of_Dice__c); i++) {
             Dice dice = new Dice(i);
@@ -83,23 +82,16 @@ public with sharing class GameService {
 
         return game;
     }
-    
-    public static void generateScore(List<Game__c> gameList) {
-        List<Score__c> scoreList = new List<Score__c>();
-        for (Game__c game : gameList) {
-            if (game.Finished__c) {
-                Score__c score = new Score__c(Value__c = game.Final_Sum__c, Date__c = DateTime.now());
-                scoreList.add(new Score__c(Value__c = game.Final_Sum__c, Date__c = DateTime.now()));
-            }
-        }
-        insert scoreList;
-    }
 
     public static String rollDice(String gameId) {
-        List<Game__c> gameList = [SELECT Id, Announcement__c, Roll_Count__c, Dice__c, Form__c
-                                FROM Game__c WHERE Id = :gameId];
-        if (gameList.size() != 1) return null;
-        Game__c game = gameList[0];
+        Game__c game = [SELECT 
+                            Id, 
+                            Announcement__c, 
+                            Roll_Count__c, 
+                            Dice__c, 
+                            Form__c
+                        FROM Game__c 
+                        WHERE Id = :gameId][0];
 
         List<Dice> diceList = (List<Dice>) JSON.deserialize(game.Dice__c, List<Dice>.class);
 
@@ -130,9 +122,11 @@ public with sharing class GameService {
     }
 
     public static String holdDice(String gameId, Integer order) {
-        List<Game__c> gameList = [SELECT Id, Dice__c FROM Game__c WHERE Id = :gameId];
-        if (gameList.size() != 1) return null;
-        Game__c game = gameList[0];
+        Game__c game = [SELECT 
+                            Id, 
+                            Dice__c 
+                        FROM Game__c
+                        WHERE Id = :gameId][0];
 
         List<Dice> diceList = (List<Dice>) JSON.deserialize(game.Dice__c, List<Dice>.class);
         for (Dice dice : diceList) {
@@ -148,10 +142,12 @@ public with sharing class GameService {
     }
 
     public static String announce(String gameId, String boxTypeString) {
-        List<Game__c> gameList = [SELECT Id, Announcement__c, Roll_Count__c
-                                FROM Game__c WHERE Id = :gameId];
-        if (gameList.size() != 1) return null;
-        Game__c game = gameList[0];
+        Game__c game = [SELECT 
+                            Id, 
+                            Announcement__c, 
+                            Roll_Count__c
+                        FROM Game__c 
+                        WHERE Id = :gameId][0];
 
         if (game.Announcement__c != null) {
             throw new IllegalMoveException('Announcement already declared!');
@@ -166,10 +162,15 @@ public with sharing class GameService {
     }
 
     public static String fill(String gameId, String columnTypeString, String boxTypeString) {
-        List<Game__c> gameList = [SELECT Id, Announcement__c, Roll_Count__c, Form__c, Dice__c
-                                FROM Game__c WHERE Id = :gameId];
-        if (gameList.size() != 1) return null;
-        Game__c game = gameList[0];
+        System.debug(gameId);
+        Game__c game = [SELECT 
+                            Id, 
+                            Announcement__c, 
+                            Roll_Count__c, 
+                            Form__c, 
+                            Dice__c
+                        FROM Game__c 
+                        WHERE Id = :gameId][0];
 
         Form form = (Form)JSON.deserialize(game.Form__c, Form.class);
         List<Dice> diceList = (List<Dice>)JSON.deserialize(game.Dice__c, List<Dice>.class);
@@ -204,17 +205,23 @@ public with sharing class GameService {
                 break;
             }
         }
-        form.updateSums();
+
+        form.updateSums(columnTypeString);
+        form.setAvailableBoxes(form.getAvailableBoxes() - 1);
         
+        if (form.getAvailableBoxes() == 0) {
+            Score__c score = new Score__c(Value__c = form.getFinalSum(), Date__c = DateTime.now());
+            insert score;
+        }
+
         for (Dice dice : diceList) {
             dice.setHeld(false);
         }
-        game.Final_Sum__c = form.getFinalSum();
+
         game.Dice__c = JSON.serialize(diceList);
         game.Form__c = JSON.serialize(form);
         game.Roll_Count__c = 0;
         game.Announcement__c = null;
-
 
         update game;
 

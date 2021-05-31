@@ -10,12 +10,10 @@
  * @modified 27.5.2021.
  * ____________________________________________________________
  * 
-*/
+ */
 
-trigger GameTrigger on Game__c (before insert, before delete) {
+trigger GameTrigger on Game__c (before insert) {
     if (Trigger.isInsert) {
         GameService.initializeGames(Trigger.new);
-    } else if(Trigger.isDelete) {
-        GameService.generateScore(Trigger.old);
     }
 }
