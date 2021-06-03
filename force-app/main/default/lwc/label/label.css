@@ -5,10 +5,13 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    border-radius: 0px;
+    border-radius: 4px;
+    border: 1px solid white;
     color: rgb(8, 7, 7);
-    font-weight: bold;
+    background-color: white;
+    font-weight: bolder;
+}
+
+.label:hover {
+    border: 1px solid rgb(221, 219, 218);
 }

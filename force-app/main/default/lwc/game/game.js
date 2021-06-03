@@ -12,7 +12,7 @@
  * 
  */
 
-import { LightningElement, wire, api } from 'lwc';
+import { LightningElement, wire, api, track } from 'lwc';
 import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { refreshApex } from '@salesforce/apex';
@@ -106,13 +106,19 @@ export default class Game extends LightningElement {
         }
     }
 
+    @track firstMove;
+
+    connectedCallback() {
+        this.firstMove = true;
+    }
+
     handleRefresh() {
         refreshGame({
             gameId: this.recordId
         }).then(() => {
             refreshApex(this.game);
         }).catch(error => {
-            console.log(error);
+            console.error(error);
             this.dispatchEvent(new ShowToastEvent({
                 title: ERROR_TITLE,
                 message: error.body.message,
@@ -122,6 +128,9 @@ export default class Game extends LightningElement {
     }
 
     handleRollDice() {
+        if (this.firstMove) {
+            this.firstMove = false;
+        }
         rollDice({
             gameId: this.recordId
         }).then(() => {

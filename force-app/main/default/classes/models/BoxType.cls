@@ -25,5 +25,5 @@ public enum BoxType {
     STRAIGHT,
     FULL,
     QUADS,
-    YAHTZEE
+    YAMB
 }

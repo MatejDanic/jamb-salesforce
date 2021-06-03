@@ -22,7 +22,7 @@ public with sharing class GameConstants {
 	public static final Integer BONUS_STRAIGHT_BIG = 45;
 	public static final Integer BONUS_FULL = 30;
 	public static final Integer BONUS_QUADS = 40;
-	public static final Integer BONUS_YAHTZEE = 50;
+	public static final Integer BONUS_YAMB = 50;
 
 	public static final Integer NUMBERSUM_BONUS_THRESHOLD = 60;
 	public static final Integer NUMBERSUM_BONUS = 30;

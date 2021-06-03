@@ -3,12 +3,12 @@
     <div class="form-container">
         <div class={formClass}>
             <div class="label-column">
-                <lightning-icon class="form-item" icon-name="utility:info" alternative-text="Info" title="Info">
-                </lightning-icon>
+
+                <c-label icon="utility:info" title="Info" body="Info">
+                </c-label>
                 <template for:each={diceImages} for:item="diceImage">
-                    <div class="form-item" key={diceImage}>
-                        <img src={diceImage} width="40%" height="40%">
-                    </div>
+                    <c-label key={diceImage} image={diceImage} width="40%" height="40%">
+                    </c-label>
                 </template>
 
                 <c-label text="(1-6)"></c-label>
@@ -19,8 +19,8 @@
                 <c-label text="Straight"></c-label>
                 <c-label text="Full"></c-label>
                 <c-label text="Quads"></c-label>
-                <c-label text="Yahtzee"></c-label>
-                <c-label text="(Trips-Yahtzee)"></c-label>
+                <c-label text="Yamb"></c-label>
+                <c-label icon="utility:advanced_function" title="Trips - Yamb" body="Trips - Yamb"></c-label>
             </div>
 
             <template for:each={form.columns} for:item="column">
@@ -62,8 +62,9 @@
 
             <div class={bottomRowClass}>
                 <c-label style="background-image: url(../static/images/misc/cog.png);"></c-label>
-                <lightning-icon class="form-item" icon-name="utility:advanced_function" alternative-text="Down"
-                    title="Down"></lightning-icon>
+                <c-label></c-label>
+                <!-- <lightning-icon class="form-item" icon-name="utility:advanced_function" alternative-text="Down"
+                    title="Down"></lightning-icon> -->
                 <c-label class="label-final-sum" text={form.finalSum}></c-label>
             </div>
 

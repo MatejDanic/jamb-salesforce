@@ -8,7 +8,7 @@
  * @version 0.1
  * 
  * @created 19.5.2021
- * @modified 27.5.2021
+ * @modified 3.6.2021
  * ____________________________________________________________
  * 
  */
@@ -46,8 +46,8 @@ public with sharing class ScoreUtil {
 			when QUADS {
 				result = calculateSumOfRepeatingValue(diceList, 4, GameConstants.BONUS_QUADS);
             }
-            when YAHTZEE {
-				result = calculateSumOfRepeatingValue(diceList, 5, GameConstants.BONUS_YAHTZEE);
+            when YAMB {
+				result = calculateSumOfRepeatingValue(diceList, 5, GameConstants.BONUS_YAMB);
             }
 		}
 		return result;
@@ -165,9 +165,14 @@ public with sharing class ScoreUtil {
                 }
             }
 			if (count == 2) {
-				valueOfPair = i * count;
+				valueOfPair = i * 2;
 			} else if (count == 3) {
-				valueOfTrips = i * count;
+				if (valueOfTrips > i * 3) {
+					valueOfPair = i * 2;
+				} else {
+					valueOfPair = valueOfTrips * 2 / 3;
+					valueOfTrips = i * 3;
+				}
 			}
 		}
 		if (valueOfPair > 0 && valueOfTrips > 0) {

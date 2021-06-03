@@ -21,6 +21,7 @@ export default class Form extends LightningElement {
     @api announcement;
     @api rollCount;
     @api announcementRequired;
+    @api firstMove;
     @api rollDiceButtonDisabled;
     @api boxesDisabled;
 
@@ -43,13 +44,13 @@ export default class Form extends LightningElement {
         this.lastColumnClass = "label-column last-column-" + this.form.columns.length;
         this.bottomRowClass = "bottom-row bottom-row-end-" + this.form.columns.length;
         this.refreshButtonClass = "form-item button-refresh button-refresh-" + (this.form.availableBoxes == 0 ? "glow" : "normal");
-        this.rollDiceButtonClass = "form-item button-roll-dice button-roll-dice-" + ((this.rollCount == 0 && !this.rollDiceButtonDisabled) ? "glow" : "normal");
+        this.rollDiceButtonClass = "form-item button-roll-dice button-roll-dice-" + ((this.firstMove && this.rollCount == 0 && !this.rollDiceButtonDisabled) ? "glow" : "normal");
     }
 
     renderedCallback() {
         this.rollDiceButtonImage = ImageResource + "/misc/roll_" + this.rollCount + ".png";
         this.refreshButtonClass = "form-item button-refresh button-refresh-" + (this.form.availableBoxes == 0 ? "glow" : "normal");
-        this.rollDiceButtonClass = "form-item button-roll-dice button-roll-dice-" + ((this.rollCount == 0 && !this.rollDiceButtonDisabled) ? "glow" : "normal");
+        this.rollDiceButtonClass = "form-item button-roll-dice button-roll-dice-" + ((this.firstMove && this.rollCount == 0 && !this.rollDiceButtonDisabled) ? "glow" : "normal");
     }
 
     handleRollDice() {

@@ -71,7 +71,7 @@ public with sharing class GameService {
             List<Box> boxList = new List<Box>();
             for (BoxType bType : BoxType.values()) {
                 Boolean available = (cType == ColumnType.DOWNWARDS && bType == BoxType.ONES
-                || cType == ColumnType.UPWARDS && bType == BoxType.YAHTZEE
+                || cType == ColumnType.UPWARDS && bType == BoxType.YAMB
                 || cType == ColumnType.ANYDIRECTION
                 || cType == ColumnType.ANNOUNCEMENT);
                 Box box = new Box(bType, available);
@@ -196,7 +196,7 @@ public with sharing class GameService {
                     if (box.getType().name() == boxTypeString) {
                         box.fill(ScoreUtil.calculateScore(diceList, box.getType()));
                     } else if (column.getType() == ColumnType.DOWNWARDS && 
-                    boxTypeString != String.valueOf(BoxType.YAHTZEE) && 
+                    boxTypeString != String.valueOf(BoxType.YAMB) && 
                     ((BoxType)EnumUtil.parseEnum(boxTypeString, BoxType.class)).ordinal() + 1 == box.getType().ordinal()) {
                         box.setAvailable(true);
                     } else if (column.getType() == ColumnType.UPWARDS && 

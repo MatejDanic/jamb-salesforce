@@ -19,25 +19,25 @@ export default class Column extends LightningElement {
     @api column
     @api announcement;
     @api rollCount;
+    @api announcementRequired;
     @api boxesDisabled;
 
     @track isDown;
     @track isUp;
     @track isAny;
     @track isAnn;
-    @track announcementColorClass;
+    @track announcementColumnClass;
 
     connectedCallback() {
         this.isDown = this.column.type == "DOWNWARDS";
         this.isUp = this.column.type == "UPWARDS";
         this.isAny = this.column.type == "ANYDIRECTION";
         this.isAnn = this.column.type == "ANNOUNCEMENT";
-        this.announcementColorClass = "form-item column-announcement-" + (this.announcementRequired ? "glow" : "normal");
-
+        this.announcementColumnClass = "form-item column-announcement-" + (this.announcementRequired ? "glow" : "normal");
     }
 
     renderedCallback() {
-        this.announcementColorClass = "form-item column-announcement-" + (this.announcementRequired ? "glow" : "normal");
+        this.announcementColumnClass = "form-item column-announcement-" + (this.announcementRequired ? "glow" : "normal");
     }
 
     handleBoxClick(event) {

@@ -97,7 +97,7 @@ public with sharing class Column {
                 numberSum += box.getValue();
             } else if (box.getType() == BoxType.TRIPS || box.getType() == BoxType.STRAIGHT || 
                         box.getType() == BoxType.FULL || box.getType() == BoxType.QUADS || 
-                        box.getType() == BoxType.YAHTZEE) {
+                        box.getType() == BoxType.YAMB) {
                 labelSum += box.getValue();
             }
         }
