@@ -55,6 +55,9 @@ public with sharing class GameService {
     }
 
     public static Game__c initializeGame(Game__c game) {
+        game.Roll_Count__c = 0;
+        game.Announcement__c = null;
+
         List<Dice> diceList = new List<Dice>();
         for (Integer i = 1; i <= Integer.valueOf(game.Number_of_Dice__c); i++) {
             Dice dice = new Dice(i);

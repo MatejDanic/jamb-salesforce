@@ -7,7 +7,7 @@
  * @version 0.1
  * 
  * @created 7.5.2021.
- * @modified 27.5.2021.
+ * @modified 3.6.2021.
  * ____________________________________________________________
  * 
 */
@@ -18,14 +18,16 @@ import ImageResource from '@salesforce/resourceUrl/ImageResource';
 export default class Form extends LightningElement {
 
     @api form;
-    @api rollCount;
     @api announcement;
+    @api rollCount;
+    @api announcementRequired;
     @api rollDiceButtonDisabled;
     @api boxesDisabled;
 
     @track rollDiceButtonImage;
     @track diceImages;
     @track formClass;
+    @track refreshButtonClass;
     @track lastColumnClass;
     @track bottomRowClass;
     @track multipleColumns;
@@ -40,10 +42,14 @@ export default class Form extends LightningElement {
         this.formClass = "form form-columns-" + this.form.columns.length;
         this.lastColumnClass = "label-column last-column-" + this.form.columns.length;
         this.bottomRowClass = "bottom-row bottom-row-end-" + this.form.columns.length;
+        this.refreshButtonClass = "form-item button-refresh button-refresh-" + (this.form.availableBoxes == 0 ? "glow" : "normal");
+        this.rollDiceButtonClass = "form-item button-roll-dice button-roll-dice-" + ((this.rollCount == 0 && !this.rollDiceButtonDisabled) ? "glow" : "normal");
     }
 
     renderedCallback() {
         this.rollDiceButtonImage = ImageResource + "/misc/roll_" + this.rollCount + ".png";
+        this.refreshButtonClass = "form-item button-refresh button-refresh-" + (this.form.availableBoxes == 0 ? "glow" : "normal");
+        this.rollDiceButtonClass = "form-item button-roll-dice button-roll-dice-" + ((this.rollCount == 0 && !this.rollDiceButtonDisabled) ? "glow" : "normal");
     }
 
     handleRollDice() {

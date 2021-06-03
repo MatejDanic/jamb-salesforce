@@ -24,13 +24,14 @@
             </div>
 
             <template for:each={form.columns} for:item="column">
-                <c-column key={column.type} column={column} boxes-disabled={boxesDisabled} onboxclick={handleBoxClick}
-                    roll-count={rollCount} announcement={announcement}></c-column>
+                <c-column key={column.type} column={column} announcement={announcement} roll-count={rollCount}
+                    announcement-required={announcementRequired} boxes-disabled={boxesDisabled}
+                    onboxclick={handleBoxClick}></c-column>
             </template>
 
             <div class={lastColumnClass}>
                 <c-label></c-label>
-                <button class="form-item button-roll-dice" id="ROLL-DICE-BUTTON" onclick={handleRollDice}
+                <button class={rollDiceButtonClass} id="ROLL-DICE-BUTTON" onclick={handleRollDice}
                     disabled={rollDiceButtonDisabled}>
                     <img src={rollDiceButtonImage}>
                 </button>
@@ -40,7 +41,7 @@
                 <template if:false={multipleColumns}>
                     <c-label></c-label>
                 </template>
-                <button class="form-item button-restart" onclick={handleRefresh}>
+                <button class={refreshButtonClass} onclick={handleRefresh}>
                     <lightning-icon class="" icon-name="utility:refresh" alternative-text="Refresh" title="Refresh">
                     </lightning-icon>
                 </button>

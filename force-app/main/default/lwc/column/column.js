@@ -7,7 +7,7 @@
  * @version 0.1
  * 
  * @created 7.5.2021.
- * @modified 26.5.2021.
+ * @modified 3.6.2021.
  * ____________________________________________________________
  * 
  */
@@ -17,20 +17,27 @@ import { LightningElement, api, track } from 'lwc';
 export default class Column extends LightningElement {
 
     @api column
-    @api boxesDisabled;
-    @api rollCount;
     @api announcement;
+    @api rollCount;
+    @api boxesDisabled;
 
     @track isDown;
     @track isUp;
     @track isAny;
     @track isAnn;
+    @track announcementColorClass;
 
     connectedCallback() {
         this.isDown = this.column.type == "DOWNWARDS";
         this.isUp = this.column.type == "UPWARDS";
         this.isAny = this.column.type == "ANYDIRECTION";
         this.isAnn = this.column.type == "ANNOUNCEMENT";
+        this.announcementColorClass = "form-item column-announcement-" + (this.announcementRequired ? "glow" : "normal");
+
+    }
+
+    renderedCallback() {
+        this.announcementColorClass = "form-item column-announcement-" + (this.announcementRequired ? "glow" : "normal");
     }
 
     handleBoxClick(event) {

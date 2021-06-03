@@ -1,10 +1,11 @@
 <template>
     <div class="game">
         <template if:true={game.data}>
-            <c-dice-rack onholddice={handleHoldDice} dice-list={dice} dice-disabled={diceDisabled}></c-dice-rack>
-            <c-form onrolldice={handleRollDice} onboxclick={handleBoxClick} onrefresh={handleRefresh} form={form} roll-dice-button-disabled={rollDiceButtonDisabled} boxes-disabled={boxesDisabled} roll-count={rollCount} announcement={announcement}></c-form>
+            <c-dice-rack dice-list={dice} dice-disabled={diceDisabled} onholddice={handleHoldDice}></c-dice-rack>
+            <c-form form={form} announcement={announcement} roll-count={rollCount}
+                announcement-required={announcementRequired} roll-dice-button-disabled={rollDiceButtonDisabled}
+                boxes-disabled={boxesDisabled} onrolldice={handleRollDice} onboxclick={handleBoxClick}
+                onrefresh={handleRefresh}></c-form>
         </template>
-        <!-- <iframe width="400" height="750" src="https://jamb.com.hr" title="Jamb" frameborder="0"></iframe> -->
     </div>
-    <!-- <button onclick={handleClick}>Button</button> -->
 </template>
