@@ -7,7 +7,7 @@
  * @version 0.1
  * 
  * @created 7.5.2021.
- * @modified 27.5.2021.
+ * @modified 5.6.2021.
  * ____________________________________________________________
  * 
 */
@@ -23,7 +23,7 @@ public enum BoxType {
     MIN,
     TRIPS,
     STRAIGHT,
-    FULL,
-    QUADS,
+    FULL_HOUSE,
+    CARRIAGE,
     YAMB
 }

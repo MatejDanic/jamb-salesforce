@@ -7,7 +7,7 @@
  * @version 0.1
  * 
  * @created 7.5.2021.
- * @modified 3.6.2021.
+ * @modified 5.6.2021.
  * ____________________________________________________________
  * 
  */
@@ -24,14 +24,14 @@ export default class Column extends LightningElement {
 
     @track isDown;
     @track isUp;
-    @track isAny;
+    @track isFree;
     @track isAnn;
     @track announcementColumnClass;
 
     connectedCallback() {
         this.isDown = this.column.type == "DOWNWARDS";
         this.isUp = this.column.type == "UPWARDS";
-        this.isAny = this.column.type == "ANYDIRECTION";
+        this.isFree = this.column.type == "FREE";
         this.isAnn = this.column.type == "ANNOUNCEMENT";
         this.announcementColumnClass = "form-item column-announcement-" + (this.announcementRequired ? "glow" : "normal");
     }

@@ -182,17 +182,18 @@ export default class Game extends LightningElement {
                 columnTypeString: event.detail.columnType.toString(),
                 boxTypeString: event.detail.boxType.toString()
             }).then(() => {
-                refreshApex(this.game);
-                if (this.form.availableBoxes - 1 == 0) {
-                    setTimeout(() => {
-                        let message = SUCCESS_MESSAGE + this.form.finalSum + "!";
-                        this.dispatchEvent(new ShowToastEvent({
-                            title: SUCCESS_TITLE,
-                            message: message,
-                            variant: SUCCESS_VARIANT,
-                        }))
-                    }, 1000);
-                }
+                refreshApex(this.game).then(() => {
+                    if (this.form.availableBoxes == 0) {
+                        setTimeout(() => {
+                            let message = SUCCESS_MESSAGE + this.form.finalSum + "!";
+                            this.dispatchEvent(new ShowToastEvent({
+                                title: SUCCESS_TITLE,
+                                message: message,
+                                variant: SUCCESS_VARIANT,
+                            }))
+                        }, 1000);
+                    }
+                });
             }).catch(error => {
                 console.error(error);
                 this.dispatchEvent(new ShowToastEvent({
@@ -203,26 +204,4 @@ export default class Game extends LightningElement {
             });
         }
     }
-
-    // isAnouncementRequired(form) {
-    //     try {
-    //         for (let column of form.columns) {
-    //             if (column.type != "ANNOUNCEMENT") {
-    //                 for (let box of column.boxes) {
-    //                     if (box.available) {
-    //                         return false;
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //         return true;
-    //     } catch (error) {
-    //         console.error(error);
-    //         this.dispatchEvent(new ShowToastEvent({
-    //             title: ERROR_TITLE,
-    //             message: error.body.message,
-    //             variant: ERROR_VARIANT,
-    //         }));
-    //     }
-    // }
 }

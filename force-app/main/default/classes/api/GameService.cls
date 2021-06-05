@@ -67,12 +67,12 @@ public with sharing class GameService {
 
         List<Column> columnList = new List<Column>();
         for (Integer i = 1; i <= Integer.valueOf(game.Number_of_Columns__c); i++) {
-            ColumnType cType = game.Column_Types__c == 'Classic' ? columnType.values()[i - 1] : ColumnType.ANYDIRECTION;
+            ColumnType cType = game.Column_Types__c == 'Classic' ? columnType.values()[i - 1] : ColumnType.FREE;
             List<Box> boxList = new List<Box>();
             for (BoxType bType : BoxType.values()) {
                 Boolean available = (cType == ColumnType.DOWNWARDS && bType == BoxType.ONES
                 || cType == ColumnType.UPWARDS && bType == BoxType.YAMB
-                || cType == ColumnType.ANYDIRECTION
+                || cType == ColumnType.FREE
                 || cType == ColumnType.ANNOUNCEMENT);
                 Box box = new Box(bType, available);
                 boxList.add(box);

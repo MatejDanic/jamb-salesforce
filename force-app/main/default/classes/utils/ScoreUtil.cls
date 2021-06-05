@@ -8,7 +8,7 @@
  * @version 0.1
  * 
  * @created 19.5.2021
- * @modified 3.6.2021
+ * @modified 5.6.2021
  * ____________________________________________________________
  * 
  */
@@ -40,11 +40,11 @@ public with sharing class ScoreUtil {
             when STRAIGHT {
 				result = calculateStraight(diceList);
             }
-			when FULL {
-				result = calculateFull(diceList, GameConstants.BONUS_FULL);
+			when FULL_HOUSE {
+				result = calculateFullHouse(diceList, GameConstants.BONUS_FULL_HOUSE);
             }
-			when QUADS {
-				result = calculateSumOfRepeatingValue(diceList, 4, GameConstants.BONUS_QUADS);
+			when CARRIAGE {
+				result = calculateSumOfRepeatingValue(diceList, 4, GameConstants.BONUS_CARRIAGE);
             }
             when YAMB {
 				result = calculateSumOfRepeatingValue(diceList, 5, GameConstants.BONUS_YAMB);
@@ -147,14 +147,14 @@ public with sharing class ScoreUtil {
 	}
 
 	/**
-	 * Checks if a full occures in dice list.
+	 * Checks if a full house occures in dice list.
 	 * 
 	 * @param diceList      the values of rolled dice
-	 * @param bonus         the predefined bonus added to the sum if a full occured
+	 * @param bonus         the predefined bonus added to the sum if a full house occured
 	 * 
 	 * @return the sum of dice if both a pair and trips occured
 	 */
-	public static Integer calculateFull(List<Dice> diceList, Integer bonus) {
+	public static Integer calculateFullHouse(List<Dice> diceList, Integer bonus) {
 		Integer valueOfPair = 0;
 		Integer valueOfTrips = 0;
 		for (Integer i = 1; i <= 6; i++) {
@@ -170,7 +170,9 @@ public with sharing class ScoreUtil {
 				if (valueOfTrips > i * 3) {
 					valueOfPair = i * 2;
 				} else {
-					valueOfPair = valueOfTrips * 2 / 3;
+					if (valueOfTrips > 0) {
+						valueOfPair = valueOfTrips * 2 / 3;
+					}
 					valueOfTrips = i * 3;
 				}
 			}

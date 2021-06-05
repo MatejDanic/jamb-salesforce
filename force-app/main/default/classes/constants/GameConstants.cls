@@ -7,7 +7,7 @@
  * @version 0.1
  * 
  * @created 19.5.2021.
- * @modified 27.5.2021.
+ * @modified 5.6.2021.
  * ____________________________________________________________
  * 
  */
@@ -20,8 +20,8 @@ public with sharing class GameConstants {
 	public static final Integer BONUS_TRIPS = 10;
 	public static final Integer BONUS_STRAIGHT_SMALL = 35;
 	public static final Integer BONUS_STRAIGHT_BIG = 45;
-	public static final Integer BONUS_FULL = 30;
-	public static final Integer BONUS_QUADS = 40;
+	public static final Integer BONUS_FULL_HOUSE = 30;
+	public static final Integer BONUS_CARRIAGE = 40;
 	public static final Integer BONUS_YAMB = 50;
 
 	public static final Integer NUMBERSUM_BONUS_THRESHOLD = 60;
