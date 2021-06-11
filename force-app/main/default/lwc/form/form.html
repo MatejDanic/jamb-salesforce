@@ -4,7 +4,7 @@
         <div class={formClass}>
             <div class="label-column">
 
-                <c-label icon="utility:info" title="Info" body="Info">
+                <c-label>
                 </c-label>
                 <template for:each={diceImages} for:item="diceImage">
                     <c-label key={diceImage} image={diceImage} width="40%" height="40%">
@@ -51,7 +51,7 @@
                 <template if:false={multipleColumns}>
                     <c-label></c-label>
                 </template>
-                <c-label class="button-scoreboard"></c-label>
+                <c-label class="button-info" icon="utility:info" title="Info" body="Info"></c-label>
                 <template if:true={multipleColumns}>
                     <c-label text={form.labelSum}></c-label>
                 </template>

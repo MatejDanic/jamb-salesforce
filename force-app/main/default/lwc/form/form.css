@@ -120,7 +120,7 @@
     background-color: rgb(221, 219, 218);
 }
 
-.button-scoreboard {
+.button-info {
     grid-row-start: 12;
     grid-row-end: 17;
 }
