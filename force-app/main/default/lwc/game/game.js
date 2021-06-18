@@ -7,7 +7,7 @@
  * @version 0.1
  * 
  * @created 7.5.2021.
- * @modified 3.6.2021.
+ * @modified 18.6.2021.
  * ____________________________________________________________
  * 
  */
@@ -80,7 +80,7 @@ export default class Game extends LightningElement {
             console.error(error);
             this.dispatchEvent(new ShowToastEvent({
                 title: ERROR_TITLE,
-                message: error.body.message,
+                message: error.body ? error.body.message : error,
                 variant: ERROR_VARIANT,
             }));
             return false;
@@ -100,7 +100,7 @@ export default class Game extends LightningElement {
             console.error(error);
             this.dispatchEvent(new ShowToastEvent({
                 title: ERROR_TITLE,
-                message: error.body.message,
+                message: error.body ? error.body.message : error,
                 variant: ERROR_VARIANT,
             }));
         }
@@ -108,8 +108,12 @@ export default class Game extends LightningElement {
 
     @track firstMove;
 
+    @track rollDiceAnimation;
+
+
     connectedCallback() {
         this.firstMove = true;
+        this.rollDiceAnimation = false;
     }
 
     handleRefresh() {
@@ -121,7 +125,7 @@ export default class Game extends LightningElement {
             console.error(error);
             this.dispatchEvent(new ShowToastEvent({
                 title: ERROR_TITLE,
-                message: error.body.message,
+                message: error.body ? error.body.message : error,
                 variant: ERROR_VARIANT,
             }));
         });
@@ -135,14 +139,20 @@ export default class Game extends LightningElement {
             gameId: this.recordId
         }).then(() => {
             refreshApex(this.game);
+            this.startRollDiceAnimation();
         }).catch(error => {
             console.error(error);
             this.dispatchEvent(new ShowToastEvent({
                 title: ERROR_TITLE,
-                message: error.body.message,
+                message: error.body ? error.body.message : error,
                 variant: ERROR_VARIANT,
             }));
         });
+    }
+
+    startRollDiceAnimation() {
+        let diceRackElement = this.template.querySelector('c-dice-rack');
+        diceRackElement.startRollDiceAnimation();
     }
 
     handleHoldDice(event) {
@@ -155,7 +165,7 @@ export default class Game extends LightningElement {
             console.error(error);
             this.dispatchEvent(new ShowToastEvent({
                 title: ERROR_TITLE,
-                message: error.body.message,
+                message: error.body ? error.body.message : error,
                 variant: ERROR_VARIANT,
             }));
         });
@@ -172,7 +182,7 @@ export default class Game extends LightningElement {
                 console.error(error);
                 this.dispatchEvent(new ShowToastEvent({
                     title: ERROR_TITLE,
-                    message: error.body.message,
+                    message: error.body ? error.body.message : error,
                     variant: ERROR_VARIANT,
                 }));
             });
@@ -198,7 +208,7 @@ export default class Game extends LightningElement {
                 console.error(error);
                 this.dispatchEvent(new ShowToastEvent({
                     title: ERROR_TITLE,
-                    message: error.body.message,
+                    message: error.body ? error.body.message : error,
                     variant: ERROR_VARIANT,
                 }));
             });

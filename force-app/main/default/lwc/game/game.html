@@ -1,7 +1,8 @@
 <template>
     <div class="game">
         <template if:true={game.data}>
-            <c-dice-rack dice-list={dice} dice-disabled={diceDisabled} onholddice={handleHoldDice}></c-dice-rack>
+            <c-dice-rack dice-list={dice} dice-disabled={diceDisabled} roll-dice-animation={rollDiceAnimation}
+                onholddice={handleHoldDice}></c-dice-rack>
             <c-form form={form} announcement={announcement} roll-count={rollCount}
                 announcement-required={announcementRequired} first-move={firstMove}
                 roll-dice-button-disabled={rollDiceButtonDisabled} boxes-disabled={boxesDisabled}

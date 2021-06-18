@@ -2,7 +2,8 @@
     <div class="dice-rack-container">
         <div class="dice-rack">
             <template for:each={diceList} for:item="dice">
-                <c-dice number={number} onholddice={handleHoldDice} key={dice.order} dice={dice} dice-disabled={diceDisabled}></c-dice>
+                <c-dice number={number} onholddice={handleHoldDice} key={dice.order} dice={dice}
+                    dice-disabled={diceDisabled} roll-dice-animation={rollDiceAnimation}></c-dice>
             </template>
         </div>
     </div>
