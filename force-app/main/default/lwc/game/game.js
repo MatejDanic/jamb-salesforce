@@ -1,17 +1,3 @@
-/**
- * ____________________________________________________________
- * 
- * ____________________________________________________________
- * 
- * @author Matej Đanić <matej.danic@triple-innovations.com>
- * @version 0.1
- * 
- * @created 7.5.2021.
- * @modified 18.6.2021.
- * ____________________________________________________________
- * 
- */
-
 import { LightningElement, wire, api, track } from 'lwc';
 import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
@@ -38,10 +24,29 @@ const GAME_FIELDS = [GAME_FORM_FIELD, GAME_DICE_FIELD, GAME_ANNOUNCEMENT_FIELD, 
 
 export default class Game extends LightningElement {
 
-    @api recordId;
+    @api gameId;
 
-    @wire(getRecord, { recordId: '$recordId', fields: GAME_FIELDS })
+    @wire(getRecord, { recordId: '$gameId', fields: GAME_FIELDS })
     game;
+
+    @wire(getRecord, { recordId: '$gameId', fields: GAME_FIELDS })
+    wiredRecord({ data, error }) {
+        if (data) {
+            const { fields } = data
+            Object.keys(fields).forEach(item => {
+                let value = fields[item] && fields[item].displayValue ? fields[item].displayValue : fields[item].value
+                this.result = { ...this.result, [item]: value }
+            });
+        }
+        if (error) {
+            console.error(error);
+            this.dispatchEvent(new ShowToastEvent({
+                title: ERROR_TITLE,
+                message: error.body ? error.body.message : error,
+                variant: ERROR_VARIANT,
+            }));
+        }
+    }
 
     get form() {
         return JSON.parse(getFieldValue(this.game.data, GAME_FORM_FIELD));
@@ -87,38 +92,20 @@ export default class Game extends LightningElement {
         }
     }
 
-    @wire(getRecord, { recordId: '$recordId', fields: GAME_FIELDS })
-    wiredRecord({ data, error }) {
-        if (data) {
-            const { fields } = data
-            Object.keys(fields).forEach(item => {
-                let value = fields[item] && fields[item].displayValue ? fields[item].displayValue : fields[item].value
-                this.result = { ...this.result, [item]: value }
-            });
-        }
-        if (error) {
-            console.error(error);
-            this.dispatchEvent(new ShowToastEvent({
-                title: ERROR_TITLE,
-                message: error.body ? error.body.message : error,
-                variant: ERROR_VARIANT,
-            }));
-        }
-    }
-
     @track firstMove;
 
     @track rollDiceAnimation;
 
 
     connectedCallback() {
+        console.log(this.gameId);
         this.firstMove = true;
         this.rollDiceAnimation = false;
     }
 
     handleRefresh() {
         refreshGame({
-            gameId: this.recordId
+            gameId: this.gameId
         }).then(() => {
             refreshApex(this.game);
         }).catch(error => {
@@ -136,7 +123,7 @@ export default class Game extends LightningElement {
             this.firstMove = false;
         }
         rollDice({
-            gameId: this.recordId
+            gameId: this.gameId
         }).then(() => {
             refreshApex(this.game);
             this.startRollDiceAnimation();
@@ -157,7 +144,7 @@ export default class Game extends LightningElement {
 
     handleHoldDice(event) {
         holdDice({
-            gameId: this.recordId,
+            gameId: this.gameId,
             order: event.detail
         }).then(() => {
             refreshApex(this.game);
@@ -174,7 +161,7 @@ export default class Game extends LightningElement {
     handleBoxClick(event) {
         if (event.detail.columnType == "ANNOUNCEMENT" && this.announcement == null) {
             announce({
-                gameId: this.recordId,
+                gameId: this.gameId,
                 boxTypeString: event.detail.boxType
             }).then(() => {
                 refreshApex(this.game);
@@ -188,7 +175,7 @@ export default class Game extends LightningElement {
             });
         } else {
             fill({
-                gameId: this.recordId,
+                gameId: this.gameId,
                 columnTypeString: event.detail.columnType.toString(),
                 boxTypeString: event.detail.boxType.toString()
             }).then(() => {

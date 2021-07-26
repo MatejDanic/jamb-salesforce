@@ -1,6 +1,6 @@
 public with sharing class UserService {
 
-    public static String getOnlineUsersJSON() {
+    public static String getActiveUsersJSON() {
 
         List<User> userList = [
             SELECT 
@@ -15,7 +15,7 @@ public with sharing class UserService {
         return JSON.serialize(userList);
     }
 
-    public static List<User> getOnlineUsers() {
+    public static List<User> getActiveUsers() {
 
         List<User> userList = [
             SELECT 

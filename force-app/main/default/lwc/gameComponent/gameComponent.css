@@ -1,0 +1,31 @@
+.window {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.game-list {
+    overflow: scroll;
+    height: 50vh;
+}
+
+.row {
+    padding: 10px;
+    display: flex;
+}
+
+.row:hover {
+    cursor: pointer;
+    background-color: rgb(221, 219, 218)
+}
+
+.title {
+    font-size: large;
+    padding: 10px;
+}
+
+.info {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+}

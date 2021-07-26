@@ -28,6 +28,19 @@ public with sharing class GameService {
         return JSON.serialize(RecordUtil.recordToMap('GAME', game));
     }
 
+
+    public static List<Game__c> getGames() {
+
+        List<Game__c> gameList = [
+            SELECT 
+                Id,
+                Name
+            FROM Game__c
+        ];
+
+        return gameList;
+    }
+
     public static String refresh(String gameId) {
 
         Game__c game = [SELECT 

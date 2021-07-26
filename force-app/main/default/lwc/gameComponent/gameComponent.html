@@ -1,0 +1,21 @@
+<template>
+    <template if:true={gameId}>
+        <c-game game-id={gameId}></c-game>
+    </template>
+    <template if:false={gameId}>
+        <lightning-card>
+            <div class="title">
+                Games
+            </div>
+            <template if:true={wiredGames.data}>
+                <div class="game-list">
+                    <template for:each={wiredGames.data} for:item="game">
+                        <div key={game.Id} id={game.Id} class="row" onclick={handleClick}>
+                            {game.Name}
+                        </div>
+                    </template>
+                </div>
+            </template>
+        </lightning-card>
+    </template>
+</template>

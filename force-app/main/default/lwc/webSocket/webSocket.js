@@ -7,7 +7,7 @@ import USER_ID from '@salesforce/user/Id';
 import WEBSOCKET_SERVER_URL from '@salesforce/label/c.WebSocket_Server_URL';
 
 import FIELD_USER_ACTIVE from '@salesforce/schema/User.IsActive';
-import getActiveUsers from '@salesforce/apex/WebSocketController.getActiveUsers';
+import getActiveUsers from '@salesforce/apex/UserController.getActiveUsers';
 
 const ERROR_TITLE = "Error";
 const ERROR_VARIANT = "Error";

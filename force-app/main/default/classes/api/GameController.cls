@@ -58,4 +58,14 @@ public with sharing class GameController {
             throw new AuraHandledException(e.getTypeName() + '\n' + e.getMessage() + '\n' + e.getStackTraceString());
         }
     }
+
+    @AuraEnabled(cacheable=true)
+    public static List<Game__c> getGames() {
+        try {
+            return GameService.getGames();
+        } catch (Exception e) {
+            throw new AuraHandledException(e.getTypeName() + '\n' + e.getMessage() + '\n' + e.getStackTraceString());
+        }
+    }
+
 }
