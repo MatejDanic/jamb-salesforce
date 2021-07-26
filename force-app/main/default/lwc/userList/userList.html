@@ -1,0 +1,26 @@
+<template>
+    <lightning-card>
+        
+        <div class="slds-text-title_caps slds-p-top_medium slds-p-left_medium">Online users</div>
+        <div class="slds-grid slds-border_top slds-border_bottom slds-border_left slds-border_right">
+            <div class="slds-col slds-size_3-of-12 slds-border_right chatroom__sidebar">
+                <template if:true={wiredOnlineUsers.data}>
+                    <ul>
+                        <template for:each={wiredOnlineUsers.data} for:item="user">
+                            <li key={user.Id} class="slds-m-around_small">
+                                <div class="slds-grid">
+                                    <div class="slds-col slds-size_2-of-12">
+                                        <img src={user.MediumPhotoUrl} class="chatroom__avatar chatroom__avatar--small" />
+                                    </div>
+                                    <div class="slds-col slds-size_10-of-12 chatroom__content chatroom__usernames">
+                                        <p class="chatroom__username">{user.Name}</p>
+                                    </div>
+                                </div>
+                            </li>
+                        </template>
+                    </ul>
+                </template>
+            </div>
+        </div>
+    </lightning-card>
+</template>
