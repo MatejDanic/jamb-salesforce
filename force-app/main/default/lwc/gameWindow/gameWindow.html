@@ -1,0 +1,10 @@
+<template>
+    <template if:true={gameId}>
+        <c-game game-id={gameId}></c-game>
+    </template>
+    <template if:false={gameId}>
+        <lightning-card>
+            <div></div>
+        </lightning-card>
+    </template>
+</template>

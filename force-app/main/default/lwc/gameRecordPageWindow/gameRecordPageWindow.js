@@ -1,5 +1,6 @@
 import { LightningElement, api } from 'lwc';
-export default class GameRecordPageComponent extends LightningElement {
+
+export default class GameRecordPageWindow extends LightningElement {
 
     @api recordId;
 
