@@ -3,13 +3,8 @@
         <template if:true={wiredActiveUsers.data}>
             <div class="user-list">
                 <template for:each={wiredActiveUsers.data} for:item="user">
-                    <div key={user.Id} class="row slds-p-horizontal_small" onclick={handleUserClick}>
-                        <div class="image">
-                            <img src={user.MediumPhotoUrl} />
-                        </div>
-                        <div class="info slds-p-horizontal_small">
-                            <div>{user.Name}</div>
-                        </div>
+                    <div key={user.Id} class="row slds-p-horizontal_small" id={user.Id} onclick={handleUserClick}>
+                        {user.Name}
                     </div>
                 </template>
             </div>

@@ -3,17 +3,21 @@
         <lightning-button label="New" slot="actions"></lightning-button>
         <lightning-button label="Back" slot="actions"></lightning-button>
     </template>
-    <lightning-card title="Menu">
-        <lightning-card title="Games">
+    <lightning-card title="Games" class="slds-card slds-grid slds-card__body">
+        <lightning-tile>
             <template if:true={wiredGames.data}>
-                <div class="game-list">
-                    <template for:each={wiredGames.data} for:item="game">
-                        <div key={game.Id} id={game.Id} class="row slds-p-horizontal_small" onclick={handleGameClick}>
-                            {game.Name}
-                        </div>
-                    </template>
-                </div>
+                <template for:each={wiredGames.data} for:item="game">
+                    <div key={game.Id} id={game.Id} class="row slds-var-p-horizontal_small" onclick={handleGameClick}>
+                        {game.Name}
+                    </div>
+                </template>
             </template>
-        </lightning-card>
+        </lightning-tile>
+        <lightning-tile>
+            <template if:true={user}>
+                <img class="slds-var-p-horizontal_small" src={user.MediumPhotoUrl} />{user.Name}
+            </template>
+        </lightning-tile>
     </lightning-card>
+
 </template>

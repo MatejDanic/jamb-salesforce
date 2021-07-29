@@ -1,13 +1,18 @@
 import { LightningElement, track, wire } from 'lwc';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+
+import { publish, subscribe, MessageContext } from 'lightning/messageService';
+import RECORD_SELECTED_CHANNEL from '@salesforce/messageChannel/RecordSelected__c';
 
 import getGames from '@salesforce/apex/GameController.getGames';
-import { publish, subscribe, MessageContext } from 'lightning/messageService';
+import getUser from '@salesforce/apex/UserController.getUser';
 
-import RECORD_SELECTED_CHANNEL from '@salesforce/messageChannel/RecordSelected__c';
+const ERROR_TITLE = "Error";
+const ERROR_VARIANT = "Error";
 
 export default class MenuBar extends LightningElement {
 
-    @track userId;
+    @track user;
  
     @wire(getGames)
     wiredGames;
@@ -31,7 +36,18 @@ export default class MenuBar extends LightningElement {
 
     handleMessage(message) {
         if (message.type == "user") {
-            this.userId = message.recordId;
+            getUser({
+                userId: message.recordId
+            }).then((user) => {
+                this.user = user;
+            }).catch(error => {
+                console.error(error);
+                this.dispatchEvent(new ShowToastEvent({
+                    title: ERROR_TITLE,
+                    message: error.body ? error.body.message : error,
+                    variant: ERROR_VARIANT,
+                }));
+            });
         }
     }
 

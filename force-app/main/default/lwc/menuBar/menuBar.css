@@ -1,6 +1,11 @@
 .game-list {
     overflow: scroll;
     overflow-x: hidden;
+    width: 50%;
+}
+
+.selected-user {
+    width: 50%;
 }
 
 .row {
@@ -14,6 +19,14 @@
 
 .title {
     font-size: large;
+}
+
+.image {
+    height: 64px;
+    width: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .info {

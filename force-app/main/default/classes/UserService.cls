@@ -29,4 +29,19 @@ public with sharing class UserService {
 
         return userList;
     }
+
+    public static User getUser(String userId) {
+
+        User user = [
+            SELECT 
+                Id, 
+                CreatedDate,
+                Name, 
+                MediumPhotoUrl
+            FROM User 
+            WHERE Id = :userId
+        ];
+
+        return user;
+    }
 }
