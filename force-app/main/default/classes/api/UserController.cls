@@ -18,4 +18,13 @@ public with sharing class UserController {
         }
     }
 
+    @AuraEnabled(cacheable=true)
+    public static User getUser(String userId) {
+        try {
+            return UserService.getUser(userId);
+        } catch (Exception e) {
+            throw new AuraHandledException(e.getTypeName() + '\n' + e.getMessage() + '\n' + e.getStackTraceString());
+        }
+    }
+
 }
