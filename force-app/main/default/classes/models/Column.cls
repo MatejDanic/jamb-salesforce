@@ -1,85 +1,30 @@
-/**
- * ____________________________________________________________
- * 
- * ____________________________________________________________
- * 
- * @author Matej Đanić <matej.danic@triple-innovations.com>
- * @version 0.1
- * 
- * @created 17.5.2021
- * @modified 5.6.2021
- * ____________________________________________________________
- * 
- */
-
 public with sharing class Column {
-    
-    private ColumnType type;
-    private List<Box> boxes;
-    private Integer numberSum;
-    private Integer differenceSum;
-    private Integer labelSum;
+    public ColumnType type { get; private set; }
+    private List<Box> boxList { get; private set; }
+    public Integer sumA { get; private set; }
+    public Integer sumB { get; private set; }
+    public Integer sumC { get; private set; }
 
-    public Column(ColumnType type, List<Box> boxes) {
+    public Column(ColumnType type, List<Box> boxList) {
         this.type = type;
-        this.boxes = boxes;
-        this.numberSum = 0;
-        this.differenceSum = 0;
-        this.labelSum = 0;
+        this.boxList = boxList;
+        this.sumA = 0;
+        this.sumB = 0;
+        this.sumC = 0;
     }
 
-    public ColumnType getType() {
-        return this.type;
+    public Box getBoxByType(BoxType boxType) {
+        for (Box box : this.boxList) {
+            if (box.type == boxType) {
+                return box;
+            }
+        }
+        return null;
     }
 
-    public void setType(ColumnType type) {
-        this.type = type;
-    }
-    
-    public List<Box> getBoxes() {
-        return this.boxes;
-    }
-
-    public void setBoxes(List<Box> boxes) {
-        this.boxes = boxes;
-    }
-    
-    public Integer getNumberSum() {
-        return this.numberSum;
-    }
-
-    public void setNumberSum(Integer numberSum) {
-        this.numberSum = numberSum;
-    }
-    
-    public Integer getDifferenceSum() {
-        return this.differenceSum;
-    }
-
-    public void setDifferenceSum(Integer differenceSum) {
-        this.differenceSum = differenceSum;
-    }
-
-    public Integer getLabelSum() {
-        return this.labelSum;
-    }
-
-    public void setLabelSum(Integer labelSum) {
-        this.labelSum = labelSum;
-    }
-
-    public Box getBoxByType(String boxTypeString) {
-		for (Box box : this.boxes) {
-			if (box.getType().name() == boxTypeString) {
-				return box;
-			}
-		}
-		return null;
-	}
-
-    public boolean isFinished() {
-        for (Box box : this.boxes) {
-            if (!box.isFilled()) {
+    public Boolean isFinished() {
+        for (Box box : this.boxList) {
+            if (!box.isFilled) {
                 return false;
             }
         }
@@ -87,25 +32,34 @@ public with sharing class Column {
     }
 
     public void updateSums() {
-        this.numberSum = 0;
-        this.differenceSum = 0;
-        this.labelSum = 0;
-        for (Box box : this.boxes) {
-            if (box.getType() == BoxType.ONES || box.getType() == BoxType.TWOS || 
-                box.getType() == BoxType.THREES || box.getType() == BoxType.FOURS || 
-                box.getType() == BoxType.FIVES || box.getType() == BoxType.SIXES) {
-                numberSum += box.getValue();
-            } else if (box.getType() == BoxType.TRIPS || box.getType() == BoxType.STRAIGHT || 
-                        box.getType() == BoxType.FULL_HOUSE || box.getType() == BoxType.CARRIAGE || 
-                        box.getType() == BoxType.YAMB) {
-                labelSum += box.getValue();
+        this.sumA = 0;
+        this.sumB = 0;
+        this.sumC = 0;
+        for (Box box : this.boxList) {
+            if (
+                box.type == BoxType.ONES ||
+                box.type == BoxType.TWOS ||
+                box.type == BoxType.THREES ||
+                box.type == BoxType.FOURS ||
+                box.type == BoxType.FIVES ||
+                box.type == BoxType.SIXES
+            ) {
+                sumA += box.value;
+            } else if (
+                box.type == BoxType.TRIPS ||
+                box.type == BoxType.STRAIGHT ||
+                box.type == BoxType.BOAT ||
+                box.type == BoxType.CARRIAGE ||
+                box.type == BoxType.YAMB
+            ) {
+                sumC += box.value;
             }
         }
-        Box ones = this.getBoxByType(String.valueOf(BoxType.ONES));
-        Box max = this.getBoxByType(String.valueOf(BoxType.MAX));
-        Box min = this.getBoxByType(String.valueOf(BoxType.MIN));
-        if (ones.isFilled() && max.isFilled() && min.isFilled()) {
-            this.differenceSum = ones.getValue() * (max.getValue() - min.getValue());
+        Box ones = this.getBoxByType(BoxType.ONES);
+        Box max = this.getBoxByType(BoxType.MAX);
+        Box min = this.getBoxByType(BoxType.MIN);
+        if (ones.isFilled && max.isFilled && min.isFilled) {
+            this.sumB = ones.value * (max.value - min.value);
         }
     }
 }

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<GlobalValueSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customValue>
+        <fullName>DOWNWARDS</fullName>
+        <default>false</default>
+        <label>Downwards</label>
+    </customValue>
+    <customValue>
+        <fullName>UPWARDS</fullName>
+        <default>false</default>
+        <label>Upwards</label>
+    </customValue>
+    <customValue>
+        <fullName>FREE</fullName>
+        <default>false</default>
+        <label>Free</label>
+    </customValue>
+    <customValue>
+        <fullName>ANNOUNCEMENT</fullName>
+        <default>false</default>
+        <label>Announcement</label>
+    </customValue>
+    <masterLabel>Column Type</masterLabel>
+    <sorted>false</sorted>
+</GlobalValueSet>

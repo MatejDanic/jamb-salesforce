@@ -1,86 +1,23 @@
-/**
- * ____________________________________________________________
- * 
- * ____________________________________________________________
- * 
- * @author Matej Đanić <matej.danic@triple-innovations.com>
- * @version 0.1
- * 
- * @created 17.5.2021
- * @modified 27.5.2021
- * ____________________________________________________________
- * 
- */
-
 public with sharing class Form {
+    private List<Column> columnList { get; private set; }
+    private Integer sumA { get; private set; }
+    private Integer sumB { get; private set; }
+    private Integer sumC { get; private set; }
+    public Integer totalSum { get; private set; }
 
-    private List<Column> columns;
-    private Integer numberSum;
-    private Integer differenceSum;
-    private Integer labelSum;
-    private Integer finalSum;
-    private Integer availableBoxes;
-
-    public Form(List<Column> columns) {
-        this.columns = columns;
-        this.numberSum = 0;
-        this.differenceSum = 0;
-        this.labelSum = 0;
-        this.finalSum = 0;
-        this.availableBoxes = this.columns.size() * GameConstants.NUMBER_OF_BOXES;
+    public Form(List<Column> columnList) {
+        this.columnList = columnList;
+        this.sumA = 0;
+        this.sumB = 0;
+        this.sumC = 0;
+        this.totalSum = 0;
     }
 
-    public List<Column> getColumns() {
-        return this.columns;
-    }
-
-    public void setColumns(List<Column> columns) {
-        this.columns = columns;
-    }
-    
-    public Integer getNumberSum() {
-        return this.numberSum;
-    }
-
-    public void setNumberSum(Integer numberSum) {
-        this.numberSum = numberSum;
-    }
-    
-    public Integer getDifferenceSum() {
-        return this.differenceSum;
-    }
-
-    public void setDifferenceSum(Integer differenceSum) {
-        this.differenceSum = differenceSum;
-    }
-
-    public Integer getLabelSum() {
-        return this.labelSum;
-    }
-
-    public void setLabelSum(Integer labelSum) {
-        this.labelSum = labelSum;
-    }
-
-    public Integer getFinalSum() {
-        return this.finalSum;
-    }
-
-    public void setFinalSum(Integer finalSum) {
-        this.finalSum = finalSum;
-    }
-
-    public Integer getAvailableBoxes() {
-        return this.availableBoxes;
-    }
-
-    public void setAvailableBoxes(Integer availableBoxes) {
-        this.availableBoxes = availableBoxes;
-    }
-
-    public boolean isAnnouncementRequired() {
-        for (Column column : this.columns) {
-            if (column.getType() != ColumnType.ANNOUNCEMENT && !column.isFinished()) {
+    public Boolean isAnnouncementRequired() {
+        for (Column column : this.columnList) {
+            if (
+                column.type != ColumnType.ANNOUNCEMENT && !column.isFinished()
+            ) {
                 return false;
             }
         }
@@ -88,38 +25,47 @@ public with sharing class Form {
     }
 
     public void updateSums() {
-        this.numberSum = 0;
-        this.differenceSum = 0;
-        this.labelSum = 0;
-        for (Column column : this.columns) {
+        this.sumA = 0;
+        this.sumB = 0;
+        this.sumC = 0;
+        for (Column column : this.columnList) {
             column.updateSums();
-            this.numberSum += column.getNumberSum();
-            this.differenceSum += column.getDifferenceSum();
-            this.labelSum += column.getLabelSum();
+            this.sumA += column.sumA;
+            this.sumB += column.sumB;
+            this.sumC += column.sumC;
         }
-        this.finalSum = this.numberSum + this.differenceSum + this.labelSum;
+        this.totalSum = this.sumA + this.sumB + this.sumC;
     }
 
-    public void UpdateSums(String columnTypeString) {
-        this.numberSum = 0;
-        this.differenceSum = 0;
-        this.labelSum = 0;
-        Column col = this.getColumnByType(columnTypeString);
+    public void updateSums(ColumnType columnType) {
+        this.sumA = 0;
+        this.sumB = 0;
+        this.sumC = 0;
+        Column col = this.getColumnByType(columnType);
         col.updateSums();
-        for (Column column : this.columns) {
-            this.numberSum += column.getNumberSum();
-            this.differenceSum += column.getDifferenceSum();
-            this.labelSum += column.getLabelSum();
+        for (Column column : this.columnList) {
+            this.sumA += column.sumA;
+            this.sumB += column.sumB;
+            this.sumC += column.sumC;
         }
-        this.finalSum = this.numberSum + this.differenceSum + this.labelSum;
+        this.totalSum = this.sumA + this.sumB + this.sumC;
     }
 
-    public Column getColumnByType(String columnTypeString) {
-		for (Column column : this.columns) {
-			if (column.getType().name() == columnTypeString) {
-				return column;
-			}
-		}
-		return null;
-	}
+    public Column getColumnByType(ColumnType type) {
+        for (Column column : this.columnList) {
+            if (column.type == type) {
+                return column;
+            }
+        }
+        return null;
+    }
+
+    public Boolean isFinished() {
+        for (Column column : this.columnList) {
+            if (!column.isFinished()) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

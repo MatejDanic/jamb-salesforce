@@ -1,71 +1,46 @@
-/**
- * ____________________________________________________________
- * 
- * ____________________________________________________________
- * 
- * @author Matej Đanić <matej.danic@triple-innovations.com>
- * @version 0.1
- * 
- * @created 7.5.2021.
- * @modified 31.5.2021.
- * ____________________________________________________________
- * 
- */
-
 public with sharing class GameController {
-
-    @auraEnabled
-    public static String refreshGame(String gameId) {
+    @AuraEnabled
+    public static Game__c getGameById(Id gameId) {
         try {
-            return GameService.refresh(gameId);
+            return GameService.getGameById(gameId);
         } catch (Exception e) {
-            throw new AuraHandledException(e.getTypeName() + '\n' + e.getMessage() + '\n' + e.getStackTraceString());
+            throw new AuraHandledException(e.getMessage());
         }
     }
 
-    @auraEnabled
-    public static String rollDice(String gameId) {
+    @AuraEnabled
+    public static List<Dice> rollDiceById(Id gameId) {
         try {
-            return GameService.rollDice(gameId);
+            return GameService.rollDiceById(gameId);
         } catch (Exception e) {
-            throw new AuraHandledException(e.getTypeName() + '\n' + e.getMessage() + '\n' + e.getStackTraceString());
+            throw new AuraHandledException(e.getMessage());
         }
     }
 
-    @auraEnabled
-    public static String holdDice(String gameId, Integer order) {
+    @AuraEnabled
+    public static BoxType announceById(Id gameId, BoxType bType) {
         try {
-            return GameService.holdDice(gameId, order);
+            return GameService.announceById(gameId, bType);
         } catch (Exception e) {
-            throw new AuraHandledException(e.getTypeName() + '\n' + e.getMessage() + '\n' + e.getStackTraceString());
+            throw new AuraHandledException(e.getMessage());
         }
     }
 
-    @auraEnabled
-    public static String announce(String gameId, String boxTypeString) {
+    @AuraEnabled
+    public static Game__c fillById(Id gameId, ColumnType cType, BoxType bType) {
         try {
-            return GameService.announce(gameId, boxTypeString);
+            return GameService.fillById(gameId, cType, bType);
         } catch (Exception e) {
-            throw new AuraHandledException(e.getTypeName() + '\n' + e.getMessage() + '\n' + e.getStackTraceString());
+            throw new AuraHandledException(e.getMessage());
         }
     }
 
-    @auraEnabled
-    public static String fill(String gameId, String columnTypeString, String boxTypeString) {
+    @AuraEnabled
+    public static List<Dice> toggleFreezeDiceById(Id gameId, Integer order) {
         try {
-            return GameService.fill(gameId, columnTypeString, boxTypeString);
+            return GameService.toggleFreezeDiceById(gameId, order);
         } catch (Exception e) {
-            throw new AuraHandledException(e.getTypeName() + '\n' + e.getMessage() + '\n' + e.getStackTraceString());
+            throw new AuraHandledException(e.getMessage());
         }
     }
-
-    @AuraEnabled(cacheable=true)
-    public static List<Game__c> getGames() {
-        try {
-            return GameService.getGames();
-        } catch (Exception e) {
-            throw new AuraHandledException(e.getTypeName() + '\n' + e.getMessage() + '\n' + e.getStackTraceString());
-        }
-    }
-
 }

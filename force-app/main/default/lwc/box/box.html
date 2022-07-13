@@ -1,6 +1,3 @@
 <template>
-    <div style="display: none;">{box}{columnType}{boxesDisabled}{announcement}</div>
-    <button class={boxClass} disabled={disabled} onclick={handleClick}>
-        <template if:true={box.filled}>{box.value}</template>
-    </button>
+    <div class="box">{box.value}</div>
 </template>

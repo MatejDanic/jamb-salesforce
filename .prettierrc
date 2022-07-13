@@ -1,13 +1,17 @@
 {
-  "trailingComma": "none",
-  "overrides": [
-    {
-      "files": "**/lwc/**/*.html",
-      "options": { "parser": "lwc" }
-    },
-    {
-      "files": "*.{cmp,page,component}",
-      "options": { "parser": "html" }
-    }
-  ]
+    "plugins": [],
+    "tabWidth": 4,
+    "singleAttributePerLine": false,
+    "bracketSameLine": true,
+    "trailingComma": "none",
+    "overrides": [
+        {
+            "files": "**/lwc/**/*.html",
+            "options": { "parser": "lwc" }
+        },
+        {
+            "files": "*.{cmp,page,component}",
+            "options": { "parser": "html" }
+        }        
+    ]
 }

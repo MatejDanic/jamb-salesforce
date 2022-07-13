@@ -1,12 +1,24 @@
 <template>
     <div class="game">
         <template if:true={game.data}>
-            <c-dice-rack dice-list={dice} dice-disabled={diceDisabled} roll-dice-animation={rollDiceAnimation}
-                onholddice={handleHoldDice}></c-dice-rack>
-            <c-form form={form} announcement={announcement} roll-count={rollCount}
-                announcement-required={announcementRequired} first-move={firstMove}
-                roll-dice-button-disabled={rollDiceButtonDisabled} boxes-disabled={boxesDisabled}
-                onrolldice={handleRollDice} onboxclick={handleBoxClick} onrefresh={handleRefresh}></c-form>
+            <div style="text-align: center">
+                <c-dice-list
+                    dice-list={diceList}
+                    dice-disabled={diceDisabled}
+                    roll-dice-animation={rollDiceAnimation}
+                    onholddice={handleHoldDice}></c-dice-list>
+                <c-form
+                    form={form}
+                    announcement={announcement}
+                    roll-count={rollCount}
+                    announcement-required={announcementRequired}
+                    first-move={firstMove}
+                    roll-dice-button-disabled={rollDiceButtonDisabled}
+                    boxes-disabled={boxesDisabled}
+                    onrolldice={handleRollDice}
+                    onboxclick={handleBoxClick}
+                    onreset={handleReset}></c-form>
+            </div>
         </template>
     </div>
 </template>

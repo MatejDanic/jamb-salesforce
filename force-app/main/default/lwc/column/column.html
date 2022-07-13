@@ -1,24 +1,41 @@
 <template>
-    <div style="display: none;">{column}</div>
     <div class="column">
         <template if:true={isDown}>
-            <c-label icon="utility:arrowdown" title="Downwards" body="This column is filled the top to the bottom."></c-label>
+            <c-label
+                icon="utility:arrowdown"
+                title="Downwards"
+                body="This column is filled the top to the bottom."></c-label>
         </template>
-        <template if:true={isUp}>   
-            <c-label icon="utility:arrowup" title="Upwards" body="This column is filled from the bottom to the top."></c-label>
+        <template if:true={isUp}>
+            <c-label
+                icon="utility:arrowup"
+                title="Upwards"
+                body="This column is filled from the bottom to the top."></c-label>
         </template>
         <template if:true={isFree}>
-            <c-label icon="utility:sort" title="Free" body="This column is filled in any direction."></c-label>
+            <c-label
+                icon="utility:sort"
+                title="Free"
+                body="This column is filled in any direction."></c-label>
         </template>
         <template if:true={isAnn}>
-            <c-label icon="utility:announcement" title="Announcement" body="This column is filled by announcing (clicking) the box after the first dice roll."></c-label>
+            <c-label
+                icon="utility:announcement"
+                title="Announcement"
+                body="This column is filled by announcing (clicking) the box after the first dice roll."></c-label>
         </template>
-        <c-label class="number-sum" text={column.numberSum}></c-label>
-        <c-label class="difference-sum" text={column.differenceSum}></c-label>
-        <c-label class="label-sum" text={column.labelSum}></c-label>
-        <template for:each={column.boxes} for:item="box">
-            <c-box key={box.type} box={box} column-type={column.type} announcement={announcement} roll-count={rollCount}
-                boxes-disabled={boxesDisabled} onboxclick={handleBoxClick}></c-box>
+        <c-label class="sum-a" text={column.sumA}></c-label>
+        <c-label class="sum-b" text={column.sumB}></c-label>
+        <c-label class="sum-c" text={column.sumC}></c-label>
+        <template for:each={column.boxList} for:item="box">
+            <c-box
+                key={box.type}
+                box={box}
+                column-type={column.type}
+                announcement={announcement}
+                roll-count={rollCount}
+                boxes-disabled={boxesDisabled}
+                onboxclick={handleBoxClick}></c-box>
         </template>
     </div>
 </template>

@@ -1,67 +1,32 @@
-/**
- * ____________________________________________________________
- * 
- * ____________________________________________________________
- * 
- * @author Matej Đanić <matej.danic@triple-innovations.com>
- * @version 0.1
- * 
- * @created 17.5.2021
- * @modified 19.5.2021
- * ____________________________________________________________
- * 
-*/
-
 public with sharing class Box {
-    
-    private Integer value;
-    private BoxType type;
-    private Boolean filled;
-    private Boolean available;
+    public Integer value { get; private set; }
+    public BoxType type { get; private set; }
+    public Boolean isFilled { get; private set; }
+    public Boolean isAvailable { get; private set; }
 
-    public Box(BoxType type, Boolean available) {
+    public Box(BoxType type, Boolean isAvailable) {
         this.type = type;
-        this.available = available;
+        this.isAvailable = isAvailable;
         this.value = 0;
-        this.filled = false;
-    }
-
-    public Integer getValue() {
-        return this.value;
-    }
-
-    public void setValue(Integer value) {
-        this.value = value;
-    }
-
-    public BoxType getType() {
-        return this.type;
-    }
-
-    public void setType(BoxType type) {
-        this.type = type;
-    }
-
-    public Boolean isFilled() {
-        return this.filled;
-    }
-
-    public void setFilled(Boolean filled) {
-        this.filled = filled;
-    }
-
-    public Boolean isAvailable() {
-        return this.available;
-    }
-
-    public void setAvailable(Boolean available) {
-        this.available = available;
+        this.isFilled = false;
+        this.isAvailable = false;
     }
 
     public void fill(Integer value) {
         this.value = value;
-        this.filled = true;
-        this.available = false;
+        this.isFilled = true;
+        this.isAvailable = false;
     }
 
+    public Boolean isNext(
+        ColumnType currentYambColumnType,
+        BoxType currentYambBoxType
+    ) {
+        return (currentYambColumnType == ColumnType.DOWNWARDS &&
+            currentYambBoxType != BoxType.YAMB &&
+            currentYambBoxType.ordinal() + 1 == type.ordinal()) ||
+            (currentYambColumnType == ColumnType.UPWARDS &&
+            currentYambBoxType != BoxType.ONES &&
+            currentYambBoxType.ordinal() - 1 == type.ordinal());
+    }
 }

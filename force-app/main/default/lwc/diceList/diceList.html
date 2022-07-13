@@ -1,0 +1,13 @@
+<template>
+    <div class="dice-list">
+        <template for:each={diceList} for:item="dice">
+            <c-dice
+                key={dice.order}
+                dice={dice}
+                number={number}
+                ondiceclick={handleDiceClick}
+                dice-disabled={diceDisabled}
+                roll-dice-animation={rollDiceAnimation}></c-dice>
+        </template>
+    </div>
+</template>

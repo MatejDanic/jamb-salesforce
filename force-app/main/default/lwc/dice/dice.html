@@ -1,6 +1,3 @@
 <template>
-    <div style="display: none;">{dice}{diceDisabled}{rollDiceAnimation}</div>
-    <button class={diceClass} onclick={handleHoldDice} disabled={diceDisabled} data-id={diceId}>
-        <img src={diceImage}>
-    </button>
+    <button class="dice">{dice.value}</button>
 </template>
