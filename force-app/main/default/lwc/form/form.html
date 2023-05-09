@@ -21,20 +21,20 @@
       <c-label value="Yamb"></c-label>
       <c-label value="Σ"></c-label>
     </div>
-    <template for:each="{columnList}" for:item="column">
+    <template for:each={columnList} for:item="column">
       <c-column
         class="column"
-        key="{column.type}"
-        type="{column.type}"
-        box-list="{column.boxList}"
-        sum-1="{column.sum1}"
-        sum-2="{column.sum2}"
-        sum-3="{column.sum3}"
-        roll-count="{rollCount}"
-        announcement="{announcement}"
-        announcement-required="{announcementRequired}"
-        all-boxes-disabled="{allBoxesDisabled}"
-        onboxclick="{handleBoxClick}"
+        key={column.type}
+        type={column.type}
+        box-list={column.boxList}
+        sum-1={column.sum1}
+        sum-2={column.sum2}
+        sum-3={column.sum3}
+        roll-count={rollCount}
+        announcement={announcement}
+        announcement-required={announcementRequired}
+        all-boxes-disabled={allBoxesDisabled}
+        onboxclick={handleBoxClick}
       >
       </c-column>
     </template>
@@ -42,11 +42,11 @@
       <button
         class="roll-dice-button"
         title="Roll!"
-        disabled="{rollDiceButtonDisabled}"
-        onclick="{handleRollDice}"
+        disabled={rollDiceButtonDisabled}
+        onclick={handleRollDice}
       ></button>
-      <c-label value="{sum1}"></c-label>
-      <button class="reset-button" onclick="{handleReset}">
+      <c-label value={sum1}></c-label>
+      <button class="reset-button" onclick={handleReset}>
         <lightning-icon
           title="Reset"
           icon-name="utility:refresh"
@@ -54,9 +54,9 @@
         >
         </lightning-icon>
       </button>
-      <c-label value="{sum2}"></c-label>
-      <c-label class="sum-c" value="{sum3}"></c-label>
+      <c-label value={sum2}></c-label>
+      <c-label class="sum-c" value={sum3}></c-label>
     </div>
-    <c-label class="total-sum" value="{totalSum}"></c-label>
+    <c-label class="total-sum" value={totalSum}></c-label>
   </div>
 </template>

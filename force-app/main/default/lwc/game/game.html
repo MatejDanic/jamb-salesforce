@@ -1,58 +1,54 @@
 <template>
-  <template if:true="{gameRecord.data}">
-    <div class="game-container">
-      <template if:true="{isLoading}">
-        <lightning-spinner
-          alternative-text="Loading"
-          size="small"
-        ></lightning-spinner>
-      </template>
-      <div class="game">
-        <div class="dice-list">
-          <template for:each="{diceList}" for:item="dice">
-            <c-dice
-              key="{dice.order}"
-              value="{dice.value}"
-              order="{dice.order}"
-              all-dice-disabled="{allDiceDisabled}"
-              ondiceclick="{handleDiceClick}"
-            >
-            </c-dice>
-          </template>
+    <template if:true={gameRecord.data}>
+        <div class="game-container">
+            <template if:true={isLoading} > 
+                <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+            </template>
+            <div class="game">
+                <div class="dice-list">
+                    <template for:each={diceList} for:item="dice">
+                        <c-dice
+                            key={dice.order}
+                            value={dice.value}
+                            order={dice.order}
+                            all-dice-disabled={allDiceDisabled}
+                            ondiceclick={handleDiceClick}>
+                        </c-dice>
+                    </template>
+                </div>
+                <c-form
+                    column-list={form.columnList}
+                    sum-1={form.sum1}
+                    sum-2={form.sum2}
+                    sum-3={form.sum3}
+                    total-sum={form.totalSum}
+                    roll-count={rollCount}
+                    announcement={announcement}
+                    announcement-required={announcementRequired}
+                    roll-dice-button-disabled={rollDiceButtonDisabled}
+                    all-boxes-disabled={allBoxesDisabled}
+                    onrolldice={handleRollDice}
+                    onboxclick={handleBoxClick}
+                    onreset={handleReset}>
+                </c-form> 
+            </div> 
         </div>
-        <c-form
-          column-list="{form.columnList}"
-          sum-1="{form.sum1}"
-          sum-2="{form.sum2}"
-          sum-3="{form.sum3}"
-          total-sum="{form.totalSum}"
-          roll-count="{rollCount}"
-          announcement="{announcement}"
-          announcement-required="{announcementRequired}"
-          roll-dice-button-disabled="{rollDiceButtonDisabled}"
-          all-boxes-disabled="{allBoxesDisabled}"
-          onrolldice="{handleRollDice}"
-          onboxclick="{handleBoxClick}"
-          onreset="{handleReset}"
-        >
-        </c-form>
-      </div>
-    </div>
-    <template if:true="{debugModeEnabled}">
-      Roll Count: <strong>{rollCount}</strong>
-      <br />
-      Announcement: <strong>{announcement}</strong>
-      <br />
-      Announcement Required: <strong>{announcementRequired}</strong>
-      <br />
-      Number of Available Boxes: <strong>{form.numOfAvailableBoxes}</strong>
-      <br />
-      Roll Dice Button Disabled: <strong>{rollDiceButtonDisabled}</strong>
-      <br />
-      All Boxes Disabled: <strong>{allBoxesDisabled}</strong>
-      <br />
-      All Dice Disabled: <strong>{allDiceDisabled}</strong>
-      <br />
+        <template if:true={debugModeEnabled}>
+            Roll Count: <strong>{rollCount}</strong>
+            <br/>
+            Announcement: <strong>{announcement}</strong>
+            <br/>
+            Announcement Required: <strong>{announcementRequired}</strong>
+            <br/>
+            Number of Available Boxes: <strong>{form.numOfAvailableBoxes}</strong>
+            <br/>
+            Roll Dice Button Disabled: <strong>{rollDiceButtonDisabled}</strong>
+            <br/> 
+            All Boxes Disabled: <strong>{allBoxesDisabled}</strong>
+            <br/> 
+            All Dice Disabled: <strong>{allDiceDisabled}</strong>
+            <br/> 
+        </template>
+        
     </template>
-  </template>
 </template>

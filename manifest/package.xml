@@ -14,10 +14,13 @@
         <members>Form</members>
         <members>Game</members>
         <members>GameUtil</members>
-        <!--
-        <members>GameControllerTest</members>
-         -->
+        <!-- <members>GameControllerTest</members> -->
         <name>ApexClass</name>
+    </types>
+
+    <types>
+        <members>GameTrigger</members>
+        <name>ApexTrigger</name>
     </types>
 
     <types>
