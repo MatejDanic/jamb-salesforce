@@ -1,5 +1,5 @@
 .box {
-    border: 1px solid blue;
-    width: 64px;
-    height: 32px;
+  border-radius: 4px;
+  width: 100%;
+  height: 100%;
 }

@@ -2,25 +2,37 @@
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
 
     <types>
-        <members>Constants</members>
-        <members>Box</members>
-        <members>BoxType</members>
-        <members>Column</members>
-        <members>ColumnType</members>
-        <members>Dice</members>
-        <members>Form</members>
         <members>GameController</members>
         <members>GameService</members>
+        <members>Constants</members>
+        <members>BoxType</members>
+        <members>ColumnType</members>
         <members>IllegalMoveException</members>
-        <members>Util</members>
+        <members>Box</members>
+        <members>Column</members>
+        <members>Dice</members>
+        <members>Form</members>
+        <members>Game</members>
+        <members>GameUtil</members>
+        <!--
+        <members>GameControllerTest</members>
+         -->
         <name>ApexClass</name>
     </types>
 
     <types>
         <members>Game__c</members>
-        <members>Game_Event__e</members>
-        <members>Score__c</members>
         <name>CustomObject</name>
+    </types>
+
+    <types>
+        <members>Game__c</members>
+        <name>CustomTab</name>
+    </types>
+
+    <types>
+        <members>Game__c.Game_String__c</members>
+        <name>CustomField</name>
     </types>
 
     <types>
@@ -31,7 +43,17 @@
 
     <types>
         <members>game</members>
+        <members>form</members>
+        <members>dice</members>
+        <members>column</members>
+        <members>box</members>
+        <members>label</members>
         <name>LightningComponentBundle</name>
+    </types>
+
+    <types>
+        <members>Game_Record_Page</members>
+        <name>FlexiPage</name>
     </types>
 
     <version>52.0</version>

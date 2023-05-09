@@ -1,46 +1,62 @@
-public with sharing class GameController {
-    @AuraEnabled
-    public static Game__c getGameById(Id gameId) {
-        try {
-            return GameService.getGameById(gameId);
-        } catch (Exception e) {
-            throw new AuraHandledException(e.getMessage());
-        }
-    }
+public class GameController {
+  public static final GameService gameService = new GameService();
 
-    @AuraEnabled
-    public static List<Dice> rollDiceById(Id gameId) {
-        try {
-            return GameService.rollDiceById(gameId);
-        } catch (Exception e) {
-            throw new AuraHandledException(e.getMessage());
-        }
+  @AuraEnabled
+  public static Game resetGameById(Id gameId) {
+    try {
+      return gameService.resetGameById(gameId);
+    } catch (Exception e) {
+      Logger.error(e);
+      throw new AuraHandledException(e.getMessage());
     }
+  }
 
-    @AuraEnabled
-    public static BoxType announceById(Id gameId, BoxType bType) {
-        try {
-            return GameService.announceById(gameId, bType);
-        } catch (Exception e) {
-            throw new AuraHandledException(e.getMessage());
-        }
+  @AuraEnabled
+  public static List<Dice> rollDiceByGameId(
+    Id gameId,
+    List<Integer> diceToRoll
+  ) {
+    try {
+      return gameService.rollDiceByGameId(gameId, diceToRoll);
+    } catch (Exception e) {
+      Logger.error(e);
+      throw new AuraHandledException(e.getMessage());
     }
+  }
 
-    @AuraEnabled
-    public static Game__c fillById(Id gameId, ColumnType cType, BoxType bType) {
-        try {
-            return GameService.fillById(gameId, cType, bType);
-        } catch (Exception e) {
-            throw new AuraHandledException(e.getMessage());
-        }
+  @AuraEnabled
+  public static BoxType makeAnnouncementByGameId(
+    Id gameId,
+    String announcementBoxTypeString
+  ) {
+    try {
+      return gameService.makeAnnouncementByGameId(
+        gameId,
+        announcementBoxTypeString
+      );
+    } catch (Exception e) {
+      Logger.error(e);
+      throw new AuraHandledException(e.getMessage());
     }
+  }
 
-    @AuraEnabled
-    public static List<Dice> toggleFreezeDiceById(Id gameId, Integer order) {
-        try {
-            return GameService.toggleFreezeDiceById(gameId, order);
-        } catch (Exception e) {
-            throw new AuraHandledException(e.getMessage());
-        }
+  @AuraEnabled
+  public static Game fillBoxByGameId(
+    Id gameId,
+    String columnTypeString,
+    String boxTypeString
+  ) {
+    Logger.debug(columnTypeString);
+    Logger.debug(boxTypeString);
+    try {
+      return gameService.fillBoxByGameId(
+        gameId,
+        columnTypeString,
+        boxTypeString
+      );
+    } catch (Exception e) {
+      Logger.error(e);
+      throw new AuraHandledException(e.getMessage());
     }
+  }
 }

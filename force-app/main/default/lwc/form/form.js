@@ -1,27 +1,30 @@
 import { LightningElement, api, track } from "lwc";
 
 export default class Form extends LightningElement {
-    @api form;
-    @api announcement;
-    @api rollCount;
-    @api announcementRequired;
-    @api firstMove;
-    @api rollDiceButtonDisabled;
-    @api boxesDisabled;
+  @api columnList;
+  @api sum1;
+  @api sum2;
+  @api sum3;
+  @api totalSum;
+  @api rollCount;
+  @api announcement;
+  @api announcementRequired;
+  @api rollDiceButtonDisabled;
+  @api allBoxesDisabled;
 
-    handleRollDice() {
-        this.dispatchEvent(new CustomEvent("rolldice"));
-    }
+  handleRollDice() {
+    this.dispatchEvent(new CustomEvent("rolldice"));
+  }
 
-    handleBoxClick(event) {
-        this.dispatchEvent(
-            new CustomEvent("boxclick", {
-                detail: event.detail
-            })
-        );
-    }
+  handleBoxClick(event) {
+    this.dispatchEvent(
+      new CustomEvent("boxclick", {
+        detail: event.detail,
+      })
+    );
+  }
 
-    handleRefresh() {
-        this.dispatchEvent(new CustomEvent("refresh"));
-    }
+  handleReset() {
+    this.dispatchEvent(new CustomEvent("reset"));
+  }
 }

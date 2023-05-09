@@ -3,16 +3,12 @@ import { getRecord, getFieldValue } from "lightning/uiRecordApi";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import { refreshApex } from "@salesforce/apex";
 
-//import refreshGame from '@salesforce/apex/GameController.refreshGame';
-import rollDiceById from "@salesforce/apex/GameController.rollDiceById";
-import toggleFreezeDiceById from "@salesforce/apex/GameController.toggleFreezeDiceById";
-import fillById from "@salesforce/apex/GameController.fillById";
-import announceById from "@salesforce/apex/GameController.announceById";
+import resetGameById from "@salesforce/apex/GameController.resetGameById";
+import rollDiceByGameId from "@salesforce/apex/GameController.rollDiceByGameId";
+import fillBoxByGameId from "@salesforce/apex/GameController.fillBoxByGameId";
+import makeAnnouncementByGameId from "@salesforce/apex/GameController.makeAnnouncementByGameId";
 
-import FIELD_FORM from "@salesforce/schema/Game__c.Form__c";
-import FIELD_DICE_LIST from "@salesforce/schema/Game__c.Dice_List__c";
-import FIELD_ANNOUNCEMENT from "@salesforce/schema/Game__c.Announcement__c";
-import FIELD_ROLL_COUNT from "@salesforce/schema/Game__c.Roll_Count__c";
+import FIELD_GAME_STRING from "@salesforce/schema/Game__c.Game_String__c";
 
 const ERROR_TITLE = "Error";
 const ERROR_VARIANT = "Error";
@@ -20,236 +16,207 @@ const SUCCESS_TITLE = "Congratulations";
 const SUCCESS_MESSAGE = "Your final score is ";
 const SUCCESS_VARIANT = "Success";
 
-const FIELD_LIST = [
-    FIELD_FORM,
-    FIELD_DICE_LIST,
-    FIELD_ANNOUNCEMENT,
-    FIELD_ROLL_COUNT
-];
+const FIELD_LIST = [FIELD_GAME_STRING];
 
 export default class Game extends LightningElement {
-    @api recordId;
+  @api recordId;
 
-    @wire(getRecord, { recordId: "$recordId", fields: FIELD_LIST })
-    game;
+  @track form;
+  @track diceList;
+  @track rollCount;
+  @track announcement;
+  @track announcementRequired;
 
-    @wire(getRecord, { recordId: "$recordId", fields: FIELD_LIST })
-    wiredRecord({ data, error }) {
-        if (data) {
-            console.log(data);
-            const { fields } = data;
-            Object.keys(fields).forEach((item) => {
-                let value =
-                    fields[item] && fields[item].displayValue
-                        ? fields[item].displayValue
-                        : fields[item].value;
-                this.result = { ...this.result, [item]: value };
-            });
-        }
-        if (error) {
-            console.error(error);
-            this.dispatchEvent(
-                new ShowToastEvent({
-                    title: ERROR_TITLE,
-                    message: error.body ? error.body.message : error,
-                    variant: ERROR_VARIANT
-                })
-            );
-        }
+  @track isLoading = false;
+
+  @wire(getRecord, { recordId: "$recordId", fields: FIELD_LIST })
+  gameRecord;
+
+  @wire(getRecord, { recordId: "$recordId", fields: FIELD_LIST })
+  wiredRecord({ data, error }) {
+    if (data) {
+      this.isLoading = true;
+      let game = JSON.parse(getFieldValue(data, FIELD_GAME_STRING));
+      console.log(game);
+      this.form = game.form;
+      this.diceList = game.diceList;
+      this.rollCount = game.rollCount;
+      this.announcement = game.announcement;
+      this.announcementRequired = game.announcementRequired;
+      this.isLoading = false;
     }
-
-    get form() {
-        return JSON.parse(getFieldValue(this.game.data, FIELD_FORM));
+    if (error) {
+      console.error(error);
+      this.dispatchEvent(
+        new ShowToastEvent({
+          title: ERROR_TITLE,
+          message: error.body ? error.body.message : error,
+          variant: ERROR_VARIANT,
+        })
+      );
     }
+  }
 
-    get diceList() {
-        return JSON.parse(getFieldValue(this.game.data, FIELD_DICE_LIST));
-    }
+  get debugModeEnabled() {
+    return true;
+  }
 
-    get announcement() {
-        return getFieldValue(this.game.data, FIELD_ANNOUNCEMENT);
-    }
+  get rollDiceButtonDisabled() {
+    return (
+      this.form.numOfAvailableBoxes == 0 ||
+      this.rollCount == 3 ||
+      (this.rollCount == 1 &&
+        this.announcement == null &&
+        this.announcementRequired)
+    );
+  }
 
-    get rollCount() {
-        return getFieldValue(this.game.data, FIELD_ROLL_COUNT);
-    }
+  get allDiceDisabled() {
+    return (
+      this.form.numOfAvailableBoxes == 0 ||
+      this.rollCount == 0 ||
+      this.rollCount == 3 ||
+      this.rollDiceButtonDisabled
+    );
+  }
 
-    get rollDiceButtonDisabled() {
-        return (
-            this.form.availableBoxes == 0 ||
-            this.rollCount == 3 ||
-            (this.rollCount == 1 &&
-                !this.announcement &&
-                this.announcementRequired)
+  get allBoxesDisabled() {
+    return this.form.numOfAvailableBoxes == 0 || this.rollCount == 0;
+  }
+
+  connectedCallback() {
+    console.log("Game Id: " + this.recordId);
+  }
+
+  handleReset() {
+    this.isLoading = true;
+    resetGameById({ gameId: this.recordId })
+      .then((game) => {
+        this.form = game.form;
+        this.diceList = game.diceList;
+        this.announcement = game.announcement;
+        this.announcementRequired = game.announcementRequired;
+        this.rollCount = game.rollCount;
+        refreshApex(this.gameRecord);
+      })
+      .catch((error) => {
+        console.error(error);
+        this.dispatchEvent(
+          new ShowToastEvent({
+            title: ERROR_TITLE,
+            message: error.body ? error.body.message : error,
+            variant: ERROR_VARIANT,
+          })
         );
+      })
+      .finally(() => {
+        this.isLoading = false;
+      });
+  }
+
+  handleRollDice() {
+    let diceToRoll = [];
+    const diceComponents = this.template.querySelectorAll("c-dice");
+
+    for (let dice of diceComponents) {
+      if (!dice.frozen) {
+        diceToRoll.push(dice.order);
+      }
     }
 
-    get diceDisabled() {
-        return (
-            this.form.availableBoxes == 0 ||
-            this.rollCount == 0 ||
-            this.rollCount == 3 ||
-            this.rollDiceButtonDisabled
+    rollDiceByGameId({ gameId: this.recordId, diceToRoll: diceToRoll })
+      .then((diceList) => {
+        console.log(diceList);
+        this.diceList = diceList;
+        refreshApex(this.gameRecord);
+        this.startRollDiceAnimation();
+      })
+      .catch((error) => {
+        console.error(error);
+        this.dispatchEvent(
+          new ShowToastEvent({
+            title: ERROR_TITLE,
+            message: error.body ? error.body.message : error,
+            variant: ERROR_VARIANT,
+          })
         );
-    }
+      });
+  }
 
-    get boxesDisabled() {
-        return this.form.availableBoxes == 0 || this.rollCount == 0;
-    }
+  startRollDiceAnimation() {
+    // let dice = this.template.querySelector('c-dice');
+    // diceRackElement.startRollDiceAnimation();
+  }
 
-    get announcementRequired() {
-        try {
-            for (let column of this.form.columnList) {
-                if (column.type != "ANNOUNCEMENT") {
-                    for (let box of column.boxList) {
-                        if (box.isAvailable) {
-                            return false;
-                        }
-                    }
-                }
+  handleDiceClick(event) {
+    toggleFreezeDiceById({ gameId: this.recordId, order: event.detail.order })
+      .then((dice) => {
+        this.diceList[dice.order] = dice;
+      })
+      .catch((error) => {
+        console.error(error);
+        this.dispatchEvent(
+          new ShowToastEvent({
+            title: ERROR_TITLE,
+            message: error.body ? error.body.message : error,
+            variant: ERROR_VARIANT,
+          })
+        );
+      });
+  }
+
+  handleBoxClick(event) {
+    if (event.detail.columnType == "ANNOUNCEMENT") {
+      makeAnnouncementByGameId({
+        gameId: this.recordId,
+        boxTypeString: event.detail.boxType,
+      })
+        .then(() => {
+          refreshApex(this.gameRecord);
+        })
+        .catch((error) => {
+          console.error(error);
+          this.dispatchEvent(
+            new ShowToastEvent({
+              title: ERROR_TITLE,
+              message: error.body ? error.body.message : error,
+              variant: ERROR_VARIANT,
+            })
+          );
+        });
+    } else {
+      fillBoxByGameId({
+        gameId: this.recordId,
+        columnTypeString: event.detail.columnType,
+        boxTypeString: event.detail.boxType,
+      })
+        .then((box) => {
+          console.log(box);
+          refreshApex(this.gameRecord).then(() => {
+            if (this.form.availableBoxes == 0) {
+              setTimeout(() => {
+                let message = SUCCESS_MESSAGE + this.form.finalSum + "!";
+                this.dispatchEvent(
+                  new ShowToastEvent({
+                    title: SUCCESS_TITLE,
+                    message: message,
+                    variant: SUCCESS_VARIANT,
+                  })
+                );
+              }, 1000);
             }
-            return true;
-        } catch (error) {
-            console.error(error);
-            this.dispatchEvent(
-                new ShowToastEvent({
-                    title: ERROR_TITLE,
-                    message: error.body ? error.body.message : error,
-                    variant: ERROR_VARIANT
-                })
-            );
-            return false;
-        }
-    }
-
-    @track firstMove;
-    @track rollDiceAnimation;
-
-    connectedCallback() {
-        console.log("Game Id: " + this.recordId);
-        this.firstMove = true;
-        this.rollDiceAnimation = false;
-    }
-
-    handleReset() {
-        console.log("reset");
-        // refreshGame({
-        //     gameId: this.recordId
-        // }).then(() => {
-        //     refreshApex(this.game);
-        // }).catch(error => {
-        //     console.error(error);
-        //     this.dispatchEvent(new ShowToastEvent({
-        //         title: ERROR_TITLE,
-        //         message: error.body ? error.body.message : error,
-        //         variant: ERROR_VARIANT,
-        //     }));
-        // });
-    }
-
-    handleRollDice() {
-        if (this.firstMove) {
-            this.firstMove = false;
-        }
-        rollDiceById({
-            gameId: this.recordId
+          });
         })
-            .then(() => {
-                refreshApex(this.game);
-                this.startRollDiceAnimation();
+        .catch((error) => {
+          console.error(error);
+          this.dispatchEvent(
+            new ShowToastEvent({
+              title: ERROR_TITLE,
+              message: error.body ? error.body.message : error,
+              variant: ERROR_VARIANT,
             })
-            .catch((error) => {
-                console.error(error);
-                this.dispatchEvent(
-                    new ShowToastEvent({
-                        title: ERROR_TITLE,
-                        message: error.body ? error.body.message : error,
-                        variant: ERROR_VARIANT
-                    })
-                );
-            });
+          );
+        });
     }
-
-    startRollDiceAnimation() {
-        // let diceRackElement = this.template.querySelector('c-dice-rack');
-        // diceRackElement.startRollDiceAnimation();
-    }
-
-    handleDiceClick(event) {
-        toggleFreezeDiceById({
-            gameId: this.recordId,
-            order: event.detail
-        })
-            .then(() => {
-                refreshApex(this.game);
-            })
-            .catch((error) => {
-                console.error(error);
-                this.dispatchEvent(
-                    new ShowToastEvent({
-                        title: ERROR_TITLE,
-                        message: error.body ? error.body.message : error,
-                        variant: ERROR_VARIANT
-                    })
-                );
-            });
-    }
-
-    handleBoxClick(event) {
-        if (
-            event.detail.columnType == "ANNOUNCEMENT" &&
-            this.announcement == null
-        ) {
-            announceById({
-                gameId: this.recordId,
-                boxTypeString: event.detail.boxType
-            })
-                .then(() => {
-                    refreshApex(this.game);
-                })
-                .catch((error) => {
-                    console.error(error);
-                    this.dispatchEvent(
-                        new ShowToastEvent({
-                            title: ERROR_TITLE,
-                            message: error.body ? error.body.message : error,
-                            variant: ERROR_VARIANT
-                        })
-                    );
-                });
-        } else {
-            fillById({
-                gameId: this.recordId,
-                columnTypeString: event.detail.columnType.toString(),
-                boxTypeString: event.detail.boxType.toString()
-            })
-                .then(() => {
-                    refreshApex(this.game).then(() => {
-                        if (this.form.availableBoxes == 0) {
-                            setTimeout(() => {
-                                let message =
-                                    SUCCESS_MESSAGE + this.form.finalSum + "!";
-                                this.dispatchEvent(
-                                    new ShowToastEvent({
-                                        title: SUCCESS_TITLE,
-                                        message: message,
-                                        variant: SUCCESS_VARIANT
-                                    })
-                                );
-                            }, 1000);
-                        }
-                    });
-                })
-                .catch((error) => {
-                    console.error(error);
-                    this.dispatchEvent(
-                        new ShowToastEvent({
-                            title: ERROR_TITLE,
-                            message: error.body ? error.body.message : error,
-                            variant: ERROR_VARIANT
-                        })
-                    );
-                });
-        }
-    }
+  }
 }

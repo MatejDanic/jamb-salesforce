@@ -1,5 +1,15 @@
 import { LightningElement, api } from "lwc";
 
 export default class Label extends LightningElement {
-    @api text;
+  @api value;
+  @api helpText;
+  @api icon;
+
+  handleClick() {
+    console.log(helpText);
+  }
+
+  get disabled() {
+    return this.helpText == null;
+  }
 }

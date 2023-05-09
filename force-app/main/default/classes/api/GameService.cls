@@ -1,113 +1,70 @@
-public with sharing class GameService {
-    public static Game__c getGameById(Id gameId) {
-        return Util.getGameById(gameId);
+public class GameService {
+  public Game resetGameById(Id gameId) {
+    Game__c gameRecord = GameUtil.getGameById(gameId);
+    GameUtil.initializeGame(gameRecord);
+    update gameRecord;
+    return GameUtil.getGameFromGameString(gameRecord.Game_String__c);
+  }
+
+  public List<Dice> rollDiceByGameId(Id gameId, List<Integer> diceToRoll) {
+    Game__c gameRecord = GameUtil.getGameById(gameId);
+    Game game = GameUtil.getGameFromGameString(gameRecord.Game_String__c);
+
+    if (game.rollCount == 3) {
+      throw new IllegalMoveException('Roll limit has been reached!');
+    } else if (
+      game.rollCount == 1 &&
+      game.announcement == null &&
+      game.announcementRequired
+    ) {
+      throw new IllegalMoveException('Announcement is required!');
     }
 
-    public static List<Dice> rollDiceById(Id gameId) {
-        Game__c game = Util.getGameById(gameId);
+    game.rollDice(diceToRoll);
+    gameRecord.Game_String__c = JSON.serialize(game);
+    update gameRecord;
 
-        List<Dice> diceList = (List<Dice>) JSON.deserialize(
-            game.Dice_List__c,
-            List<Dice>.class
-        );
-        Form form = (Form) JSON.deserialize(game.Form__c, Form.class);
+    return game.diceList;
+  }
 
-        if (game.Roll_Count__c == 0) {
-            Util.resetDice(diceList);
-        } else if (game.Roll_Count__c == 3) {
-            throw new IllegalMoveException('Roll limit has been reached!');
-        } else if (
-            game.Roll_Count__c == 1 &&
-            game.Announcement__c == null &&
-            form.isAnnouncementRequired()
-        ) {
-            throw new IllegalMoveException('Announcement is required!');
-        }
+  public BoxType makeAnnouncementByGameId(
+    Id gameId,
+    String announcementBoxTypeString
+  ) {
+    Game__c gameRecord = GameUtil.getGameById(gameId);
+    Game game = GameUtil.getGameFromGameString(gameRecord.Game_string__c);
+    BoxType announcementBoxType = BoxType.valueOf(announcementBoxTypeString);
 
-        Util.rollDice(diceList);
-        game.Roll_Count__c = game.Roll_Count__c + 1;
-        game.Dice_List__c = JSON.serialize(diceList);
-        update game;
-
-        return diceList;
+    if (game.announcement != null) {
+      throw new IllegalMoveException('Announcement is already declared!');
+    } else if (game.rollCount != 1) {
+      throw new IllegalMoveException(
+        'Announcement is available only after first roll!'
+      );
     }
 
-    public static List<Dice> toggleFreezeDiceById(Id gameId, Integer order) {
-        Game__c game = Util.getGameById(gameId);
-        List<Dice> diceList = (List<Dice>) JSON.deserialize(
-            game.Dice_List__c,
-            List<Dice>.class
-        );
+    game.announcement = announcementBoxType;
+    gameRecord.Game_String__c = JSON.serialize(game);
+    update gameRecord;
 
-        for (Dice dice : diceList) {
-            if (dice.order == order) {
-                dice.toggleFreeze();
-                break;
-            }
-        }
+    return announcementBoxType;
+  }
 
-        game.Dice_List__c = JSON.serialize(diceList);
-        update game;
+  public Game fillBoxByGameId(
+    Id gameId,
+    String columnTypeString,
+    String boxTypeString
+  ) {
+    Game__c gameRecord = GameUtil.getGameById(gameId);
+    Game game = GameUtil.getGameFromGameString(gameRecord.Game_string__c);
 
-        return diceList;
-    }
+    game.fillBox(
+      ColumnType.valueOf(columnTypeString),
+      BoxType.valueOf(boxTypeString)
+    );
+    gameRecord.Game_String__c = JSON.serialize(game);
+    update gameRecord;
 
-    public static BoxType announceById(Id gameId, BoxType announcement) {
-        Game__c game = Util.getGameById(gameId);
-
-        if (game.Announcement__c != null) {
-            throw new IllegalMoveException('Announcement is already declared!');
-        } else if (game.Roll_Count__c != 1) {
-            throw new IllegalMoveException(
-                'Announcement is available only after first roll!'
-            );
-        }
-
-        game.Announcement__c = announcement.name();
-        update game;
-
-        return BoxType.valueOf(game.Announcement__c);
-    }
-
-    public static Game__c fillById(Id gameId, ColumnType cType, BoxType bType) {
-        Game__c game = Util.getGameById(gameId);
-        Form form = (Form) JSON.deserialize(game.Form__c, Form.class);
-        List<Dice> diceList = (List<Dice>) JSON.deserialize(
-            game.Dice_List__c,
-            List<Dice>.class
-        );
-
-        Box selectedBox = form.getColumnByType(cType).getBoxByType(bType);
-
-        if (selectedBox.isFilled) {
-            throw new IllegalMoveException('Box is already filled!');
-        } else if (!selectedBox.isAvailable) {
-            throw new IllegalMoveException('Box is currently unavailable!');
-        } else if (game.Roll_Count__c == 0) {
-            throw new IllegalMoveException('First roll is mandatory!');
-        } else if (
-            game.Announcement__c != null &&
-            BoxType.valueOf(game.Announcement__c) != selectedBox.type
-        ) {
-            throw new IllegalMoveException(
-                'Announcement is different from selected box!'
-            );
-        }
-
-        selectedBox.fill(Util.calculateScore(diceList, bType));
-        form.updateSums();
-
-        if (form.isFinished()) {
-            Score__c score = new Score__c(Value__c = form.totalSum);
-            insert score;
-        }
-
-        game.Form__c = JSON.serialize(form);
-        game.Dice_List__c = JSON.serialize(diceList);
-        game.Roll_Count__c = 0;
-        game.Announcement__c = null;
-        update game;
-
-        return game;
-    }
+    return game;
+  }
 }

@@ -1,64 +1,62 @@
-<!-- sldsValidatorIgnore -->
-<!-- sldsValidatorIgnore -->
-<!-- sldsValidatorIgnore -->
 <template>
-    <div class="form">
-        <div style="display: flex">
-            <div>
-                <c-label text=""></c-label>
-                <c-label text="1"></c-label>
-                <c-label text="2"></c-label>
-                <c-label text="3"></c-label>
-                <c-label text="4"></c-label>
-                <c-label text="5"></c-label>
-                <c-label text="6"></c-label>
-
-                <c-label text="(1-6)"></c-label>
-                <c-label text="Max"></c-label>
-                <c-label text="Min"></c-label>
-                <c-label text="∆ x 1s"></c-label>
-                <c-label text="Trips"></c-label>
-                <c-label text="Straight"></c-label>
-                <c-label text="Boat"></c-label>
-                <c-label text="Carriage"></c-label>
-                <c-label text="Yamb"></c-label>
-                <c-label text="Σ"></c-label>
-            </div>
-
-            <template for:each={form.columnList} for:item="column">
-                <c-column
-                    key={column}
-                    column={column}
-                    announcement={announcement}
-                    roll-count={rollCount}
-                    announcement-required={announcementRequired}
-                    boxes-disabled={boxesDisabled}
-                    onboxclick={handleBoxClick}>
-                </c-column>
-            </template>
-
-            <div>
-                <c-label></c-label>
-                <button
-                    onclick={handleRollDice}
-                    disabled={rollDiceButtonDisabled}>
-                    roll
-                </button>
-                <c-label text={form.sumA}></c-label>
-                <c-label></c-label>
-                <button onclick={handleReset}>
-                    <lightning-icon
-                        icon-name="utility:refresh"
-                        alternative-text="Refresh"
-                        title="Refresh">
-                    </lightning-icon>
-                </button>
-                <c-label text={form.sumB}></c-label>
-                <c-label></c-label>
-                <c-label text="Info"></c-label>
-                <c-label text={form.sumC}></c-label>
-                <c-label></c-label>
-            </div>
-        </div>
+  <div class="form slds-card">
+    <div class="first-column">
+      <!-- SECTION 1 -->
+      <c-label value="1"></c-label>
+      <c-label value="2"></c-label>
+      <c-label value="3"></c-label>
+      <c-label value="4"></c-label>
+      <c-label value="5"></c-label>
+      <c-label value="6"></c-label>
+      <c-label value="(1-6)"></c-label>
+      <!-- SECTION 2 -->
+      <c-label value="Max"></c-label>
+      <c-label value="Min"></c-label>
+      <c-label value="∆ x 1s"></c-label>
+      <!-- SECTION 3 -->
+      <c-label value="Trips"></c-label>
+      <c-label value="Straight"></c-label>
+      <c-label value="Boat"></c-label>
+      <c-label value="Carriage"></c-label>
+      <c-label value="Yamb"></c-label>
+      <c-label value="Σ"></c-label>
     </div>
+    <template for:each="{columnList}" for:item="column">
+      <c-column
+        class="column"
+        key="{column.type}"
+        type="{column.type}"
+        box-list="{column.boxList}"
+        sum-1="{column.sum1}"
+        sum-2="{column.sum2}"
+        sum-3="{column.sum3}"
+        roll-count="{rollCount}"
+        announcement="{announcement}"
+        announcement-required="{announcementRequired}"
+        all-boxes-disabled="{allBoxesDisabled}"
+        onboxclick="{handleBoxClick}"
+      >
+      </c-column>
+    </template>
+    <div class="last-column">
+      <button
+        class="roll-dice-button"
+        title="Roll!"
+        disabled="{rollDiceButtonDisabled}"
+        onclick="{handleRollDice}"
+      ></button>
+      <c-label value="{sum1}"></c-label>
+      <button class="reset-button" onclick="{handleReset}">
+        <lightning-icon
+          title="Reset"
+          icon-name="utility:refresh"
+          alternative-value="Reset"
+        >
+        </lightning-icon>
+      </button>
+      <c-label value="{sum2}"></c-label>
+      <c-label class="sum-c" value="{sum3}"></c-label>
+    </div>
+    <c-label class="total-sum" value="{totalSum}"></c-label>
+  </div>
 </template>

@@ -1,15 +1,18 @@
 public enum BoxType {
-    ONES,
-    TWOS,
-    THREES,
-    FOURS,
-    FIVES,
-    SIXES,
-    MAX,
-    MIN,
-    TRIPS,
-    STRAIGHT,
-    BOAT,
-    CARRIAGE,
-    YAMB
+  // Section 1
+  ONES,
+  TWOS,
+  THREES,
+  FOURS,
+  FIVES,
+  SIXES,
+  // Section 2
+  MAX,
+  MIN,
+  // Section 3
+  TRIPS,
+  STRAIGHT,
+  BOAT,
+  CARRIAGE,
+  YAMB
 }

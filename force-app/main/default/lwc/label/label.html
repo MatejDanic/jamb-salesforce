@@ -1,3 +1,12 @@
 <template>
-    <div class="label">{text}</div>
+  <button class="label" disabled="{disabled}" onclick="{handleClick}">
+    <template if:true="{icon}">
+      <lightning-icon
+        icon-name="{icon}"
+        size="small"
+        alternative-text="{value}"
+      ></lightning-icon
+    ></template>
+    <template if:false="{icon}">{value}</template>
+  </button>
 </template>

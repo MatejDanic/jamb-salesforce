@@ -1,2 +1,2 @@
-public with sharing class IllegalMoveException extends Exception {
+public class IllegalMoveException extends Exception {
 }

@@ -1,41 +1,54 @@
 <template>
-    <div class="column">
-        <template if:true={isDown}>
-            <c-label
-                icon="utility:arrowdown"
-                title="Downwards"
-                body="This column is filled the top to the bottom."></c-label>
-        </template>
-        <template if:true={isUp}>
-            <c-label
-                icon="utility:arrowup"
-                title="Upwards"
-                body="This column is filled from the bottom to the top."></c-label>
-        </template>
-        <template if:true={isFree}>
-            <c-label
-                icon="utility:sort"
-                title="Free"
-                body="This column is filled in any direction."></c-label>
-        </template>
-        <template if:true={isAnn}>
-            <c-label
-                icon="utility:announcement"
-                title="Announcement"
-                body="This column is filled by announcing (clicking) the box after the first dice roll."></c-label>
-        </template>
-        <c-label class="sum-a" text={column.sumA}></c-label>
-        <c-label class="sum-b" text={column.sumB}></c-label>
-        <c-label class="sum-c" text={column.sumC}></c-label>
-        <template for:each={column.boxList} for:item="box">
-            <c-box
-                key={box.type}
-                box={box}
-                column-type={column.type}
-                announcement={announcement}
-                roll-count={rollCount}
-                boxes-disabled={boxesDisabled}
-                onboxclick={handleBoxClick}></c-box>
-        </template>
-    </div>
+  <div class="column">
+    <template if:true="{isDown}">
+      <c-label
+        icon="utility:arrowdown"
+        help-text="This column is filled the top to the bottom."
+        value="{type}"
+      >
+      </c-label>
+    </template>
+    <template if:true="{isUp}">
+      <c-label
+        icon="utility:arrowup"
+        help-text="This column is filled from the bottom to the top."
+        value="{type}"
+      >
+      </c-label>
+    </template>
+    <template if:true="{isFree}">
+      <c-label
+        icon="utility:sort"
+        help-text="This column is filled in any direction."
+        value="{type}"
+      >
+      </c-label>
+    </template>
+    <template if:true="{isAnn}">
+      <c-label
+        icon="utility:announcement"
+        help-text="This column is filled by announcing (clicking) the box after the first dice roll."
+        value="{type}"
+      >
+      </c-label>
+    </template>
+    <template for:each="{boxList}" for:item="box">
+      <c-box
+        key="{box.type}"
+        value="{box.value}"
+        type="{box.type}"
+        filled="{box.filled}"
+        available="{box.available}"
+        column-type="{type}"
+        roll-count="{rollCount}"
+        announcement="{announcement}"
+        announcement-required="{announcementRequired}"
+        onboxclick="{handleBoxClick}"
+      >
+      </c-box>
+    </template>
+    <c-label class="sum-1" value="{sum1}"></c-label>
+    <c-label class="sum-2" value="{sum2}"></c-label>
+    <c-label class="sum-3" value="{sum3}"></c-label>
+  </div>
 </template>

@@ -1,5 +1,9 @@
 .dice {
-    width: 64px;
-    height: 64px;
-    margin: 16px;
+  width: 64px;
+  height: 64px;
+  margin: 16px;
+}
+
+.dice-frozen {
+  border: 2px solid red;
 }

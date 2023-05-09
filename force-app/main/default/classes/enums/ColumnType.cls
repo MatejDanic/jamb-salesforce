@@ -1,6 +1,6 @@
 public enum ColumnType {
-    UPWARDS,
-    DOWNWARDS,
-    FREE,
-    ANNOUNCEMENT
+  DOWNWARDS,
+  UPWARDS,
+  FREE,
+  ANNOUNCEMENT
 }

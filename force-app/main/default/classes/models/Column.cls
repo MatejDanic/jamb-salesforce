@@ -1,65 +1,81 @@
-public with sharing class Column {
-    public ColumnType type { get; private set; }
-    private List<Box> boxList { get; private set; }
-    public Integer sumA { get; private set; }
-    public Integer sumB { get; private set; }
-    public Integer sumC { get; private set; }
+public class Column {
+  @AuraEnabled
+  public ColumnType type { get; private set; }
 
-    public Column(ColumnType type, List<Box> boxList) {
-        this.type = type;
-        this.boxList = boxList;
-        this.sumA = 0;
-        this.sumB = 0;
-        this.sumC = 0;
-    }
+  @AuraEnabled
+  public List<Box> boxList { get; private set; }
 
-    public Box getBoxByType(BoxType boxType) {
-        for (Box box : this.boxList) {
-            if (box.type == boxType) {
-                return box;
-            }
+  @AuraEnabled
+  public Integer sum1 {
+    get {
+      Integer sum1 = 0;
+      for (Box box : this.boxList) {
+        if (box.isSection1()) {
+          sum1 += box.value;
         }
-        return null;
+      }
+      return sum1;
     }
+    private set;
+  }
 
-    public Boolean isFinished() {
-        for (Box box : this.boxList) {
-            if (!box.isFilled) {
-                return false;
-            }
-        }
-        return true;
+  @AuraEnabled
+  public Integer sum2 {
+    get {
+      Integer sum2 = 0;
+      Box ones = getBoxByType(BoxType.ONES);
+      Box max = getBoxByType(BoxType.MAX);
+      Box min = getBoxByType(BoxType.MIN);
+      if (ones.filled && max.filled && min.filled) {
+        sum2 = ones.value * (max.value - min.value);
+      }
+      return sum2;
     }
+    private set;
+  }
 
-    public void updateSums() {
-        this.sumA = 0;
-        this.sumB = 0;
-        this.sumC = 0;
-        for (Box box : this.boxList) {
-            if (
-                box.type == BoxType.ONES ||
-                box.type == BoxType.TWOS ||
-                box.type == BoxType.THREES ||
-                box.type == BoxType.FOURS ||
-                box.type == BoxType.FIVES ||
-                box.type == BoxType.SIXES
-            ) {
-                sumA += box.value;
-            } else if (
-                box.type == BoxType.TRIPS ||
-                box.type == BoxType.STRAIGHT ||
-                box.type == BoxType.BOAT ||
-                box.type == BoxType.CARRIAGE ||
-                box.type == BoxType.YAMB
-            ) {
-                sumC += box.value;
-            }
+  @AuraEnabled
+  public Integer sum3 {
+    get {
+      Integer sum3 = 0;
+      for (Box box : this.boxList) {
+        if (box.isSection3()) {
+          sum3 += box.value;
         }
-        Box ones = this.getBoxByType(BoxType.ONES);
-        Box max = this.getBoxByType(BoxType.MAX);
-        Box min = this.getBoxByType(BoxType.MIN);
-        if (ones.isFilled && max.isFilled && min.isFilled) {
-            this.sumB = ones.value * (max.value - min.value);
-        }
+      }
+      return sum3;
     }
+    private set;
+  }
+
+  public Integer numOfAvailableBoxes {
+    get {
+      Integer numOfAvailableBoxes = 0;
+      for (Box box : boxList) {
+        if (box.available) {
+          numOfAvailableBoxes++;
+        }
+      }
+      return numOfAvailableBoxes;
+    }
+    private set;
+  }
+
+  public Column(ColumnType type, List<Box> boxList) {
+    this.type = type;
+    this.boxList = boxList;
+  }
+
+  public Box getBoxByType(BoxType boxType) {
+    for (Box box : this.boxList) {
+      if (box.type == boxType) {
+        return box;
+      }
+    }
+    return null;
+  }
+
+  public Boolean isFinished() {
+    return numOfAvailableBoxes == 0;
+  }
 }

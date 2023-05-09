@@ -1,33 +1,37 @@
 import { LightningElement, api, track } from "lwc";
 
 export default class Column extends LightningElement {
-    @api column;
-    @api announcement;
-    @api rollCount;
-    @api announcementRequired;
-    @api boxesDisabled;
+  @api type;
+  @api boxList;
+  @api sum1;
+  @api sum2;
+  @api sum3;
+  @api rollCount;
+  @api announcement;
+  @api announcementRequired;
+  @api allBoxesDisabled;
 
-    connectedCallback() {
-        this.isDown = this.column.type == "DOWNWARDS";
-        this.isUp = this.column.type == "UPWARDS";
-        this.isFree = this.column.type == "FREE";
-        this.isAnn = this.column.type == "ANNOUNCEMENT";
-    }
+  get isDown() {
+    return this.type == "DOWNWARDS";
+  }
+  get isUp() {
+    return this.type == "UPWARDS";
+  }
+  get isFree() {
+    return this.type == "FREE";
+  }
+  get isAnn() {
+    return this.type == "ANNOUNCEMENT";
+  }
 
-    renderedCallback() {
-        this.announcementColumnClass =
-            "form-item column-announcement-" +
-            (this.announcementRequired ? "glow" : "normal");
-    }
-
-    handleBoxClick(event) {
-        this.dispatchEvent(
-            new CustomEvent("boxclick", {
-                detail: {
-                    boxType: event.detail,
-                    columnType: this.column.type
-                }
-            })
-        );
-    }
+  handleBoxClick(event) {
+    this.dispatchEvent(
+      new CustomEvent("boxclick", {
+        detail: {
+          boxType: event.detail.boxType,
+          columnType: this.type,
+        },
+      })
+    );
+  }
 }
