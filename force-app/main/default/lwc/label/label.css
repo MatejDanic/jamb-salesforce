@@ -1,5 +1,15 @@
 .label {
-  border-radius: 4px;
-  width: 100%;
-  height: 100%;
+    background-color: var(--lwc-colorBackgroundAlt);
+    border: 1px solid var(--lwc-colorBorder);
+	border-radius: var(--lwc-borderRadiusMedium);
+	width: 100%;
+	height: 100%;
+}
+
+.label:disabled {
+    background-color: var(--lwc-colorBackgroundInputDisabled);
+}
+
+.label:hover:enabled {
+    background-color: var(--lwc-colorBackgroundRowHover);
 }

@@ -1,13 +1,9 @@
 public class GameService {
 
-    public Game resetGameById(Id gameId) {
-        Game__c gameRecord = GameUtil.getGameById(gameId);
-        GameUtil.initializeGame(gameRecord);
-        update gameRecord;
-        return GameUtil.getGameFromGameString(gameRecord.Game_String__c);
-    }
+    public static final ApexLogger logger = ApexLogger.getLogger(GameService.class);
 
     public List<Dice> rollDiceByGameId(Id gameId, List<Integer> diceToRoll) {
+        logger.debug('Dice to roll: ' + JSON.serializePretty(diceToRoll));
         Game__c gameRecord = GameUtil.getGameById(gameId);
         Game game = GameUtil.getGameFromGameString(gameRecord.Game_String__c);
 
@@ -24,6 +20,17 @@ public class GameService {
         return game.diceList;
     }
 
+    public Game fillBoxByGameId(Id gameId, String columnTypeString, String boxTypeString) {
+        Game__c gameRecord = GameUtil.getGameById(gameId);
+        Game game = GameUtil.getGameFromGameString(gameRecord.Game_string__c);
+
+        game.fillBox(ColumnType.valueOf(columnTypeString), BoxType.valueOf(boxTypeString));
+        gameRecord.Game_String__c = JSON.serialize(game);
+        update gameRecord;
+
+        return game;
+    }
+    
     public BoxType makeAnnouncementByGameId(Id gameId, String announcementBoxTypeString) {
         Game__c gameRecord = GameUtil.getGameById(gameId);
         Game game = GameUtil.getGameFromGameString(gameRecord.Game_string__c);
@@ -31,7 +38,7 @@ public class GameService {
 
         if (game.announcement != null) {
             throw new IllegalMoveException('Announcement is already declared!');
-        } else if (game.rollCount != 1) {
+        } else if (game.rollCount > 1) {
             throw new IllegalMoveException('Announcement is available only after first roll!');
         }
 
@@ -42,14 +49,10 @@ public class GameService {
         return announcementBoxType;
     }
 
-    public Game fillBoxByGameId(Id gameId, String columnTypeString, String boxTypeString) {
+    public Game restartGameById(Id gameId) {
         Game__c gameRecord = GameUtil.getGameById(gameId);
-        Game game = GameUtil.getGameFromGameString(gameRecord.Game_string__c);
-
-        game.fillBox(ColumnType.valueOf(columnTypeString), BoxType.valueOf(boxTypeString));
-        gameRecord.Game_String__c = JSON.serialize(game);
+        GameUtil.initializeGame(gameRecord);
         update gameRecord;
-
-        return game;
+        return GameUtil.getGameFromGameString(gameRecord.Game_String__c);
     }
 }

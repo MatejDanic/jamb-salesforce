@@ -67,13 +67,11 @@ public class Form {
     }
 
     public Column getColumnByType(ColumnType type) {
-        Logger.entering();
         for (Column column : columnList) {
             if (column.type == type) {
                 return column;
             }
         }
-        Logger.exiting();
         return null;
     }
 

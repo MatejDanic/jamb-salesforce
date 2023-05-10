@@ -1,62 +1,55 @@
 <template>
-  <div class="form slds-card">
-    <div class="first-column">
-      <!-- SECTION 1 -->
-      <c-label value="1"></c-label>
-      <c-label value="2"></c-label>
-      <c-label value="3"></c-label>
-      <c-label value="4"></c-label>
-      <c-label value="5"></c-label>
-      <c-label value="6"></c-label>
-      <c-label value="(1-6)"></c-label>
-      <!-- SECTION 2 -->
-      <c-label value="Max"></c-label>
-      <c-label value="Min"></c-label>
-      <c-label value="∆ x 1s"></c-label>
-      <!-- SECTION 3 -->
-      <c-label value="Trips"></c-label>
-      <c-label value="Straight"></c-label>
-      <c-label value="Boat"></c-label>
-      <c-label value="Carriage"></c-label>
-      <c-label value="Yamb"></c-label>
-      <c-label value="Σ"></c-label>
-    </div>
-    <template for:each={columnList} for:item="column">
-      <c-column
-        class="column"
-        key={column.type}
-        type={column.type}
-        box-list={column.boxList}
-        sum-1={column.sum1}
-        sum-2={column.sum2}
-        sum-3={column.sum3}
-        roll-count={rollCount}
-        announcement={announcement}
-        announcement-required={announcementRequired}
-        all-boxes-disabled={allBoxesDisabled}
-        onboxclick={handleBoxClick}
-      >
-      </c-column>
-    </template>
-    <div class="last-column">
-      <button
-        class="roll-dice-button"
-        title="Roll!"
-        disabled={rollDiceButtonDisabled}
-        onclick={handleRollDice}
-      ></button>
-      <c-label value={sum1}></c-label>
-      <button class="reset-button" onclick={handleReset}>
-        <lightning-icon
-          title="Reset"
-          icon-name="utility:refresh"
-          alternative-value="Reset"
-        >
-        </lightning-icon>
-      </button>
-      <c-label value={sum2}></c-label>
-      <c-label class="sum-c" value={sum3}></c-label>
-    </div>
-    <c-label class="total-sum" value={totalSum}></c-label>
-  </div>
+	<div class="form slds-card">
+		<div class="first-column">
+			<!-- SECTION 1 -->
+			<c-label value="1" help-text="Number of ones"></c-label>
+			<c-label value="2" help-text="Number of twos"></c-label>
+			<c-label value="3" help-text="Number of threes"></c-label>
+			<c-label value="4" help-text="Number of fours"></c-label>
+			<c-label value="5" help-text="Number of fives"></c-label>
+			<c-label value="6" help-text="Number of sixes"></c-label>
+			<c-label value="(1-6)"></c-label>
+			<!-- SECTION 2 -->
+			<c-label value="Max" help-text="Sum of all dice"></c-label>
+			<c-label value="Min" help-text="Sum of all dice"></c-label>
+			<c-label value="∆ x 1s"></c-label>
+			<!-- SECTION 3 -->
+			<c-label value="Trips" help-text="Three of a kind"></c-label>
+			<c-label value="Straight" help-text="Five consecutive numbers"></c-label>
+			<c-label value="Boat" help-text="Three of a kind and two of a kind"></c-label>
+			<c-label value="Carriage" help-text="Four of a kind"></c-label>
+			<c-label value="Yamb" help-text="Five of a kind"></c-label>
+			<c-label value="Σ"></c-label>
+		</div>
+		<template for:each={columnList} for:item="column">
+			<c-column class="column" 
+				key={column.type} 
+				type={column.type} 
+				box-list={column.boxList} 
+				sum-1={column.sum1} 
+				sum-2={column.sum2}
+				sum-3={column.sum3}
+				roll-count={rollCount}
+				announcement={announcement}
+				announcement-required={announcementRequired}
+				all-boxes-disabled={allBoxesDisabled}
+				onboxclick={handleBoxClick}>
+			</c-column>
+		</template>
+		<div class="last-column">
+			<button class="roll-dice-button" 
+				title="Roll!" 
+				disabled={rollDiceButtonDisabled} 
+				onclick={handleRollDice}>
+			</button>
+			<c-label value={sum1}></c-label>
+			<button class="restart-button" onclick={handleRestart}>
+				<lightning-icon title="Restart" icon-name="utility:refresh" alternative-value="Restart">
+				</lightning-icon>
+			</button>
+			<c-label value={sum2}></c-label>
+			<c-label class="sum-c" value={sum3}></c-label>
+		</div>
+		<c-label class="total-sum" value={totalSum}></c-label>
+	</div>
 </template>

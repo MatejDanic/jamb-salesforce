@@ -1,38 +1,52 @@
 .form {
-  display: inline-grid;
-  grid-template-rows: repeat(18, 32px);
-  grid-template-columns: repeat(6, 64px);
+	display: inline-grid;
+	grid-template-rows: repeat(18, 32px);
+	grid-template-columns: repeat(6, 64px);
 }
 
 .first-column {
-  display: inline-grid;
-  grid-row-start: 2;
-  grid-row-end: 18;
-  grid-template-rows: repeat(17, 32px);
-  grid-template-columns: 64px;
+	display: inline-grid;
+	grid-row-start: 2;
+	grid-row-end: 18;
+	grid-template-rows: repeat(17, 32px);
+	grid-template-columns: 64px;
 }
 
 .last-column {
-  display: inline-grid;
-  grid-row-start: 2;
-  grid-row-end: 18;
-  grid-column-start: 6;
-  grid-template-rows: repeat(16, 32px);
-  grid-template-columns: 64px;
+	display: inline-grid;
+	grid-row-start: 2;
+	grid-row-end: 18;
+	grid-column-start: 6;
+	grid-template-rows: repeat(16, 32px);
+	grid-template-columns: 64px;
 }
 
 .column:nth-child(2) {
-  grid-column-start: 2;
+  	grid-column-start: 2;
 }
 
 .roll-dice-button {
-  grid-row-start: 1;
-  grid-row-end: 7;
+    background-color: var(--lwc-colorBackgroundAlt);
+    border: 1px solid var(--lwc-colorBorder);
+	border-radius: var(--lwc-borderRadiusMedium);
+	grid-row-start: 1;
+	grid-row-end: 7;
 }
 
-.reset-button {
-  grid-row-start: 8;
-  grid-row-end: 10;
+.roll-dice-button:hover:enabled {
+    background-color:  var(--lwc-colorBackgroundRowHover);
+}
+
+.restart-button {
+    background-color: var(--lwc-colorBackgroundAlt);
+    border: 1px solid var(--lwc-colorBorder);
+	border-radius: var(--lwc-borderRadiusMedium);
+	grid-row-start: 8;
+	grid-row-end: 10;
+}
+
+.restart-button:hover:enabled {
+	background-color:  var(--lwc-colorBackgroundRowHover);
 }
 
 /* .info {
