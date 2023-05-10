@@ -43,7 +43,6 @@ export default class Game extends LightningElement {
 			this.rollCount = game.rollCount;
 			this.announcement = game.announcement;
 			this.announcementRequired = game.announcementRequired;
-			this.resetAllDice();
 			this.isLoading = false;
 		}
 		if (error) {
@@ -121,7 +120,7 @@ export default class Game extends LightningElement {
 	handleBoxFill(columnType, boxType) {
 		fillBoxByGameId({ gameId: this.recordId, columnTypeString: columnType, boxTypeString: boxType })
 			.then((box) => {
-				//this.resetAllDice();
+				this.resetAllDice();
 				refreshApex(this.gameRecord).then(() => {
 					if (this.form.availableBoxes == 0) {
 						setTimeout(() => {
@@ -162,7 +161,7 @@ export default class Game extends LightningElement {
 				// this.announcement = game.announcement;
 				// this.announcementRequired = game.announcementRequired;
 				// this.rollCount = game.rollCount;
-				// this.resetAllDice();
+				this.resetAllDice();
 				refreshApex(this.gameRecord);
 			})
 			.catch((error) => {

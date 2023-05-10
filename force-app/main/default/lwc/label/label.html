@@ -1,7 +1,5 @@
 <template>
-    <button class="label" 
-        disabled={disabled} 
-        onclick={handleClick}>
+    <button class="label" disabled={disabled}>
         <template if:true={icon}>
             <lightning-icon
                 icon-name={icon}
@@ -11,4 +9,9 @@
         </template>
         <template if:false={icon}>{value}</template>
     </button>
+    <template if:true={helpText}>
+        <div class="tooltip slds-popover slds-popover_tooltip slds-nubbin_top-left">
+            <div class="slds-popover__body">{helpText}</div>
+        </div>
+    </template> 
 </template>
