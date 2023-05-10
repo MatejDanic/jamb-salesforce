@@ -54,7 +54,7 @@ public class Column {
             Integer numOfAvailableBoxes = 0;
             for (Box box : boxList) {
                 if (box.available) {
-                    numOfAvailableBoxes++;
+                    numOfAvailableBoxes += 1;
                 }
             }
             return numOfAvailableBoxes;

@@ -42,17 +42,7 @@ public class Game {
     public void fillBox(ColumnType cType, BoxType bType) {
         Box selectedBox = form.getColumnByType(cType).getBoxByType(bType);
 
-        if (selectedBox.filled) {
-            throw new IllegalMoveException('Box is already filled!');
-        } else if (!selectedBox.available) {
-            throw new IllegalMoveException('Box is currently unavailable!');
-        } else if (rollCount == 0) {
-            throw new IllegalMoveException('First roll is mandatory!');
-        } else if (announcement != null && announcement != selectedBox.type) {
-            throw new IllegalMoveException('Announcement is different from selected box!');
-        }
-
-        selectedBox.fill(GameUtil.calculateScore(diceList, bType));
+        selectedBox.fill(ScoreUtil.calculateScore(diceList, bType));
         BoxType nextBoxType = selectedBox.getNextBoxType(cType);
         if (nextBoxType != null) {
             Box nextBox = form.getColumnByType(cType).getBoxByType(nextBoxType);

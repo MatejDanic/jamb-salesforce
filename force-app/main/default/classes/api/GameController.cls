@@ -9,17 +9,21 @@ public class GameController {
             return gameService.rollDiceByGameId(gameId, diceToRoll);
         } catch (Exception e) {
             logger.error(e);
-            throw new AuraHandledException(e.getMessage());
+            AuraHandledException exc = new AuraHandledException(e.getMessage());
+            exc.setMessage(e.getMessage());
+            throw exc;
         }
     }
 
     @AuraEnabled
-    public static Game fillBoxByGameId(Id gameId, String columnTypeString, String boxTypeString) {
+    public static Box fillBoxByGameId(Id gameId, String columnTypeString, String boxTypeString) {
         try {
             return gameService.fillBoxByGameId(gameId, columnTypeString, boxTypeString);
         } catch (Exception e) {
             logger.error(e);
-            throw new AuraHandledException(e.getMessage());
+            AuraHandledException exc = new AuraHandledException(e.getMessage());
+            exc.setMessage(e.getMessage());
+            throw exc;
         }
     }
 
@@ -29,7 +33,9 @@ public class GameController {
             return gameService.makeAnnouncementByGameId(gameId, announcementBoxTypeString);
         } catch (Exception e) {
             logger.error(e);
-            throw new AuraHandledException(e.getMessage());
+            AuraHandledException exc = new AuraHandledException(e.getMessage());
+            exc.setMessage(e.getMessage());
+            throw exc;
         }
     }
     
@@ -39,7 +45,9 @@ public class GameController {
             return gameService.restartGameById(gameId);
         } catch (Exception e) {
             logger.error(e);
-            throw new AuraHandledException(e.getMessage());
+            AuraHandledException exc = new AuraHandledException(e.getMessage());
+            exc.setMessage(e.getMessage());
+            throw exc;
         }
     }
 

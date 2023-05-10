@@ -1,7 +1,7 @@
 .box {
     background-color: var(--lwc-colorBackgroundAlt);
     border: 1px solid var(--lwc-colorBorder);
-	border-radius: var(--lwc-borderRadiusMedium);
+	border-radius: var(--lwc-borderRadiusMedium);    
     width: 100%;
     height: 100%;
 }
