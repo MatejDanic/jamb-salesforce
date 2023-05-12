@@ -1,15 +1,15 @@
 public enum BoxType {
-    // Section 1
+    // Top Section
     ONES,
     TWOS,
     THREES,
     FOURS,
     FIVES,
     SIXES,
-    // Section 2
+    // Middle Section
     MAX,
     MIN,
-    // Section 3
+    // Bottom Section
     TRIPS,
     STRAIGHT,
     BOAT,

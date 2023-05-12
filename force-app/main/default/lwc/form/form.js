@@ -1,13 +1,14 @@
-import { LightningElement, api, track } from "lwc";
+import { LightningElement, api } from "lwc";
 
 export default class Form extends LightningElement {
+
 	@api columnList;
-	@api sum1;
-	@api sum2;
-	@api sum3;
+	@api topSectionSum;
+	@api middleSectionSum;
+	@api bottomSectionSum;
 	@api totalSum;
 	@api rollCount;
-	@api announcement;
+	@api announcementString;
 	@api announcementRequired;
 	@api rollDiceButtonDisabled;
 	@api allBoxesDisabled;
@@ -23,9 +24,9 @@ export default class Form extends LightningElement {
 		}));
 	}
 
-	handleRestart() {
-		if (confirm("Are you sure you want to restart?")) {
-			this.dispatchEvent(new CustomEvent("restart"));
-		}
-	}
+	// handleRestart() {
+	// 	if (confirm("Are you sure you want to restart?")) {
+	// 		this.dispatchEvent(new CustomEvent("restart"));
+	// 	}
+	// }
 }

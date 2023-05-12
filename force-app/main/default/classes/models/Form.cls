@@ -1,82 +1,81 @@
 public class Form {
 
-    @AuraEnabled
-    public List<Column> columnList { get; private set; }
-
-    public Form() {
-    }
-
-    public Form(List<Column> columnList) {
-        this.columnList = columnList;
+    public Map<ColumnType, Column> columnMap { get; private set; }
+    
+    public Form(Map<ColumnType, Column> columnMap) {
+        this.columnMap = columnMap;
     }
 
     @AuraEnabled
-    public Integer sum1 { 
+    public transient List<Column> columnList { 
         get {
-            Integer sum1 = 0;
-            for (Column column : columnList) {
-                sum1 += column.sum1;
+            List<Column> columnList = columnMap.values();
+            columnList.sort();
+            return columnList;
+        } 
+        private set;
+    }
+
+    private transient List<Column> columnListUnsorted { 
+        get {
+            return columnMap.values();
+        } 
+        set;
+    }
+
+    @AuraEnabled
+    public transient Integer topSectionSum { 
+        get {
+            Integer topSectionSum = 0;
+            for (Column column : columnListUnsorted) {
+                topSectionSum += column.topSectionSum;
             }
-            return sum1;
+            return topSectionSum;
         }
         private set; 
     }
 
     @AuraEnabled
-    public Integer sum2 { 
+    public transient Integer middleSectionSum { 
         get {
-            Integer sum2 = 0;
-            for (Column column : columnList) {
-                sum2 += column.sum2;
+            Integer middleSectionSum = 0;
+            for (Column column : columnListUnsorted) {
+                middleSectionSum += column.middleSectionSum;
             }
-            return sum2;
+            return middleSectionSum;
         }
         private set; 
     }
 
     @AuraEnabled
-    public Integer sum3 { 
+    public transient Integer bottomSectionSum { 
         get {
-            Integer sum3 = 0;
-            for (Column column : columnList) {
-                sum3 += column.sum3;
+            Integer bottomSectionSum = 0;
+            for (Column column : columnListUnsorted) {
+                bottomSectionSum += column.bottomSectionSum;
             }
-            return sum3;
+            return bottomSectionSum;
         }
         private set; 
     }
 
     @AuraEnabled
-    public Integer totalSum { 
+    public transient Integer totalSum { 
         get{
-            return sum1 + sum2 + sum3;
+            return topSectionSum + middleSectionSum + bottomSectionSum;
         }
         private set;
     }
 
-    @AuraEnabled
-    public Integer numOfAvailableBoxes {
+    public transient Integer numOfAvailableBoxes {
         get { 
             Integer numOfAvailableBoxes = 0;
-            for (Column column : columnList) {
+            for (Column column : columnListUnsorted) {
                 numOfAvailableBoxes += column.numOfAvailableBoxes;
             }
             return numOfAvailableBoxes;
         }
         private set;
-    }
-
-    public Column getColumnByType(ColumnType type) {
-        for (Column column : columnList) {
-            if (column.type == type) {
-                return column;
-            }
-        }
-        return null;
-    }
-
-    public Boolean isFinished() {
-        return numOfAvailableBoxes == 0;
     }
 
 }

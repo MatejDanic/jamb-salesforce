@@ -1,26 +1,51 @@
 public class Game {
-
-    @AuraEnabled
-    public Form form { get; private set; }
-    @AuraEnabled 
-    public List<Dice> diceList { get; private set; }
-    @AuraEnabled 
-    public Integer rollCount {get; set; }
-    @AuraEnabled 
+    
+    public Map<Integer, Dice> diceMap { get; private set; }
     public BoxType announcement { get; set; }
 
-    public Game(Form form, List<Dice> diceList) {
+    public Game(Form form, Map<Integer, Dice> diceMap) {
         this.form = form;
-        this.diceList = diceList;
+        this.diceMap = diceMap;
         rollCount = 0;
         announcement = null;
     }
+
+    @AuraEnabled
+    public Form form { get; private set; }
+
+    @AuraEnabled
+    public transient List<Dice> diceList {
+        get {
+            List<Dice> diceList = diceMap.values();
+            diceList.sort();
+            return diceList;
+        }
+        private set;
+    }
+
+    private transient List<Dice> diceListUnsorted {
+        get {
+            return diceMap.values();
+        }
+        set;
+    }
+
+    @AuraEnabled 
+    public Integer rollCount { get; set; }
+
+    @AuraEnabled
+    public transient String announcementString { 
+        get {
+            return announcement == null ? null : String.valueOf(announcement);
+        } 
+        private set;
+    }
     
     @AuraEnabled
-    public Boolean announcementRequired {
+    public transient Boolean announcementRequired {
         get {
             for (Column column : form.columnList) {
-                if (column.type != ColumnType.ANNOUNCEMENT && !column.isFinished()) {
+                if (column.type != ColumnType.ANNOUNCEMENT && column.numOfAvailableBoxes > 0) {
                     return false;
                 }
             }
@@ -29,10 +54,23 @@ public class Game {
         private set;
     }
 
+    @AuraEnabled
+    public transient Boolean completed { 
+        get {
+            return form.numOfAvailableBoxes == 0;
+        }
+        private set;
+    }
+
     public void rollDice(List<Integer> diceToRoll) {
-        for (Dice dice : diceList) {
-            // always roll all dice for first roll
-            if (diceToRoll.contains(dice.order) || rollCount == 0) {
+        // always roll all dice for first roll
+        if (rollCount == 0) {
+            for (Dice dice : diceListUnsorted) {
+                dice.roll();
+            }
+        } else { // 
+            for (Integer diceKey : diceToRoll) {
+                Dice dice = diceMap.get(diceKey);
                 dice.roll();
             }
         }
@@ -40,12 +78,12 @@ public class Game {
     }   
 
     public void fillBox(ColumnType cType, BoxType bType) {
-        Box selectedBox = form.getColumnByType(cType).getBoxByType(bType);
+        Box selectedBox = form.columnMap.get(cType).boxMap.get(bType);
 
-        selectedBox.fill(ScoreUtil.calculateScore(diceList, bType));
+        selectedBox.fill(ScoreUtil.calculateScore(diceListUnsorted, bType));
         BoxType nextBoxType = selectedBox.getNextBoxType(cType);
         if (nextBoxType != null) {
-            Box nextBox = form.getColumnByType(cType).getBoxByType(nextBoxType);
+            Box nextBox = form.columnMap.get(cType).boxMap.get(nextBoxType);
             nextBox.available = true;
         }
 
@@ -57,4 +95,5 @@ public class Game {
         //     insert score;
         // }
     }
+
 }

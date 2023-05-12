@@ -14,6 +14,7 @@
         <members>Form</members>
         <members>Game</members>
         <members>GameUtil</members>
+        <members>ScoreUtil</members>
         <members>GameControllerTest</members>
         <name>ApexClass</name>
     </types>
@@ -39,6 +40,11 @@
     </types>
 
     <types>
+        <members>Game__c-Game Layout</members>
+        <name>Layout</name>
+    </types>
+
+    <types>
         <members>Box_Type</members>
         <members>Column_Type</members>
         <name>GlobalValueSet</name>
@@ -51,12 +57,18 @@
         <members>column</members>
         <members>box</members>
         <members>label</members>
+        <members>restartGame</members>
         <name>LightningComponentBundle</name>
     </types>
 
     <types>
         <members>Game_Record_Page</members>
         <name>FlexiPage</name>
+    </types>
+
+    <types>
+        <members>Game__c.Restart</members>
+        <name>QuickAction</name>
     </types>
 
     <version>52.0</version>

@@ -1,58 +1,84 @@
-public class Column {
+public class Column implements Comparable {
 
-    @AuraEnabled
     public ColumnType type { get; private set; }
+    public Map<BoxType, Box> boxMap { get; private set; }    
+
+    public Column(ColumnType type, Map<BoxType, Box> boxMap) {
+        this.type = type;
+        this.boxMap = boxMap;
+    }
 
     @AuraEnabled
-    public List<Box> boxList { get; private set; }
-
-    @AuraEnabled
-    public Integer sum1 {
+    public transient String typeString { 
         get {
-            Integer sum1 = 0;
-            for (Box box : this.boxList) {
-                if (box.isSection1()) {
-                    sum1 += box.value;
-                }
+            return String.valueOf(type);
+        }
+        private set;
+    }
+
+    @AuraEnabled 
+    public transient List<Box> boxList {
+        get {
+            List<Box> boxList = boxMap.values();
+            boxList.sort();
+            return boxList;
+        }
+        private set;
+    }
+
+    private transient List<Box> boxListUnsorted {
+        get {
+            return boxMap.values();
+        }
+        set;
+    }
+
+    @AuraEnabled
+    public transient Integer topSectionSum {
+        get {
+            Integer topSectionSum = 0;
+            for (BoxType bType : GameConstants.TOP_SECTION) {
+                topSectionSum += boxMap.get(bType).value;
             }
-            return sum1;
+            if (topSectionSum >= GameConstants.NUMBERSUM_BONUS_THRESHOLD) {
+                topSectionSum += GameConstants.NUMBERSUM_BONUS;
+            }
+            return topSectionSum;
         }
         private set;
     }
 
     @AuraEnabled
-    public Integer sum2 { 
+    public transient Integer middleSectionSum { 
         get {
-            Integer sum2 = 0;
-            Box ones = getBoxByType(BoxType.ONES);
-            Box max = getBoxByType(BoxType.MAX);
-            Box min = getBoxByType(BoxType.MIN);
+            Integer middleSectionSum = 0;
+            Box ones = boxMap.get(BoxType.ONES);
+            Box max = boxMap.get(BoxType.MAX);
+            Box min = boxMap.get(BoxType.MIN);
             if (ones.filled && max.filled && min.filled) {
-                sum2 = ones.value * (max.value - min.value);
+                middleSectionSum = ones.value * (max.value - min.value);
             }
-            return sum2;
+            return middleSectionSum;
         }
         private set; 
     }
 
     @AuraEnabled
-    public Integer sum3 { 
+    public transient Integer bottomSectionSum { 
         get {
-            Integer sum3 = 0;
-            for (Box box : this.boxList) {
-                if (box.isSection3()) {
-                    sum3 += box.value;
-                }
+            Integer bottomSectionSum = 0;
+            for (BoxType bType : GameConstants.BOTTOM_SECTION) {
+                bottomSectionSum += boxMap.get(bType).value;
             }
-            return sum3;
+            return bottomSectionSum;
         }
         private set; 
     }
 
-    public Integer numOfAvailableBoxes {
+    public transient Integer numOfAvailableBoxes {
         get {
             Integer numOfAvailableBoxes = 0;
-            for (Box box : boxList) {
+            for (Box box : boxListUnsorted) {
                 if (box.available) {
                     numOfAvailableBoxes += 1;
                 }
@@ -62,22 +88,17 @@ public class Column {
         private set;
     }
 
-    public Column(ColumnType type, List<Box> boxList) {
-        this.type = type;
-        this.boxList = boxList;
-    }
+    public Integer compareTo(Object compareTo) {
+        Column compareToColumn = (Column) compareTo;
 
-    public Box getBoxByType(BoxType boxType) {
-        for (Box box : this.boxList) {
-            if (box.type == boxType) {
-                return box;
-            }
+        Integer returnValue = 0;
+        if (type.ordinal() > compareToColumn.type.ordinal()) {
+            returnValue = 1;
+        } else if (type.ordinal() < compareToColumn.type.ordinal()) {
+            returnValue = -1;
         }
-        return null;
-    }
 
-    public Boolean isFinished() { 
-        return numOfAvailableBoxes == 0;
+        return returnValue;       
     }
 
 }

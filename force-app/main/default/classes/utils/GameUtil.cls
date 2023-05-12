@@ -19,41 +19,41 @@ public class GameUtil {
     }
 
     public static Game__c initializeGame(Game__c game) {
-        game.Game_String__c = JSON.serialize(new Game(generateForm(), generateDiceList()));
+        game.Game_String__c = JSON.serialize(new Game(generateForm(), generateDiceMap()));
         return game;
     }
 
     private static Form generateForm() {
-        Form form = new Form(generateColumnList());
+        Form form = new Form(generateColumnMap());
         return form;
     }
     
-    private static List<Dice> generateDiceList() {
-        List<Dice> diceList = new List<Dice>();
+    private static Map<Integer, Dice> generateDiceMap() {
+        Map<Integer, Dice> diceMap = new Map<Integer, Dice>();
         for (Integer i = 0; i < GameConstants.NUMBER_OF_DICE; i++) {
             Dice dice = new Dice(i);
-            diceList.add(dice);
+            diceMap.put(i, dice);
         }
-        return diceList;
+        return diceMap;
     }
     
-    private static List<Column> generateColumnList() {
-        List<Column> columnList = new List<Column>();
+    private static Map<ColumnType, Column> generateColumnMap() {
+        Map<ColumnType, Column> columnMap = new Map<ColumnType, Column>();
         for (ColumnType cType : ColumnType.values()) {
-            Column column = new Column(cType, generateBoxList(cType));
-            columnList.add(column);
+            Column column = new Column(cType, generateBoxMap(cType));
+            columnMap.put(cType, column);
         }
-        return columnList;
+        return columnMap;
     }
     
 
-    private static List<Box> generateBoxList(ColumnType cType) {
-        List<Box> boxList = new List<Box>();
+    private static Map<BoxType, Box> generateBoxMap(ColumnType cType) {
+        Map<BoxType, Box> boxMap = new Map<BoxType, Box>();
         for (BoxType bType : BoxType.values()) {
             Box box = new Box(bType, isBoxAvailableAtStart(cType, bType));
-            boxList.add(box);
+            boxMap.put(bType, box);
         }
-        return boxList;
+        return boxMap;
     }
 
     private static Boolean isBoxAvailableAtStart(ColumnType cType, BoxType bType) {

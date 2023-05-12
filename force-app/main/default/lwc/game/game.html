@@ -1,9 +1,9 @@
 <template>
-    <template if:true={gameRecord.data}>
+    <template if:true={game}>
         <div class="game-container">
-            <template if:true={isLoading} > 
+             <!-- <template if:true={isLoading} > 
                 <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
-            </template>
+            </template> -->
             <div class="game">
                 <div class="dice-list">
                     <template for:each={diceList} for:item="dice">
@@ -18,29 +18,27 @@
                 </div>
                 <c-form
                     column-list={form.columnList}
-                    sum-1={form.sum1}
-                    sum-2={form.sum2}
-                    sum-3={form.sum3}
+                    top-section-sum={form.topSectionSum} 
+                    middle-section-sum={form.middleSectionSum}
+                    bottom-section-sum={form.bottomSectionSum}
                     total-sum={form.totalSum}
                     roll-count={rollCount}
-                    announcement={announcement}
+                    announcement-string={announcementString}
                     announcement-required={announcementRequired}
                     roll-dice-button-disabled={rollDiceButtonDisabled}
                     all-boxes-disabled={allBoxesDisabled}
                     onrolldice={handleRollDice}
                     onboxclick={handleBoxClick}
                     onrestart={handleRestart}>
-                </c-form> 
+                </c-form>
             </div> 
         </div>
         <template if:true={debugModeEnabled}>
             Roll Count: <strong>{rollCount}</strong>
             <br/>
-            Announcement: <strong>{announcement}</strong>
+            Announcement: <strong>{announcementString}</strong>
             <br/>
             Announcement Required: <strong>{announcementRequired}</strong>
-            <br/>
-            Number of Available Boxes: <strong>{form.numOfAvailableBoxes}</strong>
             <br/>
             Roll Dice Button Disabled: <strong>{rollDiceButtonDisabled}</strong>
             <br/> 

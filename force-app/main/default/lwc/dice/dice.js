@@ -1,4 +1,4 @@
-import { LightningElement, api, track } from "lwc";
+import { LightningElement, api } from "lwc";
 
 export default class Dice extends LightningElement {
 	
@@ -8,6 +8,14 @@ export default class Dice extends LightningElement {
     @api allDiceDisabled;
 
     _frozen = false;
+
+	get diceClass() {
+		if (this._frozen) {
+			return "dice red-border";
+		} else {
+			return "dice";
+		}
+	}
 
 	@api 
 	get frozen() {
@@ -19,12 +27,6 @@ export default class Dice extends LightningElement {
 	
 	setFrozen(frozen) {
 		this._frozen = frozen;
-		let dice = this.template.querySelector(".dice")
-		if (this._frozen) {
-			dice.classList.add("red-border");
-		} else {
-			dice.classList.remove("red-border");
-		}
 	}
 
 	@api startRollAnimation() {

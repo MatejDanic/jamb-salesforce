@@ -6,14 +6,14 @@
 	grid-template-columns: 64px;
 }
 
-.sum-1 {
+.top-section-sum {
 	grid-row-start: 8;
 }
 
-.sum-2 {
+.middle-section-sum {
 	grid-row-start: 11;
 }
 
-.sum-3 {
+.bottom-section-sum {
 	grid-row-start: 17;
 }

@@ -1,7 +1,7 @@
 <template>
 	<div class="form slds-card">
 		<div class="first-column">
-			<!-- SECTION 1 -->
+			<!-- TOP SECTION -->
 			<c-label value="1" help-text="Number of ones"></c-label>
 			<c-label value="2" help-text="Number of twos"></c-label>
 			<c-label value="3" help-text="Number of threes"></c-label>
@@ -9,11 +9,11 @@
 			<c-label value="5" help-text="Number of fives"></c-label>
 			<c-label value="6" help-text="Number of sixes"></c-label>
 			<c-label value="(1-6)"></c-label>
-			<!-- SECTION 2 -->
+			<!-- MIDDLE SECTION -->
 			<c-label value="Max" help-text="Sum of all dice"></c-label>
 			<c-label value="Min" help-text="Sum of all dice"></c-label>
 			<c-label value="∆ x 1s"></c-label>
-			<!-- SECTION 3 -->
+			<!-- BOTTOM SECTION -->
 			<c-label value="Trips" help-text="Three of a kind"></c-label>
 			<c-label value="Straight" help-text="Five consecutive numbers"></c-label>
 			<c-label value="Boat" help-text="Three of a kind and two of a kind"></c-label>
@@ -23,14 +23,14 @@
 		</div>
 		<template for:each={columnList} for:item="column">
 			<c-column class="column" 
-				key={column.type} 
-				type={column.type} 
+				key={column.typeString} 
+				type-string={column.typeString} 
 				box-list={column.boxList} 
-				sum-1={column.sum1} 
-				sum-2={column.sum2}
-				sum-3={column.sum3}
+				top-section-sum={column.topSectionSum} 
+				middle-section-sum={column.middleSectionSum}
+				bottom-section-sum={column.bottomSectionSum}
 				roll-count={rollCount}
-				announcement={announcement}
+				announcement-string={announcementString}
 				announcement-required={announcementRequired}
 				all-boxes-disabled={allBoxesDisabled}
 				onboxclick={handleBoxClick}>
@@ -42,13 +42,13 @@
 				disabled={rollDiceButtonDisabled} 
 				onclick={handleRollDice}>
 			</button>
-			<c-label value={sum1}></c-label>
-			<button class="restart-button" onclick={handleRestart}>
+			<c-label value={topSectionSum}></c-label>
+			<!-- <button class="restart-button" onclick={handleRestart}>
 				<lightning-icon title="Restart" icon-name="utility:refresh" alternative-value="Restart">
 				</lightning-icon>
-			</button>
-			<c-label value={sum2}></c-label>
-			<c-label class="sum-c" value={sum3}></c-label>
+			</button> -->
+			<c-label value={middleSectionSum}></c-label>
+			<c-label class="bottomSectionSum" value={bottomSectionSum}></c-label>
 		</div>
 		<c-label class="total-sum" value={totalSum}></c-label>
 	</div>

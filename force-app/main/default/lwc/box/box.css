@@ -13,3 +13,7 @@
 .box:hover:enabled {
     background-color:  var(--lwc-colorBackgroundRowHover) ;
 }
+
+.red-border {
+    border: 1px solid var(--lwc-colorBorderError);
+}

@@ -1,5 +1,5 @@
 <template>
-    <button class="dice" disabled={allDiceDisabled} onclick={handleClick}>
+    <button class={diceClass} disabled={allDiceDisabled} onclick={handleClick}>
 		<template lwc:if={isOne}>
 			<svg viewBox="0 0 64 64">
 				<rect height="64" width="64" rx="8" fill="white" />

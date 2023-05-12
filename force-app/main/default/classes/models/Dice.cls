@@ -1,4 +1,4 @@
-public class Dice {
+public class Dice implements Comparable {
 
     @AuraEnabled
     public Integer value { get; private set; }
@@ -12,6 +12,11 @@ public class Dice {
 
     public void roll() {
         value = 1 + Integer.valueOf(Math.random() * 6);
+    }
+
+    public Integer compareTo(Object compareTo) {
+        Dice compareToDice = (Dice) compareTo;
+        return order - compareToDice.order;     
     }
 
 }

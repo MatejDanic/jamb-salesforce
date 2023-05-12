@@ -2,7 +2,14 @@ public class GameService {
 
     public static final ApexLogger logger = ApexLogger.getLogger(GameService.class);
 
-    public List<Dice> rollDiceByGameId(Id gameId, List<Integer> diceToRoll) {
+    public Game getGameFromGameId(Id gameId) {
+        Game__c gameRecord = GameUtil.getGameById(gameId);
+        Game game = GameUtil.getGameFromGameString(gameRecord.Game_String__c);
+        logger.debug(JSON.serializePretty(game));
+        return game;
+    }
+
+    public Game rollDiceByGameId(Id gameId, List<Integer> diceToRoll) {
         Game__c gameRecord = GameUtil.getGameById(gameId);
         Game game = GameUtil.getGameFromGameString(gameRecord.Game_String__c);
 
@@ -16,15 +23,15 @@ public class GameService {
         gameRecord.Game_String__c = JSON.serialize(game);
         update gameRecord;
 
-        return game.diceList;
+        return game;
     }
 
-    public Box fillBoxByGameId(Id gameId, String columnTypeString, String boxTypeString) {
+    public Game fillBoxByGameId(Id gameId, String columnTypeString, String boxTypeString) {
         Game__c gameRecord = GameUtil.getGameById(gameId);
         Game game = GameUtil.getGameFromGameString(gameRecord.Game_string__c);
         ColumnType cType = ColumnType.valueOf(columnTypeString);
         BoxType bType = BoxType.valueOf(boxTypeString);
-        Box box = game.form.getColumnByType(cType).getBoxByType(bType);
+        Box box = game.form.columnMap.get(cType).boxMap.get(bType);
 
         if (box.filled) {
             throw new IllegalMoveException(GameConstants.ERROR_MESSAGE_BOX_ALREADY_FILLED);
@@ -40,13 +47,13 @@ public class GameService {
         gameRecord.Game_String__c = JSON.serialize(game);
         update gameRecord;
 
-        return game.form.getColumnByType(cType).getBoxByType(bType);
+        return game;
     }
     
-    public BoxType makeAnnouncementByGameId(Id gameId, String announcementBoxTypeString) {
+    public Game makeAnnouncementByGameId(Id gameId, String boxTypeString) {
         Game__c gameRecord = GameUtil.getGameById(gameId);
         Game game = GameUtil.getGameFromGameString(gameRecord.Game_string__c);
-        BoxType announcementBoxType = BoxType.valueOf(announcementBoxTypeString);
+        BoxType announcementBoxType = BoxType.valueOf(boxTypeString);
 
         if (game.announcement != null) {
             throw new IllegalMoveException(GameConstants.ERROR_MESSAGE_ANNOUNCEMENT_ALREADY_DECLARED);
@@ -58,14 +65,14 @@ public class GameService {
         gameRecord.Game_String__c = JSON.serialize(game);
         update gameRecord;
 
-        return game.announcement;
+        return game;
     }
 
-    public Game restartGameById(Id gameId) {
+    public Game restartGameByGameId(Id gameId) {
         Game__c gameRecord = GameUtil.getGameById(gameId);
         Game game = GameUtil.getGameFromGameString(gameRecord.Game_string__c);
 
-        if (game.form.isFinished()) {
+        if (game.completed) {
             throw new IllegalMoveException(GameConstants.ERROR_MESSAGE_RESTART_FINISHED_GAME);
         }
 

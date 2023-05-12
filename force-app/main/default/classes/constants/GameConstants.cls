@@ -1,5 +1,27 @@
 public class GameConstants {
 
+    public static final SET<BoxType> TOP_SECTION = new Set<BoxType>{
+        BoxType.ONES,
+        BoxType.TWOS,
+        BoxType.THREES,
+        BoxType.FOURS,
+        BoxType.FIVES,
+        BoxType.SIXES
+    };
+
+    public static final SET<BoxType> MIDDLE_SECTION = new Set<BoxType>{
+        BoxType.MAX,
+        BoxType.MIN
+    };
+    
+    public static final SET<BoxType> BOTTOM_SECTION = new Set<BoxType>{
+        BoxType.TRIPS,
+        BoxType.STRAIGHT,
+        BoxType.CARRIAGE,
+        BoxType.BOAT,
+        BoxType.YAMB
+    };
+
     public static final Integer NUMBER_OF_BOXES = 13;
     public static final Integer NUMBER_OF_DICE = 5;
 

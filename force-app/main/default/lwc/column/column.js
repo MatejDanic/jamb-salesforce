@@ -2,33 +2,33 @@ import { LightningElement, api } from "lwc";
 
 export default class Column extends LightningElement {
   
-	@api type;
+	@api typeString;
 	@api boxList;
-	@api sum1;
-	@api sum2;
-	@api sum3;
+	@api topSectionSum;
+	@api middleSectionSum;
+	@api bottomSectionSum;
 	@api rollCount;
-	@api announcement;
+	@api announcementString;
 	@api announcementRequired;
 	@api allBoxesDisabled;
 
 	get isDown() {
-		return this.type == "DOWNWARDS";
+		return this.typeString == "DOWNWARDS";
 	}
 	get isUp() {
-		return this.type == "UPWARDS";
+		return this.typeString == "UPWARDS";
 	}
 	get isFree() {
-		return this.type == "FREE";
+		return this.typeString == "FREE";
 	}
 	get isAnn() {
-		return this.type == "ANNOUNCEMENT";
+		return this.typeString == "ANNOUNCEMENT";
 	}
 
 	handleBoxClick(event) {
 		this.dispatchEvent(new CustomEvent("boxclick", { detail: {
-			boxType: event.detail.boxType,
-			columnType: this.type
+			boxTypeString: event.detail.boxTypeString,
+			columnTypeString: this.typeString
 		}}));
 	}
 }
