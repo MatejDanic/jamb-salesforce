@@ -71,5 +71,10 @@
         <name>QuickAction</name>
     </types>
 
+    <types>
+        <members>GameMessageChannel</members>
+        <name>LightningMessageChannel</name>
+    </types>
+
     <version>52.0</version>
 </Package>

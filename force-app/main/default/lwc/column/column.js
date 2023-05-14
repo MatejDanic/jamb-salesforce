@@ -31,4 +31,5 @@ export default class Column extends LightningElement {
 			columnTypeString: this.typeString
 		}}));
 	}
+
 }

@@ -1,7 +1,7 @@
 import { LightningElement, wire, api, track } from "lwc";
-//import { getRecord, getFieldValue } from "lightning/uiRecordApi";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
-//import { refreshApex } from "@salesforce/apex";
+import { subscribe, unsubscribe, MessageContext } from 'lightning/messageService';
+import GameMessageChannel from '@salesforce/messageChannel/GameMessageChannel__c';
 
 import getGameFromGameId from "@salesforce/apex/GameController.getGameFromGameId";
 import rollDiceByGameId from "@salesforce/apex/GameController.rollDiceByGameId";
@@ -16,11 +16,14 @@ const MESSAGE_FINAL_SCORE = "Congratulations, Your final score is ";
 
 export default class Game extends LightningElement {
 
+	subscription = null;
+
+	@wire(MessageContext)
+    messageContext;
+
 	@api recordId;
 
-	//@track isLoading = false;
-
-	@track	game;
+	@track game;
 
 	@wire(getGameFromGameId, { gameId: "$recordId" })
 	wiredGame({data, error}) {
@@ -33,7 +36,34 @@ export default class Game extends LightningElement {
 			this.showErrorToastMessage(error);
 		}
 	}
+
+	connectedCallback() {
+        this.subscribeToGameMessageChannel();
+    }
 	
+    disconnectedCallback() {
+        this.unsubscribeFromGameMessageChannel();
+    }
+	
+    subscribeToGameMessageChannel() {
+        if (!this.subscription) {
+            this.subscription = subscribe(this.messageContext, GameMessageChannel, ( message ) => {
+				this.handleMessage(message)
+			});
+			console.log("Subscribed to message channel: " + GameMessageChannel);
+        }
+    }	
+
+    unsubscribeFromGameMessageChannel() {
+        unsubscribe(this.subscription);
+        this.subscription = null;
+		console.log("Unsubscribed from message channel: " + GameMessageChannel);
+    }
+
+	handleMessage(message) {
+		this.game = message.game;
+	}
+    
 	get form() {
 		return this.game?.form;
 	}
@@ -51,6 +81,9 @@ export default class Game extends LightningElement {
 	}
 	get completed() {
 		return this.game?.completed;
+	}
+	get actionHistory() {
+		return this.game?.actionHistory;
 	}
 
 	get debugModeEnabled() {
@@ -76,10 +109,6 @@ export default class Game extends LightningElement {
 		return this.completed == 0 || this.rollCount == 0;
 	}
 
-	connectedCallback() {
-		console.log("Game Id: " + this.recordId);
-	}
-
 	handleRollDice() {
 		let diceToRoll = [];
 		for (let dice of this.template.querySelectorAll("c-dice")) {
@@ -92,9 +121,6 @@ export default class Game extends LightningElement {
 				console.log(game);
 				this.game = game;
 				this.startDiceRollAnimation();
-				// refreshApex(this.gameRecord).then(() => {
-				// 	this.startDiceRollAnimation();
-				// });
 			})
 			.catch((error) => {
 				console.error(error);
@@ -143,7 +169,6 @@ export default class Game extends LightningElement {
 			.then((game) => {
 				console.log(game);
 				this.game = game;
-				//refreshApex(this.gameRecord);
 			})
 			.catch((error) => {
 				console.error(error);
@@ -156,23 +181,6 @@ export default class Game extends LightningElement {
 			dice.frozen = false;
 		}
 	}
-
-	// handleRestart() {
-	// 	this.isLoading = true;
-	// 	restartGameById({ gameId: this.recordId })
-	// 		.then((game) => {
-	// 			console.log(game);
-	// 			this.resetAllDice();
-	// 			refreshApex(this.gameRecord);
-	// 		})
-	// 		.catch((error) => {
-	// 			console.error(error);
-	// 			this.showErrorToastMessage(error)
-	// 		})
-	// 		.finally(() => {
-	// 			this.isLoading = false;
-	// 		});
-	// }
 
 	showSuccessToastMessage(message) {
 		this.dispatchEvent(new ShowToastEvent({

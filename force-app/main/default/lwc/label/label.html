@@ -7,7 +7,7 @@
                 alternative-text={value}>
             </lightning-icon>
         </template>
-        <template if:false={icon}>{value}</template>
+        <template if:false={icon}><strong>{value}</strong></template>
     </button>
     <template if:true={helpText}>
         <div class="tooltip slds-popover slds-popover_tooltip slds-nubbin_top-left">

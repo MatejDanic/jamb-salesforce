@@ -1,10 +1,6 @@
 public class Form {
 
     public Map<ColumnType, Column> columnMap { get; private set; }
-    
-    public Form(Map<ColumnType, Column> columnMap) {
-        this.columnMap = columnMap;
-    }
 
     @AuraEnabled
     public transient List<Column> columnList { 
@@ -76,6 +72,10 @@ public class Form {
             return numOfAvailableBoxes;
         }
         private set;
+    }
+
+    public Form(Map<ColumnType, Column> columnMap) {
+        this.columnMap = columnMap;
     }
 
 }

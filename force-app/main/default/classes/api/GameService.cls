@@ -61,7 +61,7 @@ public class GameService {
             throw new IllegalMoveException(GameConstants.ERROR_MESSAGE_ANNOUNCEMENT_NOT_AVAILABLE);
         }
 
-        game.announcement = announcementBoxType;
+        game.makeAnnouncement(announcementBoxType);
         gameRecord.Game_String__c = JSON.serialize(game);
         update gameRecord;
 

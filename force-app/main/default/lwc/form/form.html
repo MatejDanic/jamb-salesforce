@@ -41,14 +41,31 @@
 				title="Roll!" 
 				disabled={rollDiceButtonDisabled} 
 				onclick={handleRollDice}>
-			</button>
-			<c-label value={topSectionSum}></c-label>
-			<!-- <button class="restart-button" onclick={handleRestart}>
-				<lightning-icon title="Restart" icon-name="utility:refresh" alternative-value="Restart">
+				<lightning-icon
+					icon-name="utility:fallback"
+					class={rollCountTopClass}>
 				</lightning-icon>
-			</button> -->
-			<c-label value={middleSectionSum}></c-label>
-			<c-label class="bottomSectionSum" value={bottomSectionSum}></c-label>
+				<br/>
+				<br/>
+				<lightning-icon
+					icon-name="utility:fallback"
+					class={rollCountMiddleClass}>
+				</lightning-icon>
+				<br/>
+				<br/>
+				<lightning-icon
+					icon-name="utility:fallback"
+					class={rollCountBottomClass}>
+				</lightning-icon>
+			</button>
+			<c-label class="top-section-sum" value={topSectionSum}></c-label>
+			<c-label class="middle-section-sum" value={middleSectionSum}></c-label>
+			<div class="action-history">
+				<template for:each={actionHistoryTruncated} for:item="action">
+					<div key={action}>{action}</div>
+				</template>
+			</div>
+			<c-label class="bottom-section-sum" value={bottomSectionSum}></c-label>
 		</div>
 		<c-label class="total-sum" value={totalSum}></c-label>
 	</div>

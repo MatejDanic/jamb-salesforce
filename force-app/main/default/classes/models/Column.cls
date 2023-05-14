@@ -1,13 +1,7 @@
 public class Column implements Comparable {
 
     public ColumnType type { get; private set; }
-    public Map<BoxType, Box> boxMap { get; private set; }    
-
-    public Column(ColumnType type, Map<BoxType, Box> boxMap) {
-        this.type = type;
-        this.boxMap = boxMap;
-    }
-
+    
     @AuraEnabled
     public transient String typeString { 
         get {
@@ -15,6 +9,8 @@ public class Column implements Comparable {
         }
         private set;
     }
+
+    public Map<BoxType, Box> boxMap { get; private set; }    
 
     @AuraEnabled 
     public transient List<Box> boxList {
@@ -86,6 +82,11 @@ public class Column implements Comparable {
             return numOfAvailableBoxes;
         }
         private set;
+    }
+    
+    public Column(ColumnType type, Map<BoxType, Box> boxMap) {
+        this.type = type;
+        this.boxMap = boxMap;
     }
 
     public Integer compareTo(Object compareTo) {
