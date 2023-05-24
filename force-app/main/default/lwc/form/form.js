@@ -29,19 +29,19 @@ export default class Form extends LightningElement {
 			this.dispatchEvent(new CustomEvent("restart"));
 		}
 	}
+	
+	get actionHistoryReversed() {
+		let actionHistoryReversed = [...this.actionHistory];
+		// reverse order to show latest actions at the top
+		return actionHistoryReversed.reverse();
+	}
 
 	get actionHistoryTruncated() {
-		// copy array to perform reverse and cut operations
-		let actionHistoryTruncated = [...this.actionHistory];
-		console.log("before reverse " + actionHistoryTruncated);
-		// reverse order to show latest actions at the top
-		actionHistoryTruncated.reverse();
-		console.log("after reverse " + actionHistoryTruncated);
-		if (actionHistoryTruncated.length > 5) {
-			// cut everything after the 5th element
-			actionHistoryTruncated.length = 5;
-			console.log("after cut " + actionHistoryTruncated);
-		} 
+		let actionHistoryTruncated = this.actionHistoryReversed;
+		// cut everything after the 5th element
+		/*if (actionHistoryTruncated.length >= 5) {
+			actionHistoryTruncated.length = 5; // this causes exceptions which break the game :(
+		}*/
 		return actionHistoryTruncated;
 	}
 

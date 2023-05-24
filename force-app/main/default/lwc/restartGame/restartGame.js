@@ -17,7 +17,10 @@ export default class RestartGame extends LightningElement {
     }
 
     async handleClick() {
-        const result = await LightningConfirm.open({label: "Are you sure you want to restart?"});
+        const result = await LightningConfirm.open({
+            label: "Restart Game", 
+            message: "Are you sure you want to restart this Game?"
+        });
         if (result) {
             restartGameByGameId({ gameId: this.recordId })
                 .then((game) => {

@@ -86,6 +86,7 @@ export default class Game extends LightningElement {
 		return this.game?.actionHistory;
 	}
 
+	// when debug mode is enabled, specific game paramater values are displayed on the front-end
 	get debugModeEnabled() {
 		return true;
 	}
@@ -152,7 +153,7 @@ export default class Game extends LightningElement {
 				console.log(game);
 				this.game = game;
 				this.resetAllDice();
-				if (this.form?.availableBoxes == 0) {
+				if (this.game.completed) {
 					setTimeout(() => {
 						this.showSuccessToastMessage(MESSAGE_FINAL_SCORE + this.form.finalSum + "!");
 					}, 1000);
