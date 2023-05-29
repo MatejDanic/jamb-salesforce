@@ -2,83 +2,83 @@ public class GameService {
 
     public static final ApexLogger logger = ApexLogger.getLogger(GameService.class);
 
-    public Game getGameFromGameId(Id gameId) {
-        Game__c gameRecord = GameUtil.getGameById(gameId);
-        Game game = GameUtil.getGameFromGameString(gameRecord.Game_String__c);
-        logger.debug(JSON.serializePretty(game));
-        return game;
+    public Sheet getSheetFromGameId(Id gameId) {
+        Game__c game = GameUtil.getGameById(gameId);
+        Sheet sheet = GameUtil.getSheetFromString(game.Sheet__c);
+        logger.debug(JSON.serializePretty(sheet));
+        return sheet;
     }
 
-    public Game rollDiceByGameId(Id gameId, List<Integer> diceToRoll) {
-        Game__c gameRecord = GameUtil.getGameById(gameId);
-        Game game = GameUtil.getGameFromGameString(gameRecord.Game_String__c);
+    public Sheet rollDiceByGameId(Id gameId, List<Integer> diceToRoll) {
+        Game__c game = GameUtil.getGameById(gameId);
+        Sheet sheet = GameUtil.getSheetFromString(game.Sheet__c);
 
-        if (game.rollCount == 3) {
+        if (sheet.rollCount == 3) {
             throw new IllegalMoveException(GameConstants.ERROR_MESSAGE_ROLL_LIMIT_REACHED);
-        } else if (game.rollCount == 1 && game.announcement == null && game.announcementRequired) {
+        } else if (sheet.rollCount == 1 && sheet.announcement == null && sheet.announcementRequired) {
             throw new IllegalMoveException(GameConstants.ERROR_MESSAGE_ANNOUNCEMENT_REQUIRED);
         }
 
-        game.rollDice(diceToRoll);
-        gameRecord.Game_String__c = JSON.serialize(game);
-        update gameRecord;
+        sheet.rollDice(diceToRoll);
+        game.Sheet__c = JSON.serialize(sheet);
+        update game;
 
-        return game;
+        return sheet;
     }
 
-    public Game fillBoxByGameId(Id gameId, String columnTypeString, String boxTypeString) {
-        Game__c gameRecord = GameUtil.getGameById(gameId);
-        Game game = GameUtil.getGameFromGameString(gameRecord.Game_string__c);
+    public Sheet fillBoxByGameId(Id gameId, String columnTypeString, String boxTypeString) {
+        Game__c game = GameUtil.getGameById(gameId);
+        Sheet sheet = GameUtil.getSheetFromString(game.Sheet__c);
         ColumnType cType = ColumnType.valueOf(columnTypeString);
         BoxType bType = BoxType.valueOf(boxTypeString);
-        Box box = game.form.columnMap.get(cType).boxMap.get(bType);
+        Box box = sheet.columnMap.get(cType).boxMap.get(bType);
 
         if (box.filled) {
             throw new IllegalMoveException(GameConstants.ERROR_MESSAGE_BOX_ALREADY_FILLED);
         } else if (!box.available) {
 			throw new IllegalMoveException(GameConstants.ERROR_MESSAGE_BOX_NOT_AVAILABLE);
-        } else if (game.rollCount == 0) {
+        } else if (sheet.rollCount == 0) {
 			throw new IllegalMoveException(GameConstants.ERROR_MESSAGE_DICE_ROLL_REQUIRED);
-        } else if (game.announcement != null && (game.announcement != bType || cType != ColumnType.ANNOUNCEMENT)) {
+        } else if (sheet.announcement != null && (sheet.announcement != bType || cType != ColumnType.ANNOUNCEMENT)) {
 			throw new IllegalMoveException(GameConstants.ERROR_MESSAGE_BOX_NOT_ANNOUNCED);
         }
 
-        game.fillBox(cType, bType);
-        gameRecord.Game_String__c = JSON.serialize(game);
-        update gameRecord;
+        sheet.fillBox(cType, bType);
+        game.Sheet__c = JSON.serialize(sheet);
+        update game;
 
-        return game;
+        return sheet;
     }
     
-    public Game makeAnnouncementByGameId(Id gameId, String boxTypeString) {
-        Game__c gameRecord = GameUtil.getGameById(gameId);
-        Game game = GameUtil.getGameFromGameString(gameRecord.Game_string__c);
+    public Sheet makeAnnouncementByGameId(Id gameId, String boxTypeString) {
+        Game__c game = GameUtil.getGameById(gameId);
+        Sheet sheet = GameUtil.getSheetFromString(game.Sheet__c);
         BoxType announcementBoxType = BoxType.valueOf(boxTypeString);
 
-        if (game.announcement != null) {
+        if (sheet.announcement != null) {
             throw new IllegalMoveException(GameConstants.ERROR_MESSAGE_ANNOUNCEMENT_ALREADY_DECLARED);
-        } else if (game.rollCount > 1) {
+        } else if (sheet.rollCount > 1) {
             throw new IllegalMoveException(GameConstants.ERROR_MESSAGE_ANNOUNCEMENT_NOT_AVAILABLE);
         }
 
-        game.makeAnnouncement(announcementBoxType);
-        gameRecord.Game_String__c = JSON.serialize(game);
-        update gameRecord;
+        sheet.makeAnnouncement(announcementBoxType);
+        game.Sheet__c = JSON.serialize(sheet);
+        update game;
 
-        return game;
+        return sheet;
     }
 
-    public Game restartGameByGameId(Id gameId) {
-        Game__c gameRecord = GameUtil.getGameById(gameId);
-        Game game = GameUtil.getGameFromGameString(gameRecord.Game_string__c);
+    public Sheet restartByGameId(Id gameId) {
+        Game__c game = GameUtil.getGameById(gameId);
+        Sheet sheet = GameUtil.getSheetFromString(game.Sheet__c);
 
-        if (game.completed) {
-            throw new IllegalMoveException(GameConstants.ERROR_MESSAGE_RESTART_FINISHED_GAME);
+        if (sheet.completed) {
+            throw new IllegalMoveException(GameConstants.ERROR_MESSAGE_RESTART_COMPLETED_SHEET);
         }
 
-        GameUtil.initializeGame(gameRecord);
-        update gameRecord;
+        GameUtil.initializeGame(game);
+        update game;
         
-        return GameUtil.getGameFromGameString(gameRecord.Game_String__c);
+        return GameUtil.getSheetFromString(game.Sheet__c);
     }
 }

@@ -43,5 +43,5 @@ public class GameConstants {
     public static final String ERROR_MESSAGE_BOX_NOT_AVAILABLE = 'The box is not available!';
     public static final String ERROR_MESSAGE_DICE_ROLL_REQUIRED = 'To fill a box, the first dice roll is required!';
     public static final String ERROR_MESSAGE_BOX_NOT_ANNOUNCED = 'The box is different from announcement!';
-    public static final String ERROR_MESSAGE_RESTART_FINISHED_GAME = 'A finished game cannot be restarted!';
+    public static final String ERROR_MESSAGE_RESTART_COMPLETED_SHEET = 'A completed sheet cannot be restarted!';
 }

@@ -5,185 +5,202 @@ public class GameControllerTest {
     
     @TestSetup
     private static void createTestData() {
-        Game__c gameRecord = new Game__c();
-        insert gameRecord;        
+        Game__c game = new Game__c();
+        insert game;        
     }
     
     @IsTest
     public static void testRollDiceByGameId() {
-        Game__c gameRecord = [SELECT Id FROM Game__c LIMIT 1];
-        //
+        // ARANGE
+        Game__c game = [SELECT Id FROM Game__c LIMIT 1];
+        // ACT
         Test.startTest();
-        List<Dice> diceList = GameController.rollDiceBygameId(gameRecord.Id, DICE_TO_ROLL);
+        Sheet sheet = GameController.rollDiceBygameId(game.Id, DICE_TO_ROLL);
         Test.stopTest();
-        //
-        gameRecord = [SELECT Id, Game_String__c FROM Game__c WHERE Id = :gameRecord.Id];
-        Game game = GameUtil.getGameFromGameString(gameRecord.Game_String__c);
-        Assert.areEqual(1, game.rollCount);
+        // ASSERT
+        Assert.areEqual(1, sheet.rollCount);
     }
     
     @IsTest
     public static void testFillBoxByGameId() {
-        Game__c gameRecord = [SELECT Id FROM Game__c LIMIT 1];
-        //
+        // ARANGE
+        Game__c game = [SELECT Id FROM Game__c LIMIT 1];
+        // ACT
         Test.startTest();
-		GameController.rollDiceBygameId(gameRecord.Id, DICE_TO_ROLL);
-        Box box = GameController.fillBoxByGameId(gameRecord.Id, 'DOWNWARDS', 'ONES');
+		GameController.rollDiceBygameId(game.Id, DICE_TO_ROLL);
+        Sheet sheet = GameController.fillBoxByGameId(game.Id, String.valueOf(ColumnType.DOWNWARDS), String.valueOf(BoxType.ONES));
         Test.stopTest();
-        //
+        // ASSERT
+        Box box = sheet.columnMap.get(ColumnType.DOWNWARDS).boxMap.get(BoxType.ONES);
         Assert.isTrue(box.filled);
         Assert.isTrue(!box.available);
     }
     
     @IsTest
     public static void testMakeAnnouncementByGameId() {
-        Game__c gameRecord = [SELECT Id FROM Game__c LIMIT 1];
-        //
+        // ARANGE
+        Game__c game = [SELECT Id FROM Game__c LIMIT 1];
+        // ACT
         Test.startTest();
-        GameController.rollDiceBygameId(gameRecord.Id, DICE_TO_ROLL);
-        BoxType bType = GameController.makeAnnouncementByGameId(gameRecord.Id, 'ONES');
+        GameController.rollDiceBygameId(game.Id, DICE_TO_ROLL);
+        Sheet sheet = GameController.makeAnnouncementByGameId(game.Id, String.valueOf(BoxType.ONES));
         Test.stopTest();
-        //
-        gameRecord = [SELECT Id, Game_String__c FROM Game__c WHERE Id = :gameRecord.Id];
-        Game game = GameUtil.getGameFromGameString(gameRecord.Game_String__c);
-        Assert.areEqual(BoxType.ONES, game.announcement);
+        // ASSERT
+        Assert.areEqual(BoxType.ONES, sheet.announcement);
     }
     
     @IsTest
     public static void testRestartGameById() {
-        Game__c gameRecord = [SELECT Id FROM Game__c LIMIT 1];
-        //
+        // ARANGE
+        Game__c game = [SELECT Id FROM Game__c LIMIT 1];
+        // ACT
         Test.startTest();
-        Game game = GameController.restartGameById(gameRecord.Id);
+        Sheet sheet = GameController.restartByGameId(game.Id);
         Test.stopTest();
-        //
-        Assert.isTrue(game.announcement == null);
-        Assert.areEqual(0, game.rollCount);
+        // ASSERT
+        Assert.isTrue(sheet.announcement == null);
+        Assert.areEqual(0, sheet.rollCount);
     }
     
     @IsTest
     public static void testRollLimitReachedException() {
-        Game__c gameRecord = [SELECT Id FROM Game__c LIMIT 1];
-        //
+        // ARANGE
+        Game__c game = [SELECT Id FROM Game__c LIMIT 1];
+        // Act
         Test.startTest();
         try {
             for (Integer i = 0; i < 4; i++) {
-                List<Dice> diceList = GameController.rollDiceBygameId(gameRecord.Id, DICE_TO_ROLL);
+                GameController.rollDiceBygameId(game.Id, DICE_TO_ROLL);
             }
         } catch (AuraHandledException e) {
         	Assert.areEqual(GameConstants.ERROR_MESSAGE_ROLL_LIMIT_REACHED, e.getMessage());
         }
         Test.stopTest();
+        // Assert
     }
     
     @IsTest
     public static void testAnnouncementRequiredException() {
-        Game__c gameRecord = [SELECT Id FROM Game__c LIMIT 1];
-        //
+        // Arange
+        Game__c game = [SELECT Id FROM Game__c LIMIT 1];
+        // Act
         Test.startTest();
         try {
             for (Integer i = 0; i < BoxType.values().size(); i++) {
-                GameController.rollDiceByGameId(gameRecord.Id, DICE_TO_ROLL);
-                GameController.fillBoxByGameId(gameRecord.Id, String.valueOf(ColumnType.DOWNWARDS), String.valueOf(BoxType.values()[i]));
+                GameController.rollDiceByGameId(game.Id, DICE_TO_ROLL);
+                GameController.fillBoxByGameId(game.Id, String.valueOf(ColumnType.DOWNWARDS), String.valueOf(BoxType.values()[i]));
             }
             for (Integer i = BoxType.values().size() - 1; i >= 0; i--) {
-                GameController.rollDiceByGameId(gameRecord.Id, DICE_TO_ROLL);
-                GameController.fillBoxByGameId(gameRecord.Id, String.valueOf(ColumnType.UPWARDS), String.valueOf(BoxType.values()[i]));
+                GameController.rollDiceByGameId(game.Id, DICE_TO_ROLL);
+                GameController.fillBoxByGameId(game.Id, String.valueOf(ColumnType.UPWARDS), String.valueOf(BoxType.values()[i]));
             }
             for (Integer i = 0; i < BoxType.values().size(); i++) {
-                GameController.rollDiceByGameId(gameRecord.Id, DICE_TO_ROLL);
-                GameController.fillBoxByGameId(gameRecord.Id, String.valueOf(ColumnType.FREE), String.valueOf(BoxType.values()[i]));
+                GameController.rollDiceByGameId(game.Id, DICE_TO_ROLL);
+                GameController.fillBoxByGameId(game.Id, String.valueOf(ColumnType.FREE), String.valueOf(BoxType.values()[i]));
             } 
-            GameController.rollDiceByGameId(gameRecord.Id, DICE_TO_ROLL);
-            GameController.rollDiceByGameId(gameRecord.Id, DICE_TO_ROLL);
+            GameController.rollDiceByGameId(game.Id, DICE_TO_ROLL);
+            GameController.rollDiceByGameId(game.Id, DICE_TO_ROLL);
         } catch (AuraHandledException e) {
             Assert.areEqual(GameConstants.ERROR_MESSAGE_ANNOUNCEMENT_REQUIRED, e.getMessage());
         }
         Test.stopTest();
+        // Assert
     }
     
     @IsTest
     public static void testBoxAlreadyFilledException() {
-        Game__c gameRecord = [SELECT Id FROM Game__c LIMIT 1];         
-        //
+        // Arange
+        Game__c game = [SELECT Id FROM Game__c LIMIT 1];         
+        // Act
         Test.startTest();
         try {         
-            GameController.rollDiceByGameId(gameRecord.Id, DICE_TO_ROLL);                        
-            GameController.fillBoxByGameId(gameRecord.Id, String.valueOf(ColumnType.DOWNWARDS), String.valueOf(BoxType.ONES));
-            GameController.rollDiceByGameId(gameRecord.Id, DICE_TO_ROLL);  
-            GameController.fillBoxByGameId(gameRecord.Id, String.valueOf(ColumnType.DOWNWARDS), String.valueOf(BoxType.ONES));
+            GameController.rollDiceByGameId(game.Id, DICE_TO_ROLL);                        
+            GameController.fillBoxByGameId(game.Id, String.valueOf(ColumnType.DOWNWARDS), String.valueOf(BoxType.ONES));
+            GameController.rollDiceByGameId(game.Id, DICE_TO_ROLL);  
+            GameController.fillBoxByGameId(game.Id, String.valueOf(ColumnType.DOWNWARDS), String.valueOf(BoxType.ONES));
         } catch (AuraHandledException e) {
         	Assert.areEqual(GameConstants.ERROR_MESSAGE_BOX_ALREADY_FILLED, e.getMessage());
         }
         Test.stopTest();
+        // Assert
     }
     
     @IsTest
     public static void testBoxNotAvailableException() {
-        Game__c gameRecord = [SELECT Id FROM Game__c LIMIT 1];            
-        //
+        // Arange
+        Game__c game = [SELECT Id FROM Game__c LIMIT 1];   
+        Exception caughtException = null;
+        // Act
         Test.startTest();
         try {          
-            GameController.rollDiceByGameId(gameRecord.Id, DICE_TO_ROLL);                            
-            GameController.fillBoxByGameId(gameRecord.Id, String.valueOf(ColumnType.DOWNWARDS), String.valueOf(BoxType.TWOS));
+            GameController.rollDiceByGameId(game.Id, DICE_TO_ROLL);                            
+            GameController.fillBoxByGameId(game.Id, String.valueOf(ColumnType.DOWNWARDS), String.valueOf(BoxType.TWOS));
         } catch (AuraHandledException e) {
-        	Assert.areEqual(GameConstants.ERROR_MESSAGE_BOX_NOT_AVAILABLE, e.getMessage());
+        	caughtException = e;
         }
         Test.stopTest();
+        // Assert
+        Assert.areEqual(GameConstants.ERROR_MESSAGE_BOX_NOT_AVAILABLE, caughtException.getMessage());
     }
     
     @IsTest
     public static void testDiceRollRequiredException() {
-        Game__c gameRecord = [SELECT Id FROM Game__c LIMIT 1];            
-        //
+        // Arange
+        Game__c game = [SELECT Id FROM Game__c LIMIT 1];            
+        // Act
         Test.startTest();
         try {          
-            GameController.fillBoxByGameId(gameRecord.Id, String.valueOf(ColumnType.DOWNWARDS), String.valueOf(BoxType.ONES));
+            GameController.fillBoxByGameId(game.Id, String.valueOf(ColumnType.DOWNWARDS), String.valueOf(BoxType.ONES));
         } catch (AuraHandledException e) {
         	Assert.areEqual(GameConstants.ERROR_MESSAGE_DICE_ROLL_REQUIRED, e.getMessage());
         }
         Test.stopTest();
+        // Assert
     }
     
     @IsTest
     public static void testBoxNotAnnouncedException() {
-        Game__c gameRecord = [SELECT Id FROM Game__c LIMIT 1];            
-        //
+        // Arange
+        Game__c game = [SELECT Id FROM Game__c LIMIT 1];            
+        // Act
         Test.startTest();
         try {          
-            GameController.rollDiceByGameId(gameRecord.Id, DICE_TO_ROLL);    
-            GameController.makeAnnouncementByGameId(gameRecord.Id, String.valueOf(BoxType.ONES));
-            GameController.fillBoxByGameId(gameRecord.Id, String.valueOf(ColumnType.ANNOUNCEMENT), String.valueOf(BoxType.TWOS));
+            GameController.rollDiceByGameId(game.Id, DICE_TO_ROLL);    
+            GameController.makeAnnouncementByGameId(game.Id, String.valueOf(BoxType.ONES));
+            GameController.fillBoxByGameId(game.Id, String.valueOf(ColumnType.ANNOUNCEMENT), String.valueOf(BoxType.TWOS));
         } catch (AuraHandledException e) {
         	Assert.areEqual(GameConstants.ERROR_MESSAGE_BOX_NOT_ANNOUNCED, e.getMessage());
         }
         Test.stopTest();
+        // Assert
     }
     
     @IsTest
     public static void testAnnouncementAlreadyDeclaredException() {
-        Game__c gameRecord = [SELECT Id FROM Game__c LIMIT 1];            
-        //
+        // Arange
+        Game__c game = [SELECT Id FROM Game__c LIMIT 1];            
+        // Act
         Test.startTest();
         try {          
-            GameController.rollDiceByGameId(gameRecord.Id, DICE_TO_ROLL);    
-            GameController.makeAnnouncementByGameId(gameRecord.Id, String.valueOf(BoxType.ONES));
-            GameController.makeAnnouncementByGameId(gameRecord.Id, String.valueOf(BoxType.TWOS));
+            GameController.rollDiceByGameId(game.Id, DICE_TO_ROLL);    
+            GameController.makeAnnouncementByGameId(game.Id, String.valueOf(BoxType.ONES));
+            GameController.makeAnnouncementByGameId(game.Id, String.valueOf(BoxType.TWOS));
         } catch (AuraHandledException e) {
         	Assert.areEqual(GameConstants.ERROR_MESSAGE_ANNOUNCEMENT_ALREADY_DECLARED, e.getMessage());
         }
         Test.stopTest();
+        // Assert
     }
     
     @IsTest
     public static void testAnnouncementNotAvailableException() {
-        Game__c gameRecord = [SELECT Id FROM Game__c LIMIT 1];            
+        Game__c game = [SELECT Id FROM Game__c LIMIT 1];            
         //
         Test.startTest();
         try {
-            GameController.rollDiceByGameId(gameRecord.Id, DICE_TO_ROLL);    
-            GameController.rollDiceByGameId(gameRecord.Id, DICE_TO_ROLL);    
-            GameController.makeAnnouncementByGameId(gameRecord.Id, String.valueOf(BoxType.ONES));
+            GameController.rollDiceByGameId(game.Id, DICE_TO_ROLL);    
+            GameController.rollDiceByGameId(game.Id, DICE_TO_ROLL);    
+            GameController.makeAnnouncementByGameId(game.Id, String.valueOf(BoxType.ONES));
         } catch (AuraHandledException e) {
         	Assert.areEqual(GameConstants.ERROR_MESSAGE_ANNOUNCEMENT_NOT_AVAILABLE, e.getMessage());
         }
@@ -192,30 +209,30 @@ public class GameControllerTest {
     
     @IsTest
     public static void testRestartFinishedGameException() {
-        Game__c gameRecord = [SELECT Id FROM Game__c LIMIT 1];
+        Game__c game = [SELECT Id FROM Game__c LIMIT 1];
         // fill out the first three columns before Test.startTest() so that the test doesn't hit query and dml limits
         for (Integer i = 0; i < BoxType.values().size(); i++) {
-            GameController.rollDiceByGameId(gameRecord.Id, DICE_TO_ROLL);
-            GameController.fillBoxByGameId(gameRecord.Id, String.valueOf(ColumnType.DOWNWARDS), String.valueOf(BoxType.values()[i]));
+            GameController.rollDiceByGameId(game.Id, DICE_TO_ROLL);
+            GameController.fillBoxByGameId(game.Id, String.valueOf(ColumnType.DOWNWARDS), String.valueOf(BoxType.values()[i]));
         }
         for (Integer i = BoxType.values().size() - 1; i >= 0; i--) {
-            GameController.rollDiceByGameId(gameRecord.Id, DICE_TO_ROLL);
-            GameController.fillBoxByGameId(gameRecord.Id, String.valueOf(ColumnType.UPWARDS), String.valueOf(BoxType.values()[i]));
+            GameController.rollDiceByGameId(game.Id, DICE_TO_ROLL);
+            GameController.fillBoxByGameId(game.Id, String.valueOf(ColumnType.UPWARDS), String.valueOf(BoxType.values()[i]));
         }
         for (Integer i = 0; i < BoxType.values().size(); i++) {
-            GameController.rollDiceByGameId(gameRecord.Id, DICE_TO_ROLL);
-            GameController.fillBoxByGameId(gameRecord.Id, String.valueOf(ColumnType.FREE), String.valueOf(BoxType.values()[i]));
+            GameController.rollDiceByGameId(game.Id, DICE_TO_ROLL);
+            GameController.fillBoxByGameId(game.Id, String.valueOf(ColumnType.FREE), String.valueOf(BoxType.values()[i]));
         }        
         Test.startTest();
         try {
             for (Integer i = 0; i < BoxType.values().size(); i++) {
-                GameController.rollDiceByGameId(gameRecord.Id, DICE_TO_ROLL);
-                GameController.makeAnnouncementByGameId(gameRecord.Id, String.valueOf(BoxType.values()[i]));
-                GameController.fillBoxByGameId(gameRecord.Id, String.valueOf(ColumnType.ANNOUNCEMENT), String.valueOf(BoxType.values()[i]));
+                GameController.rollDiceByGameId(game.Id, DICE_TO_ROLL);
+                GameController.makeAnnouncementByGameId(game.Id, String.valueOf(BoxType.values()[i]));
+                GameController.fillBoxByGameId(game.Id, String.valueOf(ColumnType.ANNOUNCEMENT), String.valueOf(BoxType.values()[i]));
             }
-            GameController.restartGameById(gameRecord.Id);
+            GameController.restartByGameId(game.Id);
         } catch (AuraHandledException e) {
-        	Assert.areEqual(GameConstants.ERROR_MESSAGE_RESTART_FINISHED_GAME, e.getMessage());
+        	Assert.areEqual(GameConstants.ERROR_MESSAGE_RESTART_COMPLETED_SHEET, e.getMessage());
         }
         Test.stopTest();
     }

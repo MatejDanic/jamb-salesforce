@@ -1,4 +1,4 @@
-import { LightningElement, api, track } from "lwc";
+import { LightningElement, api } from "lwc";
 
 export default class Label extends LightningElement {
 	
@@ -9,4 +9,5 @@ export default class Label extends LightningElement {
 	get disabled() {
 		return this.helpText == null;
 	}
+
 }

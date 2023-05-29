@@ -2,14 +2,14 @@ public class GameUtil {
 
     public static Game__c getGameById(Id gameId) {
         return [
-            SELECT Id, Game_String__c
+            SELECT Id, Sheet__c
             FROM Game__c
             WHERE Id = :gameId
         ];
     }
 
-    public static Game getGameFromGameString(String gameString) {
-        return (Game) JSON.deserialize(gameString, Game.class);
+    public static Sheet getSheetFromString(String sheetString) {
+        return (Sheet) JSON.deserialize(sheetString, Sheet.class);
     }
 
     public static void initializeGameList(List<Game__c> gameList) {
@@ -19,15 +19,10 @@ public class GameUtil {
     }
 
     public static Game__c initializeGame(Game__c game) {
-        game.Game_String__c = JSON.serialize(new Game(generateForm(), generateDiceMap()));
+        game.Sheet__c = JSON.serialize(new Sheet(generateColumnMap(), generateDiceMap()));
         return game;
     }
 
-    private static Form generateForm() {
-        Form form = new Form(generateColumnMap());
-        return form;
-    }
-    
     private static Map<Integer, Dice> generateDiceMap() {
         Map<Integer, Dice> diceMap = new Map<Integer, Dice>();
         for (Integer i = 0; i < GameConstants.NUMBER_OF_DICE; i++) {

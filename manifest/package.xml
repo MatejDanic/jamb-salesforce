@@ -11,8 +11,7 @@
         <members>Box</members>
         <members>Column</members>
         <members>Dice</members>
-        <members>Form</members>
-        <members>Game</members>
+        <members>Sheet</members>
         <members>GameUtil</members>
         <members>ScoreUtil</members>
         <members>GameControllerTest</members>
@@ -35,7 +34,7 @@
     </types>
 
     <types>
-        <members>Game__c.Game_String__c</members>
+        <members>Game__c.Sheet__c</members>
         <name>CustomField</name>
     </types>
 
@@ -52,7 +51,7 @@
 
     <types>
         <members>game</members>
-        <members>form</members>
+        <members>sheet</members>
         <members>dice</members>
         <members>column</members>
         <members>box</members>
@@ -69,11 +68,6 @@
     <types>
         <members>Game__c.Restart</members>
         <name>QuickAction</name>
-    </types>
-
-    <types>
-        <members>GameMessageChannel</members>
-        <name>LightningMessageChannel</name>
     </types>
 
     <version>52.0</version>

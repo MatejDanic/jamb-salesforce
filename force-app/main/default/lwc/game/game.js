@@ -1,186 +1,52 @@
 import { LightningElement, wire, api, track } from "lwc";
+import { refreshApex } from '@salesforce/apex';
+import { getRecord } from 'lightning/uiRecordApi';
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
-import { subscribe, unsubscribe, MessageContext } from 'lightning/messageService';
-import GameMessageChannel from '@salesforce/messageChannel/GameMessageChannel__c';
 
-import getGameFromGameId from "@salesforce/apex/GameController.getGameFromGameId";
-import rollDiceByGameId from "@salesforce/apex/GameController.rollDiceByGameId";
-import fillBoxByGameId from "@salesforce/apex/GameController.fillBoxByGameId";
-import makeAnnouncementByGameId from "@salesforce/apex/GameController.makeAnnouncementByGameId";
+import Id from '@salesforce/user/Id';
+import USER_DEBUG_MODE_ENABLED_FIELD from '@salesforce/schema/User.UserPreferencesUserDebugModePref';
+
+import GAME_SHEET_FIELD from '@salesforce/schema/Game__c.Sheet__c';
 
 const ERROR_TITLE = "Error";
 const ERROR_VARIANT = "error";
 const SUCCESS_TITLE = "Success";
 const SUCCESS_VARIANT = "success";
-const MESSAGE_FINAL_SCORE = "Congratulations, Your final score is ";
 
 export default class Game extends LightningElement {
 
-	subscription = null;
-
-	@wire(MessageContext)
-    messageContext;
-
 	@api recordId;
 
-	@track game;
+	// determines if verbose game state information is displayed on the screen
+	@track debugModeEnabled = false;
 
-	@wire(getGameFromGameId, { gameId: "$recordId" })
-	wiredGame({data, error}) {
-		if (data) {
-			console.log(data);
-			this.game = data;
-		}
-		if (error) {
-			console.error(error);
-			this.showErrorToastMessage(error);
-		}
-	}
+	// there are a total of 2 wired methods in the chain of this lwc hierarchy (game.js->sheet.js) 
+	// the first method retreives the game record data and serves as a listener for record updates outside of the component
+	// the second wire method is located in the sheet component and it is used to retreive the actual data for displaying from the apex controller
+	// the reason that the Sheet__c field value of the Game__c record is not used and a custom wired method is called instead,
+	// is that the properties of the Sheet apex class that the lwc requires for displaying data are not 
+	// identical to the properties being serialized and saved to the database 
+	// most game state properties are computed at runtime (similar to formula fields) and not saved
+	// this helps prevent invalid save state issues, i.e. future changes in game logic won't break current game instances
+	@wire(getRecord, { recordId: '$recordId', fields: [ GAME_SHEET_FIELD ] })
+	record;
 
-	connectedCallback() {
-        this.subscribeToGameMessageChannel();
-    }
-	
-    disconnectedCallback() {
-        this.unsubscribeFromGameMessageChannel();
-    }
-	
-    subscribeToGameMessageChannel() {
-        if (!this.subscription) {
-            this.subscription = subscribe(this.messageContext, GameMessageChannel, ( message ) => {
-				this.handleMessage(message)
-			});
-			console.log("Subscribed to message channel: " + GameMessageChannel);
+	@wire(getRecord, { recordId: Id, fields: [ USER_DEBUG_MODE_ENABLED_FIELD ]}) 
+    currentUserInfo({error, data}) {
+        if (data) {
+            this.debugModeEnabled = data.fields.UserPreferencesUserDebugModePref.value;
+        } else if (error) {
+            this.error = error ;
         }
-    }	
-
-    unsubscribeFromGameMessageChannel() {
-        unsubscribe(this.subscription);
-        this.subscription = null;
-		console.log("Unsubscribed from message channel: " + GameMessageChannel);
     }
 
-	handleMessage(message) {
-		this.game = message.game;
-	}
-    
-	get form() {
-		return this.game?.form;
-	}
-	get diceList() {
-		return this.game?.diceList;
-	}
-	get rollCount() {
-		return this.game?.rollCount;
-	}
-	get announcementString() {
-		return this.game?.announcementString;
-	}
-	get announcementRequired() {
-		return this.game?.announcementRequired;
-	}
-	get completed() {
-		return this.game?.completed;
-	}
-	get actionHistory() {
-		return this.game?.actionHistory;
-	}
+	handleRefresh() {
+        console.log("handleRefresh");
+        refreshApex(this.record);
+    }
 
-	// when debug mode is enabled, specific game paramater values are displayed on the front-end
-	get debugModeEnabled() {
-		return true;
-	}
-
-	get rollDiceButtonDisabled() {
-		return this.completed
-			|| this.rollCount == 3
-			|| this.rollCount == 1
-				&& this.announcementString == null
-			 	&& this.announcementRequired;
-	}
-
-	get allDiceDisabled() {
-		return this.completed 
-			|| this.rollCount == 0
-			|| this.rollCount == 3 
-			|| this.rollDiceButtonDisabled;
-	}
-
-	get allBoxesDisabled() {
-		return this.completed == 0 || this.rollCount == 0;
-	}
-
-	handleRollDice() {
-		let diceToRoll = [];
-		for (let dice of this.template.querySelectorAll("c-dice")) {
-			if (!dice.frozen) {
-				diceToRoll.push(dice.order);
-			}
-		}
-		rollDiceByGameId({ gameId: this.recordId, diceToRoll: diceToRoll })
-			.then((game) => {
-				console.log(game);
-				this.game = game;
-				this.startDiceRollAnimation();
-			})
-			.catch((error) => {
-				console.error(error);
-				this.showErrorToastMessage(error)
-			});
-	}
-
-	startDiceRollAnimation() {
-		for (let dice of this.template.querySelectorAll("c-dice")) {
-			if (!dice.frozen) {
-				setTimeout(function () {
-					dice.startRollAnimation()
-				}, 0);
-			}
-		}
-	}
-
-	handleBoxClick(event) {
-		if (event.detail.columnTypeString == "ANNOUNCEMENT" && this.announcementString == null) {
-			this.handleAnnouncement(event.detail.boxTypeString);
-		} else {
-			this.handleBoxFill(event.detail.columnTypeString, event.detail.boxTypeString);
-		}
-	}
-
-	handleBoxFill(columnTypeString, boxTypeString) {
-		fillBoxByGameId({ gameId: this.recordId, columnTypeString: columnTypeString, boxTypeString: boxTypeString })
-			.then((game) => {
-				console.log(game);
-				this.game = game;
-				this.resetAllDice();
-				if (this.game.completed) {
-					setTimeout(() => {
-						this.showSuccessToastMessage(MESSAGE_FINAL_SCORE + this.form.finalSum + "!");
-					}, 1000);
-				}
-			})
-			.catch((error) => {
-				console.error(error);
-				this.showErrorToastMessage(error)
-			});
-	}
-
-	handleAnnouncement(announcementString) {
-		makeAnnouncementByGameId({ gameId: this.recordId, announcementString: announcementString})
-			.then((game) => {
-				console.log(game);
-				this.game = game;
-			})
-			.catch((error) => {
-				console.error(error);
-				this.showErrorToastMessage(error)
-			});
-	}
-	
-	resetAllDice() {
-		for (let dice of this.template.querySelectorAll("c-dice")) {
-			dice.frozen = false;
-		}
+	handleError(event) {
+		this.showErrorToastMessage(event.detail);
 	}
 
 	showSuccessToastMessage(message) {
@@ -194,8 +60,9 @@ export default class Game extends LightningElement {
    	showErrorToastMessage(error) {
 	   	this.dispatchEvent(new ShowToastEvent({
 			title: ERROR_TITLE,
-			message: error?.body?.message,
+			message: error.body ? error.body.message : error,
 			variant: ERROR_VARIANT
 		}));
    	}
+
 }

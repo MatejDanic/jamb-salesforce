@@ -91,15 +91,7 @@ public class Column implements Comparable {
 
     public Integer compareTo(Object compareTo) {
         Column compareToColumn = (Column) compareTo;
-
-        Integer returnValue = 0;
-        if (type.ordinal() > compareToColumn.type.ordinal()) {
-            returnValue = 1;
-        } else if (type.ordinal() < compareToColumn.type.ordinal()) {
-            returnValue = -1;
-        }
-
-        return returnValue;       
+        return type.ordinal() - compareToColumn.type.ordinal();
     }
 
 }

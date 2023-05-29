@@ -34,15 +34,7 @@ public class Box implements Comparable {
 
     public Integer compareTo(Object compareTo) {
         Box compareToBox = (Box) compareTo;
-
-        Integer returnValue = 0;
-        if (type.ordinal() > compareToBox.type.ordinal()) {
-            returnValue = 1;
-        } else if (type.ordinal() < compareToBox.type.ordinal()) {
-            returnValue = -1;
-        }
-
-        return returnValue;       
+        return type.ordinal() - compareToBox.type.ordinal(); 
     }
     
 }

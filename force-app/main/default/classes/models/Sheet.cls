@@ -1,4 +1,23 @@
-public class Game {
+public class Sheet {
+
+    public Map<ColumnType, Column> columnMap { get; private set; }
+
+    @AuraEnabled
+    public transient List<Column> columnList { 
+        get {
+            List<Column> columnList = columnMap.values();
+            columnList.sort();
+            return columnList;
+        } 
+        private set;
+    }
+
+    private transient List<Column> columnListUnsorted { 
+        get {
+            return columnMap.values();
+        } 
+        set;
+    }
 
     public Map<Integer, Dice> diceMap { get; private set; }
 
@@ -18,9 +37,6 @@ public class Game {
         }
         set;
     }
-    
-    @AuraEnabled
-    public Form form { get; private set; }
 
     @AuraEnabled 
     public Integer rollCount { get; set; }
@@ -38,7 +54,7 @@ public class Game {
     @AuraEnabled
     public transient Boolean announcementRequired {
         get {
-            for (Column column : form.columnList) {
+            for (Column column : columnList) {
                 if (column.type != ColumnType.ANNOUNCEMENT && column.numOfAvailableBoxes > 0) {
                     return false;
                 }
@@ -51,7 +67,7 @@ public class Game {
     @AuraEnabled
     public transient Boolean completed { 
         get {
-            return form.numOfAvailableBoxes == 0;
+            return numOfAvailableBoxes == 0;
         }
         private set;
     }
@@ -67,11 +83,66 @@ public class Game {
         private set;
     }
 
-    public Game(Form form, Map<Integer, Dice> diceMap) {
-        this.form = form;
+    public Sheet(Map<ColumnType, Column> columnMap, Map<Integer, Dice> diceMap) {
+        this.columnMap = columnMap;
         this.diceMap = diceMap;
         rollCount = 0;
         announcement = null;
+    }
+
+    @AuraEnabled
+    public transient Integer topSectionSum { 
+        get {
+            Integer topSectionSum = 0;
+            for (Column column : columnListUnsorted) {
+                topSectionSum += column.topSectionSum;
+            }
+            return topSectionSum;
+        }
+        private set; 
+    }
+
+    @AuraEnabled
+    public transient Integer middleSectionSum { 
+        get {
+            Integer middleSectionSum = 0;
+            for (Column column : columnListUnsorted) {
+                middleSectionSum += column.middleSectionSum;
+            }
+            return middleSectionSum;
+        }
+        private set; 
+    }
+
+    @AuraEnabled
+    public transient Integer bottomSectionSum { 
+        get {
+            Integer bottomSectionSum = 0;
+            for (Column column : columnListUnsorted) {
+                bottomSectionSum += column.bottomSectionSum;
+            }
+            return bottomSectionSum;
+        }
+        private set; 
+    }
+
+    @AuraEnabled
+    public transient Integer totalSum { 
+        get{
+            return topSectionSum + middleSectionSum + bottomSectionSum;
+        }
+        private set;
+    }
+
+    public transient Integer numOfAvailableBoxes {
+        get { 
+            Integer numOfAvailableBoxes = 0;
+            for (Column column : columnListUnsorted) {
+                numOfAvailableBoxes += column.numOfAvailableBoxes;
+            }
+            return numOfAvailableBoxes;
+        }
+        private set;
     }
 
     public void rollDice(List<Integer> diceToRoll) {
@@ -91,22 +162,17 @@ public class Game {
     }   
 
     public void fillBox(ColumnType cType, BoxType bType) {
-        Box selectedBox = form.columnMap.get(cType).boxMap.get(bType);
+        Box selectedBox = columnMap.get(cType).boxMap.get(bType);
 
         selectedBox.fill(ScoreUtil.calculateScore(diceListUnsorted, bType));
         BoxType nextBoxType = getNextBoxType(cType, selectedBox.type);
         if (nextBoxType != null) {
-            Box nextBox = form.columnMap.get(cType).boxMap.get(nextBoxType);
+            Box nextBox = columnMap.get(cType).boxMap.get(nextBoxType);
             nextBox.available = true;
         }
 
         rollCount = 0;
         announcement = null;
-
-        // if (form.isFinished()) {
-        //     Score__c score = new Score__c(Value__c = form.totalSum);
-        //     insert score;
-        // }
         
         actionHistory.add('Fill [' + cType.ordinal() + ', ' + bType.ordinal() + ']');
     }
