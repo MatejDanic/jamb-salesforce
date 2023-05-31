@@ -28,64 +28,29 @@ export default class Sheet extends LightningElement {
 		}
 	}
 
-	// game sheet properties
-    get columnList() {
-        return this.sheet?.columnList;
-    }
-	get diceList() {
-		return this.sheet?.diceList;
-	}
-	get rollCount() {
-		return this.sheet?.rollCount;
-	}
-	get announcementString() {
-		return this.sheet?.announcementString;
-	}
-	get announcementRequired() {
-		return this.sheet?.announcementRequired;
-	}
-	get completed() {
-		return this.sheet?.completed;
-	}
-	get actionHistory() {
-		return this.sheet?.actionHistory;
-	}
-    get topSectionSum() {
-        return this.sheet?.topSectionSum;
-    }
-    get middleSectionSum() {
-        return this.sheet?.middleSectionSum;
-    }
-    get bottomSectionSum() {
-        return this.sheet?.bottomSectionSum;
-    }
-    get totalSum() {
-        return this.sheet?.totalSum;
-    }
-
 	// computed properties
 	get rollDiceButtonDisabled() {
-		return this.completed
-			|| this.rollCount == 3
-			|| this.rollCount == 1
-				&& this.announcementString == null
-			 	&& this.announcementRequired;
+		return this.sheet.completed
+			|| this.sheet.rollCount == 3
+			|| this.sheet.rollCount == 1
+				&& this.sheet.announcementString == null
+			 	&& this.sheet.announcementRequired;
 	}
 
 	get allDiceDisabled() {
-		return this.completed 
-			|| this.rollCount == 0
-			|| this.rollCount == 3 
+		return this.sheet.completed 
+			|| this.sheet.rollCount == 0
+			|| this.sheet.rollCount == 3 
 			|| this.rollDiceButtonDisabled;
 	}
 
 	get allBoxesDisabled() {
-		return this.completed == 0 || this.rollCount == 0;
+		return this.sheet.completed == 0 || this.sheet.rollCount == 0;
 	}
 
 	// reverse order of action history elements to show latest first
     get actionHistoryReversed() {
-		let actionHistoryReversed = [...this.actionHistory];
+		let actionHistoryReversed = [...this.sheet.actionHistory];
 		return actionHistoryReversed.reverse();
 	}
 
@@ -101,13 +66,13 @@ export default class Sheet extends LightningElement {
 
 	// determines if top/middle/bottom lightning bolt in the roll dice button will be filled or not
 	get rollCountTopClass() {
-		return this.rollCount == 0 ? "roll-count-filled" : "";
+		return this.sheet.rollCount == 0 ? "roll-count-filled" : "";
 	}
 	get rollCountMiddleClass() {
-		return this.rollCount <= 1 ? "roll-count-filled" : "";
+		return this.sheet.rollCount <= 1 ? "roll-count-filled" : "";
 	}
 	get rollCountBottomClass() {
-		return this.rollCount <= 2 ? "roll-count-filled" : "";
+		return this.sheet.rollCount <= 2 ? "roll-count-filled" : "";
 	}
 
 	// handler functions
@@ -138,7 +103,7 @@ export default class Sheet extends LightningElement {
 
 	// determine if click action is filling the box or announcing it based on current game state and the clicked box 
 	handleBoxClick(event) {
-		if (event.detail.columnTypeString == "ANNOUNCEMENT" && this.announcementString == null) {
+		if (event.detail.columnTypeString == "ANNOUNCEMENT" && this.sheet.announcementString == null) {
 			this.handleAnnouncement(event.detail.boxTypeString);
 		} else {
 			this.handleBoxFill(event.detail.columnTypeString, event.detail.boxTypeString);
@@ -151,7 +116,7 @@ export default class Sheet extends LightningElement {
 				console.log(sheet);
 				this.sheet = sheet;
 				this.resetAllDice();
-				// if (this.completed) {
+				// if (this.sheet.completed) {
 				// 	setTimeout(() => {
 				// 		this.showSuccessToastMessage(MESSAGE_FINAL_SCORE + this.form.finalSum + "!");
 				// 	}, 1000);
