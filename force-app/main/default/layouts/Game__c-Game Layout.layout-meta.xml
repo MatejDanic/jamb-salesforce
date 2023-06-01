@@ -22,7 +22,7 @@
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
-                <behavior>Edit</behavior>
+                <behavior>Readonly</behavior>
                 <field>OwnerId</field>
             </layoutItems>
         </layoutColumns>
@@ -54,11 +54,7 @@
         <label>Game String</label>
         <layoutColumns>
             <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Game_String__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
+                <behavior>Readonly</behavior>
                 <field>Sheet__c</field>
             </layoutItems>
         </layoutColumns>
