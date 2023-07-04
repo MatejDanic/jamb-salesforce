@@ -192,15 +192,18 @@ public class GameControllerTest {
         sheet.makeAnnouncement(BoxType.ONES);
         game.Sheet__c = JSON.serialize(sheet);
         update game;
+        AuraHandledException caughtException;        
         // Act
         Test.startTest();
         try {          
             GameController.fillBoxByGameId(game.Id, String.valueOf(ColumnType.ANNOUNCEMENT), String.valueOf(BoxType.TWOS));
         } catch (AuraHandledException e) {
-        	Assert.areEqual(GameConstants.ERROR_MESSAGE_BOX_NOT_ANNOUNCED, e.getMessage());
+            caughtException = e;	
         }
         Test.stopTest();
         // Assert
+        Assert.areEqual(GameConstants.ERROR_MESSAGE_BOX_NOT_ANNOUNCED, caughtException.getMessage());
+
     }
     
     @IsTest

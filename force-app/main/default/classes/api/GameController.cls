@@ -4,6 +4,8 @@ public class GameController {
 
     public static final GameService gameService = new GameService();
 
+    // lastModifiedDate parameter is ignored,
+    // it is only used for refreshing data in the lwc
     @AuraEnabled(cacheable=true)
     public static Sheet getSheetFromGameId(Id gameId, Date lastModifiedDate) {
         try {
