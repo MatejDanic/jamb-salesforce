@@ -73,9 +73,9 @@
                 <c-label class="top-section-sum" value={sheet.topSectionSum}></c-label>
                 <c-label class="middle-section-sum" value={sheet.middleSectionSum}></c-label>
                 <div class="action-history">
-                    <template for:each={actionHistoryTruncated} for:item="action">
+                    <!--<template for:each={actionHistoryTruncated} for:item="action">
                         <div key={action}>{action}</div>
-                    </template>
+                    </template>-->
                 </div>
                 <c-label class="bottom-section-sum" value={sheet.bottomSectionSum}></c-label>
             </div>
@@ -98,6 +98,12 @@
             All Dice Disabled: <strong>{allDiceDisabled}</strong>
             <br/> 
             Completed: <strong>{sheet.completed}</strong>
+            <br/> 
+            Roll Count Top Class: <strong>{rollCountTopClass}</strong>
+            <br/> 
+            Roll Count Middle Class: <strong>{rollCountMiddleClass}</strong>
+            <br/> 
+            Roll Count Bottom Class: <strong>{rollCountBottomClass}</strong>
             <br/> 
         </template>
     </template>

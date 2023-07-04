@@ -55,8 +55,9 @@
     background-color: var(--lwc-colorBackgroundRowHover);
 }
 
-.roll-count-filled {
+.filled {
     --lwc-colorTextIconDefault: var(--lwc-colorBrandDark);
+	--sds-c-icon-color-foreground-default: var(--lwc-colorBrandDark);
 }
 
 .action-history {
