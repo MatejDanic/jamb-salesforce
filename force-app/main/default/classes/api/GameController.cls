@@ -4,17 +4,13 @@ public class GameController {
 
     public static final GameService gameService = new GameService();
 
-    // lastModifiedDate parameter is ignored,
-    // it is only used for refreshing data in the lwc
     @AuraEnabled(cacheable=true)
-    public static Sheet getSheetFromGameId(Id gameId, Date lastModifiedDate) {
+    public static Sheet getSheetFromGameId(Id gameId) {
         try {
             return gameService.getSheetFromGameId(gameId);
         } catch (Exception e) {
             logger.error(e);
-            AuraHandledException exc = new AuraHandledException(e.getMessage());
-            exc.setMessage(e.getMessage());
-            throw exc;
+            throw new AuraHandledException(e.getMessage());
         }
     }
 
@@ -24,9 +20,7 @@ public class GameController {
             return gameService.rollDiceByGameId(gameId, diceToRoll);
         } catch (Exception e) {
             logger.error(e);
-            AuraHandledException exc = new AuraHandledException(e.getMessage());
-            exc.setMessage(e.getMessage());
-            throw exc;
+            throw new AuraHandledException(e.getMessage());
         }
     }
 
@@ -36,9 +30,7 @@ public class GameController {
             return gameService.fillBoxByGameId(gameId, columnTypeString, boxTypeString);
         } catch (Exception e) {
             logger.error(e);
-            AuraHandledException exc = new AuraHandledException(e.getMessage());
-            exc.setMessage(e.getMessage());
-            throw exc;
+            throw new AuraHandledException(e.getMessage());
         }
     }
 
@@ -48,9 +40,7 @@ public class GameController {
             return gameService.makeAnnouncementByGameId(gameId, announcementString);
         } catch (Exception e) {
             logger.error(e);
-            AuraHandledException exc = new AuraHandledException(e.getMessage());
-            exc.setMessage(e.getMessage());
-            throw exc;
+            throw new AuraHandledException(e.getMessage());
         }
     }
     
@@ -60,9 +50,7 @@ public class GameController {
             return gameService.restartByGameId(gameId);
         } catch (Exception e) {
             logger.error(e);
-            AuraHandledException exc = new AuraHandledException(e.getMessage());
-            exc.setMessage(e.getMessage());
-            throw exc;
+            throw new AuraHandledException(e.getMessage());
         }
     }
 

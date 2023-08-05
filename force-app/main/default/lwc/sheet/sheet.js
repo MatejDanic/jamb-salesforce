@@ -8,22 +8,15 @@ import makeAnnouncementByGameId from "@salesforce/apex/GameController.makeAnnoun
 export default class Sheet extends LightningElement {
 
 	@api gameId;
-	// variable used only for chaining wired functions, ignored in the actual implementation
-	@api lastModifiedDate;
     @api debugModeEnabled;
 
-	// the reason that the sheet variable is "manually" wired is because of performance reasons
-	// on each imperative apex method call, a sheet is returned and inputted in this variable
-	// this way, there is no need to wait for the wired method chain to update the displayed game state data
 	@track sheet;
 
-	// second wire function in the chain (the first is in game.js) used for actually retrieving data to display
-	@wire(getSheetFromGameId, { gameId: "$gameId", lastModifiedDate: "$lastModifiedDate" })
+	@wire(getSheetFromGameId, { gameId: "$gameId" })
 	wiredSheet({data, error}) {
 		if (data) {
 			this.sheet = data;
-		}
-		if (error) {
+		} else if (error) {
 			this.handleError(error);
 		}
 	}
@@ -92,12 +85,10 @@ export default class Sheet extends LightningElement {
 				// immediately update the sheet upon method return
 				this.sheet = sheet;
 				this.startDiceRollAnimation();
-			})
-			.catch((error) => {
+			}).catch((error) => {
 				this.handleError(error)
-			})
-			.finally(() => {
-				this.handleRefresh();
+			}).finally(() => {
+				//this.handleRefresh();
 			});
 	}
 
@@ -121,12 +112,10 @@ export default class Sheet extends LightningElement {
 				// 		this.showSuccessToastMessage(MESSAGE_FINAL_SCORE + this.form.finalSum + "!");
 				// 	}, 1000);
 				// }
-			})
-			.catch((error) => {
+			}).catch((error) => {
 				this.handleError(error)
-			})
-			.finally(() => {
-				this.handleRefresh();
+			}).finally(() => {
+				//this.handleRefresh();
 			});
 	}
 
@@ -140,7 +129,7 @@ export default class Sheet extends LightningElement {
 				this.handleError(error)
 			})
 			.finally(() => {
-				this.handleRefresh();
+				//this.handleRefresh();
 			});
 	}
 	

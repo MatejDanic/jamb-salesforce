@@ -23,8 +23,8 @@ export default class RestartGame extends LightningElement {
                 .then((sheet) => {
                     console.log(sheet);
                     notifyRecordUpdateAvailable([{recordId: this.recordId}]);
-                })
-                .catch((error) => {
+                    window.location.reload();
+                }).catch((error) => {
                     console.error(error);
                 });
         }
