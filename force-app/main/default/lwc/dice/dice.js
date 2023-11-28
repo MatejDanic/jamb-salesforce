@@ -2,32 +2,20 @@ import { LightningElement, api } from "lwc";
 
 export default class Dice extends LightningElement {
 	
+    @api index;
     @api value;
-    @api order;
 	@api rollCount;
     @api allDiceDisabled;
-
-    _frozen = false;
+	@api saved;
 
 	get diceClass() {
-		if (this._frozen) {
+		if (this.saved) {
 			return "dice red-border";
 		} else {
 			return "dice";
 		}
 	}
 
-	@api 
-	get frozen() {
-		return this._frozen;
-	}
-	set frozen(value) {
-		this.setFrozen(value);
-	}
-	
-	setFrozen(frozen) {
-		this._frozen = frozen;
-	}
 
 	@api startRollAnimation() {
 		let dice = this.template.querySelector(".dice");
@@ -44,7 +32,7 @@ export default class Dice extends LightningElement {
 	}
 
     handleClick() {
-      	this.setFrozen(!this._frozen);
+		this.dispatchEvent(new CustomEvent("ondiceclick", { detail: this.index }));
     }
 
 	get isOne() {

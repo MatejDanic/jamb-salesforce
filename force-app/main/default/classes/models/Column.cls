@@ -1,43 +1,39 @@
-public class Column implements Comparable {
+public class Column {
 
     public ColumnType type { get; private set; }
     
     @AuraEnabled
-    public transient String typeString { 
+    public transient String typeString {
         get {
             return String.valueOf(type);
         }
         private set;
     }
-
-    public Map<BoxType, Box> boxMap { get; private set; }    
-
-    @AuraEnabled 
-    public transient List<Box> boxList {
-        get {
-            List<Box> boxList = boxMap.values();
-            boxList.sort();
-            return boxList;
-        }
-        private set;
+    
+    @AuraEnabled
+    public List<Box> boxes { get; private set; } 
+    
+    private Column (ColumnType type, List<Box> boxes) {
+        this.type = type; 
+        this.boxes = boxes;
     }
-
-    private transient List<Box> boxListUnsorted {
-        get {
-            return boxMap.values();
-        }
-        set;
+    
+    public static Column getInstance(ColumnType type) {
+        return new Column(type, generateBoxes(type));
     }
 
     @AuraEnabled
     public transient Integer topSectionSum {
         get {
             Integer topSectionSum = 0;
-            for (BoxType bType : GameConstants.TOP_SECTION) {
-                topSectionSum += boxMap.get(bType).value;
+            for (BoxType boxType : GameConstants.TOP_SECTION) {
+                Box box = boxes.get(boxType.ordinal());
+                if (box.value != null) {
+                    topSectionSum += box.value;
+                }
             }
-            if (topSectionSum >= GameConstants.NUMBERSUM_BONUS_THRESHOLD) {
-                topSectionSum += GameConstants.NUMBERSUM_BONUS;
+            if (topSectionSum >= GameConstants.TOP_SECTION_SUM_BONUS_THRESHOLD) {
+                topSectionSum += GameConstants.TOP_SECTION_SUM_BONUS;
             }
             return topSectionSum;
         }
@@ -48,10 +44,10 @@ public class Column implements Comparable {
     public transient Integer middleSectionSum { 
         get {
             Integer middleSectionSum = 0;
-            Box ones = boxMap.get(BoxType.ONES);
-            Box max = boxMap.get(BoxType.MAX);
-            Box min = boxMap.get(BoxType.MIN);
-            if (ones.filled && max.filled && min.filled) {
+            Box ones = boxes.get(BoxType.ONES.ordinal());
+            Box max = boxes.get(BoxType.MAX.ordinal());
+            Box min = boxes.get(BoxType.MIN.ordinal());
+            if (ones.value != null && max.value != null && min.value != null) {
                 middleSectionSum = ones.value * (max.value - min.value);
             }
             return middleSectionSum;
@@ -63,35 +59,49 @@ public class Column implements Comparable {
     public transient Integer bottomSectionSum { 
         get {
             Integer bottomSectionSum = 0;
-            for (BoxType bType : GameConstants.BOTTOM_SECTION) {
-                bottomSectionSum += boxMap.get(bType).value;
+            for (BoxType boxType : GameConstants.BOTTOM_SECTION) {
+                Box box = boxes.get(boxType.ordinal());
+                if (box.value != null) {
+                    bottomSectionSum += box.value;
+                }
             }
             return bottomSectionSum;
         }
         private set; 
     }
 
-    public transient Integer numOfAvailableBoxes {
+    public transient Integer numOfEmptyBoxes {
         get {
-            Integer numOfAvailableBoxes = 0;
-            for (Box box : boxListUnsorted) {
-                if (box.available) {
-                    numOfAvailableBoxes += 1;
+            Integer numOfEmptyBoxes = 0;
+            for (Box box : boxes) {
+                if (box.value == null) {
+                    numOfEmptyBoxes += 1;
                 }
             }
-            return numOfAvailableBoxes;
+            return numOfEmptyBoxes;
         }
         private set;
-    }
-    
-    public Column(ColumnType type, Map<BoxType, Box> boxMap) {
-        this.type = type;
-        this.boxMap = boxMap;
+    }    
+
+    public transient Boolean isCompleted {
+        get {
+            return numOfEmptyBoxes == 0;
+        }
+        private set;
+
     }
 
-    public Integer compareTo(Object compareTo) {
-        Column compareToColumn = (Column) compareTo;
-        return type.ordinal() - compareToColumn.type.ordinal();
+    private static List<Box> generateBoxes(ColumnType columnType) {
+        List<Box> boxes = new List<Box>();
+        for (BoxType boxType : BoxType.values()) {
+            boxes.add(Box.getInstance(boxType));
+        }
+        return boxes;
+    }
+
+    public void fillBox(BoxType boxType, Integer value) { 
+        Box selectedBox = boxes.get(boxType.ordinal());
+        selectedBox.fill(value);
     }
 
 }

@@ -1,16 +1,5 @@
 <template>
-    <template if:true={sheet}>
-        <div class="dice-list">
-            <template for:each={sheet.diceList} for:item="dice">
-                <c-dice
-                    key={dice.order}
-                    value={dice.value}
-                    order={dice.order}
-                    all-dice-disabled={allDiceDisabled}
-                    ondiceclick={handleDiceClick}>
-                </c-dice>
-            </template>
-        </div>
+    <template if:true={columns}>
         <div class="form slds-card">
             <div class="first-column">
                 <!-- TOP SECTION -->
@@ -33,11 +22,11 @@
                 <c-label value="Yamb" help-text="Five of a kind"></c-label>
                 <c-label value="Σ"></c-label>
             </div>
-            <template for:each={sheet.columnList} for:item="column">
+            <template for:each={columns} for:item="column">
                 <c-column class="column" 
                     key={column.typeString} 
                     type-string={column.typeString} 
-                    box-list={column.boxList} 
+                    boxes={column.boxes} 
                     top-section-sum={column.topSectionSum} 
                     middle-section-sum={column.middleSectionSum}
                     bottom-section-sum={column.bottomSectionSum}
@@ -50,7 +39,7 @@
             </template>
             <div class="last-column">
                 <button class="roll-dice-button" 
-                    title="Roll!" 
+                    title="Roll" 
                     disabled={rollDiceButtonDisabled} 
                     onclick={handleRollDice}>
                     <lightning-icon
@@ -70,41 +59,11 @@
                         class={rollCountBottomClass}>
                     </lightning-icon>
                 </button>
-                <c-label class="top-section-sum" value={sheet.topSectionSum}></c-label>
-                <c-label class="middle-section-sum" value={sheet.middleSectionSum}></c-label>
-                <div class="action-history">
-                    <!--<template for:each={actionHistoryTruncated} for:item="action">
-                        <div key={action}>{action}</div>
-                    </template>-->
-                </div>
-                <c-label class="bottom-section-sum" value={sheet.bottomSectionSum}></c-label>
+                <c-label class="top-section-sum" value={topSectionSum}></c-label>
+                <c-label class="middle-section-sum" value={middleSectionSum}></c-label>
+                <c-label class="bottom-section-sum" value={bottomSectionSum}></c-label>
             </div>
-            <c-label class="total-sum" value={sheet.totalSum}></c-label>
+            <c-label class="total-sum" value={totalSum}></c-label>
         </div>
-        <template if:true={debugModeEnabled}>
-            <br/>
-            Last Modified Date: <strong>{lastModifiedDate}</strong>
-            <br/>
-            Roll Count: <strong>{sheet.rollCount}</strong>
-            <br/>
-            Announcement: <strong>{sheet.announcementString}</strong>
-            <br/>
-            Announcement Required: <strong>{sheet.announcementRequired}</strong>
-            <br/>
-            Roll Dice Button Disabled: <strong>{rollDiceButtonDisabled}</strong>
-            <br/> 
-            All Boxes Disabled: <strong>{allBoxesDisabled}</strong>
-            <br/> 
-            All Dice Disabled: <strong>{allDiceDisabled}</strong>
-            <br/> 
-            Completed: <strong>{sheet.completed}</strong>
-            <br/> 
-            Roll Count Top Class: <strong>{rollCountTopClass}</strong>
-            <br/> 
-            Roll Count Middle Class: <strong>{rollCountMiddleClass}</strong>
-            <br/> 
-            Roll Count Bottom Class: <strong>{rollCountBottomClass}</strong>
-            <br/> 
-        </template>
     </template>
 </template>

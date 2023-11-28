@@ -3,7 +3,7 @@ import { LightningElement, api } from "lwc";
 export default class Column extends LightningElement {
   
 	@api typeString;
-	@api boxList;
+	@api boxes;
 	@api topSectionSum;
 	@api middleSectionSum;
 	@api bottomSectionSum;

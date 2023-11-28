@@ -1,55 +1,48 @@
 public class GameController {
 
-    public static final ApexLogger logger = ApexLogger.getLogger(GameService.class);
-
     public static final GameService gameService = new GameService();
 
     @AuraEnabled(cacheable=true)
-    public static Sheet getSheetFromGameId(Id gameId) {
+    public static Game getGameByRecordId(Id gameId) {
         try {
-            return gameService.getSheetFromGameId(gameId);
+            return gameService.getGameByRecordId(gameId);
         } catch (Exception e) {
-            logger.error(e);
             throw new AuraHandledException(e.getMessage());
         }
     }
 
     @AuraEnabled
-    public static Sheet rollDiceByGameId(Id gameId, List<Integer> diceToRoll) {
+    public static Game rollDiceById(Id gameId, ActionRequest actionRequest) {
         try {
-            return gameService.rollDiceByGameId(gameId, diceToRoll);
+            return gameService.rollDiceById(gameId, actionRequest);
         } catch (Exception e) {
-            logger.error(e);
             throw new AuraHandledException(e.getMessage());
         }
     }
 
     @AuraEnabled
-    public static Sheet fillBoxByGameId(Id gameId, String columnTypeString, String boxTypeString) {
+    public static Game fillBoxById(Id gameId, ActionRequest actionRequest) {
         try {
-            return gameService.fillBoxByGameId(gameId, columnTypeString, boxTypeString);
+            return gameService.fillBoxById(gameId, actionRequest);
         } catch (Exception e) {
-            logger.error(e);
             throw new AuraHandledException(e.getMessage());
         }
     }
 
     @AuraEnabled
-    public static Sheet makeAnnouncementByGameId(Id gameId, String announcementString) {
+    public static Game makeAnnouncementById(Id gameId, ActionRequest actionRequest) {
         try {
-            return gameService.makeAnnouncementByGameId(gameId, announcementString);
+            return gameService.makeAnnouncementById(gameId, actionRequest);
         } catch (Exception e) {
-            logger.error(e);
             throw new AuraHandledException(e.getMessage());
         }
     }
     
     @AuraEnabled
-    public static Sheet restartByGameId(Id gameId) {
+    public static Game restartById(Id gameId) {
         try {
-            return gameService.restartByGameId(gameId);
+            return gameService.restartById(gameId);
         } catch (Exception e) {
-            logger.error(e);
             throw new AuraHandledException(e.getMessage());
         }
     }

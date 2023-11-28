@@ -1,11 +1,27 @@
 <template>
-    <div class="game-container">
-        <template if:true={record.data}>
-            <div class="game">
+    <div class="game">
+        <template if:true={dices}>
+            <div class="dices">
+                <template for:each={dices} for:item="dice">
+                    <c-dice
+                        key={dice.index}
+                        index={dice.index}
+                        value={dice.value}
+                        all-dice-disabled={allDiceDisabled}
+                        ondiceclick={handleDiceClick}>
+                    </c-dice>
+                </template>
+            </div>
+        </template>
+        <template if:true={sheet}>
                 <c-sheet
-                    game-id={record.data.id}
-                    last-modified-date={record.data.lastModifiedDate}
-                    debug-mode-enabled={debugModeEnabled}
+                    roll-count={rollCount}
+                    announcement-string={announcementString}
+                    columns={sheet.columns}
+                    top-section-sum={sheet.topSectionSum}
+                    middle-section-sum={sheet.middleSectionSum}
+                    bottom-section-sum={sheet.bottomSectionSum}
+                    total-sum={sheet.totalSum}
                     onrolldice={handleRollDice}
                     onboxclick={handleBoxClick}
                     onerror={handleError}

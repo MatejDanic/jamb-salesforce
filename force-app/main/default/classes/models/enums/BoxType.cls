@@ -1,4 +1,5 @@
 public enum BoxType {
+
     // Top Section
     ONES,
     TWOS,
@@ -15,4 +16,5 @@ public enum BoxType {
     BOAT,
     CARRIAGE,
     YAMB
+    
 }
