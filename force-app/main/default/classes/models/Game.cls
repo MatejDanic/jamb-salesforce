@@ -29,7 +29,9 @@ public class Game {
         private set;
     }
 
-    private Game(Sheet gameSheet, List<Dice> dices, Integer rollCount, BoxType announcement, GameStatus status) {
+    public Game() {}
+
+    public Game(Sheet gameSheet, List<Dice> dices, Integer rollCount, BoxType announcement, GameStatus status) {
         this.gameSheet = gameSheet;
         this.dices = dices;
         this.rollCount = rollCount;
@@ -41,17 +43,19 @@ public class Game {
         return new Game(Sheet.getInstance(), generateDices(), 0, null, GameStatus.IN_PROGRESS);
     }
 
-    public static Game fromSObject(Game__c game) {
-        return new Game(
-            (Sheet) JSON.deserialize(game.Sheet__c, Sheet.class),
-            (List<Dice>) JSON.deserialize(game.Dices__c, List<Dice>.class),
-            Integer.valueOf(game.Roll_Count__c),
-            game.Announcement__c != null ? BoxType.valueOf(game.Announcement__c) : null,
-            GameStatus.valueOf(game.Status__c)
-        );
+    public void mapFromSObject(Game__c game) {
+        gameSheet = (Sheet) JSON.deserialize(game.Sheet__c, Sheet.class);
+        dices = (List<Dice>) JSON.deserialize(game.Dices__c, List<Dice>.class);
+        rollCount = Integer.valueOf(game.Roll_Count__c);
+        if (game.Announcement__c != null) {
+            announcement = BoxType.valueOf(game.Announcement__c);
+        }
+        if (game.Status__c != null) {
+            status = GameStatus.valueOf(game.Status__c);
+        }
     }
 
-    public Game__c toSObject(Game__c game) {
+    public Game__c mapToSObject(Game__c game) {
         game.Sheet__c = JSON.serialize(gameSheet);
         game.Dices__c = JSON.serialize(dices);
         game.Roll_Count__c = rollCount;

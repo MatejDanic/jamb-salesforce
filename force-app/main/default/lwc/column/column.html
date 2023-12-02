@@ -16,13 +16,13 @@
             <c-label icon="utility:announcement" help-text="This column is filled by announcing (clicking) the box after the first dice roll." value={typeString}>
             </c-label>
         </template>
-        <template for:each={boxList} for:item="box">
+        <template for:each={boxes} for:item="box">
             <c-box
                 key={box.typeString}
                 value={box.value}
                 type-string={box.typeString}
                 filled={box.filled}
-                available={box.available}
+                disabled={box.disabled}
                 column-type-string={typeString}
                 roll-count={rollCount}
                 announcement-string={announcementString}

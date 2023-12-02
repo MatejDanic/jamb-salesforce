@@ -20,9 +20,11 @@ export default class Yamb extends LightningElement {
 
     connectedCallback() {
         console.log("recordId: " + this.recordId);
-        getGameByRecordId({ gameId: this.recordId })
-        .then(game => {
-            console.log(game);
+        getGameByRecordId({ 
+			gameId: this.recordId 
+		})
+        .then(data => {
+            console.log(data);
             this.game = data;
         })
         .catch((error) => {
@@ -30,57 +32,76 @@ export default class Yamb extends LightningElement {
         });
     }
 
-    // handler functions
-	handleRollDice(diceToRoll) {
-		console.log("Dice to roll: " + diceToRoll);
-		rollDiceById({ gameId: this.gameId, actionRequest: { diceToRoll: diceToRoll } })
-			.then(game => {
-                console.log(game);
-				this.game = game;
-				this.startDiceRollAnimation();
-			})
-            .catch((error) => {
-				this.showErrorToastMessage(error)
-			});
+	handleRollDice(event) {
+		let diceToRoll = event.detail;
+		console.log(diceToRoll);
+		rollDiceById({
+			gameId: this.recordId, 
+			actionRequest: { diceToRoll: diceToRoll }
+		})
+		.then(data => {
+			console.log(data);
+			this.game = data;
+			this.startDiceRollAnimation();
+		})
+		.catch((error) => {
+			this.showErrorToastMessage(error)
+		});
 	}
 
-	handleBoxFill(columnTypeString, boxTypeString) {
-		fillBoxById({ gameId: this.gameId, actionRequest: { columnTypeString: columnTypeString, boxTypeString: boxTypeString } })
-			.then(game => {
-                console.log(game);
-				this.game = game;
-				this.resetAllDice();
-				// if (this.sheet.completed) {
-				// 	setTimeout(() => {
-				// 		this.showSuccessToastMessage(MESSAGE_FINAL_SCORE + this.form.finalSum + "!");
-				// 	}, 1000);
-				// }
-			})
-            .catch((error) => {
-				this.showErrorToastMessage(error)
-			});
+	startDiceRollAnimation() {
+		console.log("Roll");
 	}
 
-	handleMakeAnnouncement(announcementString) {
-		makeAnnouncementById({ gameId: this.gameId, actionRequest: { announcementString: announcementString } })
-			.then(game => {
-                console.log(game);
-				this.game = game;
-			})
-			.catch((error) => {
-				this.showErrorToastMessage(error)
-			});
+	handleBoxFill(event) {
+		let columnTypeString = event.detail.columnTypeString;
+		let boxTypeString = event.detail.boxTypeString;
+		console.log(columnTypeString + " " + boxTypeString);
+		fillBoxById({ 
+			gameId: this.recordId, 
+			actionRequest: { columnTypeString: columnTypeString, boxTypeString: boxTypeString } 
+		})
+		.then(data => {
+			console.log(data);
+			this.game = data;
+			this.resetAllDice();
+			// if (this.sheet.completed) {
+			// 	setTimeout(() => {
+			// 		this.showSuccessToastMessage(MESSAGE_FINAL_SCORE + this.form.finalSum + "!");
+			// 	}, 1000);
+			// }
+		})
+		.catch((error) => {
+			this.showErrorToastMessage(error)
+		});
+	}
+
+	handleMakeAnnouncement(event) {
+		let boxTypeString = event.detail.boxTypeString;
+		makeAnnouncementById({ 
+			gameId: this.recordId, 
+			actionRequest: { boxTypeString: boxTypeString } 
+		})
+		.then(data => {
+			console.log(data);
+			this.game = data;
+		})
+		.catch((error) => {
+			this.showErrorToastMessage(error)
+		});
 	}
 
     handleRestart() {
-		restartById({ gameId: this.gameId })
-			.then(game => {
-                console.log(game);
-				this.game = game;
-			})
-			.catch((error) => {
-				this.showErrorToastMessage(error)
-			});
+		restartById({ 
+			gameId: this.recordId
+		})
+		.then(data => {
+			console.log(data);
+			this.game = data;
+		})
+		.catch((error) => {
+			this.showErrorToastMessage(error)
+		});
 	}
 
 	showSuccessToastMessage(message) {
@@ -92,6 +113,7 @@ export default class Yamb extends LightningElement {
 	}
    
    	showErrorToastMessage(error) {
+		console.error(error);
 	   	this.dispatchEvent(new ShowToastEvent({
 			title: ERROR_TITLE,
 			message: error.body ? error.body.message : error,

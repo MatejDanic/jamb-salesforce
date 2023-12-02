@@ -15,16 +15,18 @@ export default class Sheet extends LightningElement {
 
 	// determines if top/middle/bottom lightning bolt in the roll dice button will be filled or not
 	get rollCountTopClass() {
-		return this.sheet.rollCount == 0 ? "filled" : "empty";
+		return this.rollCount == 0 ? "filled" : "empty";
 	}
 	get rollCountMiddleClass() {
-		return this.sheet.rollCount <= 1 ? "filled" : "empty";
+		return this.rollCount <= 1 ? "filled" : "empty";
 	}
 	get rollCountBottomClass() {
-		return this.sheet.rollCount <= 2 ? "filled" : "empty";
+		return this.rollCount <= 2 ? "filled" : "empty";
 	}
 
-	handleBoxClick(columnTypeString, boxTypeString) {
+	handleBoxClick(event) {
+		let columnTypeString = event.detail.columnTypeString;
+		let boxTypeString = event.detail.boxTypeString;
 		this.dispatchEvent(new CustomEvent("boxclick", { detail: {
 			boxTypeString: boxTypeString,
 			columnTypeString: columnTypeString
@@ -32,7 +34,7 @@ export default class Sheet extends LightningElement {
 	}
 
 	handleRollDice() {
-		this.dispatchEvent(new CustomEvent("diceroll"));
+		this.dispatchEvent(new CustomEvent("rolldice"));
 	}
 
 	handleRestart() {		

@@ -1,13 +1,13 @@
 public class ActionRequest {
 
     @AuraEnabled
-    public Integer[] diceToRoll { get; private set; }
+    public Integer[] diceToRoll { get; set; }
 
     @AuraEnabled
-    public String columnTypeString { get; private set; }
+    public String columnTypeString { get; set; }
 
     @AuraEnabled
-    public String boxTypeString { get; private set; }
+    public String boxTypeString { get; set; }
 
     public BoxType bType {
         get {

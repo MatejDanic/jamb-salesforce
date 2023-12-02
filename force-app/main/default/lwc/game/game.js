@@ -30,7 +30,8 @@ export default class Game extends LightningElement {
 	}
 
 	// determine if click action is filling the box or announcing it based on current game state and the clicked box 
-	handleDiceClick(index) {
+	handleDiceClick(event) {
+		let index = event.detail;
 		if (this.diceToRoll.includes(index)) {
 			this.diceToRoll.splice(this.diceToRoll.indexOf(index), 1);
 		} else {
@@ -40,7 +41,9 @@ export default class Game extends LightningElement {
 
 	// determine if click action is filling the box or announcing it based on current game state and the clicked box 
 	handleBoxClick(event) {
-		if (event.detail.columnTypeString == "ANNOUNCEMENT" && this.announcementString == null) {
+		let columnTypeString = event.detail.columnTypeString;
+		let boxTypeString = event.detail.boxTypeString;
+		if (columnTypeString == "ANNOUNCEMENT" && this.announcementString == null) {
 			this.dispatchEvent(new CustomEvent("makeannouncement", { detail: {
 				boxTypeString: boxTypeString,
 			}}));
@@ -53,7 +56,7 @@ export default class Game extends LightningElement {
 	}
 
 	handleRollDice() {
-		this.dispatchEvent(new CustomEvent("diceroll"), { detail: diceToRoll });
+		this.dispatchEvent(new CustomEvent("rolldice", { detail: this.diceToRoll }));
 	}
 
 	handleRestart() {		

@@ -55,36 +55,15 @@
     background-color: var(--lwc-colorBackgroundRowHover);
 }
 
+.restart-button {
+    background-color: var(--lwc-colorBackgroundAlt);
+    border: 1px solid var(--lwc-colorBorder);
+	border-radius: var(--lwc-borderRadiusMedium);
+	grid-row-start: 8;
+	grid-row-end: 10;
+}
+
 .filled {
     --lwc-colorTextIconDefault: var(--lwc-colorBrandDark);
 	--sds-c-icon-color-foreground-default: var(--lwc-colorBrandDark);
-}
-
-.action-history {
-	display: inline-block;
-	grid-row-start: 12;
-    grid-row-end: 15;
-	overflow: hidden;
-	transition: all 1s ease-in-out;
-}
-
-.action-history div:nth-child(1) {
-	color: #00FF7F;
-	font-weight: bold;
-}
-
-.action-history div:nth-child(2) {
-	color: #00C060;
-}
-
-.action-history div:nth-child(3) {
-	color: #018141;
-}
-
-.action-history div:nth-child(4) {
-	color: #014122;
-}
-
-.action-history div:nth-child(5) {
-	color: #010203;
 }

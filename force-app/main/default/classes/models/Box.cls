@@ -2,7 +2,8 @@ public class Box {
 
     public BoxType type { get; private set; }    
 
-    public String typeString {
+    @AuraEnabled
+    public transient String typeString {
         get {
             return String.valueOf(type);
         }

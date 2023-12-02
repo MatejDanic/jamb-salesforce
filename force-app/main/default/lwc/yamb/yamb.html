@@ -1,19 +1,18 @@
 <template>
     <div class="yamb">
         <template if:true={game}>
-                <c-game
-                    roll-count={game.rollCount}
-                    announcement-string={game.announcementString}
-                    sheet={game.sheet}
-                    dices={game.dices}
-                    status-string={game.statusString}
-                    onrolldice={handleRollDice}
-                    onfillbox={handleFillBox}
-                    onmakeannouncement={handleMakeAnnouncement}
-                    onerror={handleError}
-                    onrefresh={handleRefresh}>
-                </c-game>
-            </div>
+            <c-game
+                roll-count={game.rollCount}
+                announcement-string={game.announcementString}
+                sheet={game.gameSheet}
+                dices={game.dices}
+                status-string={game.statusString}
+                onrolldice={handleRollDice}
+                onfillbox={handleFillBox}
+                onmakeannouncement={handleMakeAnnouncement}
+                onerror={handleError}
+                onrestart={handleRestart}>
+            </c-game>
         </template>
     </div>
 </template>

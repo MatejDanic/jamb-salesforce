@@ -6,9 +6,9 @@ public class Dice {
     @AuraEnabled
     public Integer value { get; private set; }   
 
-    public Dice(Integer index, Integer value) {
+    private Dice(Integer index, Integer value) {
         this.index = index;
-        this.value = 6;
+        this.value = value;
     }
 
     public static Dice getInstance(Integer index) {

@@ -30,9 +30,9 @@
                     top-section-sum={column.topSectionSum} 
                     middle-section-sum={column.middleSectionSum}
                     bottom-section-sum={column.bottomSectionSum}
-                    roll-count={sheet.rollCount}
-                    announcement-string={sheet.announcementString}
-                    announcement-required={sheet.announcementRequired}
+                    roll-count={rollCount}
+                    announcement-string={announcementString}
+                    announcement-required={announcementRequired}
                     all-boxes-disabled={allBoxesDisabled}
                     onboxclick={handleBoxClick}>
                 </c-column>
@@ -60,6 +60,13 @@
                     </lightning-icon>
                 </button>
                 <c-label class="top-section-sum" value={topSectionSum}></c-label>
+                <button class="restart-button" 
+                    title="Restart" 
+                    onclick={handleRestart}>
+                    <lightning-icon
+                        icon-name="utility:refresh">
+                    </lightning-icon>
+                </button>
                 <c-label class="middle-section-sum" value={middleSectionSum}></c-label>
                 <c-label class="bottom-section-sum" value={bottomSectionSum}></c-label>
             </div>

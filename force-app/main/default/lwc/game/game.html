@@ -14,20 +14,19 @@
             </div>
         </template>
         <template if:true={sheet}>
-                <c-sheet
-                    roll-count={rollCount}
-                    announcement-string={announcementString}
-                    columns={sheet.columns}
-                    top-section-sum={sheet.topSectionSum}
-                    middle-section-sum={sheet.middleSectionSum}
-                    bottom-section-sum={sheet.bottomSectionSum}
-                    total-sum={sheet.totalSum}
-                    onrolldice={handleRollDice}
-                    onboxclick={handleBoxClick}
-                    onerror={handleError}
-                    onrefresh={handleRefresh}>
-                </c-sheet>
-            </div>
+            <c-sheet
+                roll-count={rollCount}
+                announcement-string={announcementString}
+                columns={sheet.columns}
+                top-section-sum={sheet.topSectionSum}
+                middle-section-sum={sheet.middleSectionSum}
+                bottom-section-sum={sheet.bottomSectionSum}
+                total-sum={sheet.totalSum}
+                onrolldice={handleRollDice}
+                onboxclick={handleBoxClick}
+                onerror={handleError}
+                onrestart={handleRestart}>
+            </c-sheet>
         </template>
     </div>
 </template>

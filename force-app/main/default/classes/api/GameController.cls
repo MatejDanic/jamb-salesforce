@@ -7,6 +7,7 @@ public class GameController {
         try {
             return gameService.getGameByRecordId(gameId);
         } catch (Exception e) {
+            System.debug(e.getStackTraceString());
             throw new AuraHandledException(e.getMessage());
         }
     }
@@ -16,6 +17,7 @@ public class GameController {
         try {
             return gameService.rollDiceById(gameId, actionRequest);
         } catch (Exception e) {
+            System.debug(e.getStackTraceString());
             throw new AuraHandledException(e.getMessage());
         }
     }
@@ -25,6 +27,7 @@ public class GameController {
         try {
             return gameService.fillBoxById(gameId, actionRequest);
         } catch (Exception e) {
+            System.debug(e.getStackTraceString());
             throw new AuraHandledException(e.getMessage());
         }
     }
@@ -34,6 +37,7 @@ public class GameController {
         try {
             return gameService.makeAnnouncementById(gameId, actionRequest);
         } catch (Exception e) {
+            System.debug(e.getStackTraceString());
             throw new AuraHandledException(e.getMessage());
         }
     }
@@ -43,6 +47,7 @@ public class GameController {
         try {
             return gameService.restartById(gameId);
         } catch (Exception e) {
+            System.debug(e.getStackTraceString());
             throw new AuraHandledException(e.getMessage());
         }
     }
