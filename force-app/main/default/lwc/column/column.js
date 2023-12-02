@@ -28,7 +28,7 @@ export default class Column extends LightningElement {
 			} else if (this.typeString === "UPWARDS") {
 				disabled = this.typeString != "YAMB" &&  this.props.boxes[this.props.boxes.findIndex(x => x.typeString === box.typeString) + 1].value == null;
 			} else if (this.typeString === "ANNOUNCEMENT") {
-				disabled = this.typeString != "YAMB" &&  this.props.boxes[this.props.boxes.findIndex(x => x.typeString === box.typeString) + 1].value == null;
+				disabled = this.rollCount !== 1 && this.typeString !== this.announcementString;
 			}
 			box.disabled = disabled;
 		}
