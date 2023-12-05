@@ -52,6 +52,7 @@ export default class Game extends LightningElement {
 				boxTypeString: boxTypeString,
 				columnTypeString: columnTypeString
 			}}));
+			this.diceToRoll([0, 1, 2, 3, 4]);
 		}
 	}
 
